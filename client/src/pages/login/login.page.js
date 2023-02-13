@@ -1,6 +1,6 @@
 import React from "react";
 import "./login.styles.css";
-import Logo from "../../assets/download.png";
+import Logo from "../../assets/logo.png";
 
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";

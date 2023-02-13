@@ -1,6 +1,6 @@
 import React from "react";
 import "./home.styles.css";
-import Logo from "../../assets/download.png";
+import Logo from "../../assets/logo.png";
 /*import Video from '../../assets/nashvilleflyover.mp4'
 
 import CustomButton from '../../components/custom-button/custom-buttom.component'
