@@ -5,7 +5,9 @@ import Sidebar from '../sidebar/sidebar.component'
 const Layout = () => (
     <div className="layout">
         <Sidebar/>
-        <Outlet/>
+        <div className="pages">
+            <Outlet/>
+        </div>
     </div>
 )
 
