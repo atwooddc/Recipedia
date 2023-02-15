@@ -19,7 +19,7 @@ import Paper from "@mui/material/Paper";
 import Link from "@mui/material/Link";
 import Avatar from "@mui/material/Avatar";
 
-const Settings = () => {
+const SettingsPage = () => {
   const scrollOffset = -1 * window.innerHeight * 0.1;
 
   const handleSubmit = (event) => {
@@ -124,4 +124,4 @@ const Settings = () => {
   );
 };
 
-export default Settings;
+export default SettingsPage;

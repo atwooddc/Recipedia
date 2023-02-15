@@ -7,7 +7,9 @@ import CustomButton from '../../components/custom-button/custom-buttom.component
 import ContactForm from '../../components/contact-form/contact-form.component'
 import Gallery from '../../components/gallery/gallery.component'
 */
-import { Link as Anchor } from "react-scroll";
+// import { Link as Anchor } from "react-scroll";
+
+import {Link} from 'react-router-dom'
 
 const HomePage = () => {
   const scrollOffset = -1 * window.innerHeight * 0.1;
@@ -24,8 +26,13 @@ const HomePage = () => {
           recipes{" "}
         </h2>
         <div className="btn-grp">
-          <button id="main_btn">Register Now!</button>
-          <button id="secondary_btn">Sign In </button>
+            <Link to='login'>
+                <button id="secondary_btn">Sign In </button>
+            </Link>
+            <Link to='register'>
+              <button id="main_btn">Register Now!</button>
+            </Link>
+          
         </div>
 
         <br />
