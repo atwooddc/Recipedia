@@ -14,7 +14,11 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
+import useAuth from "../../hooks/useAuth";
+import {Link as RouterLink} from 'react-router-dom'
+
 const Login = () => {
+  const {auth, setAuth} = useAuth()
   const scrollOffset = -1 * window.innerHeight * 0.1;
 
   const handleSubmit = (event) => {
@@ -24,6 +28,9 @@ const Login = () => {
       email: data.get("email"),
       password: data.get("password"),
     });
+
+    //temporary, login whenever button is clicked
+    setAuth(true)
   };
 
   const theme = createTheme({
@@ -36,6 +43,7 @@ const Login = () => {
 
   return (
     <div className="homepage">
+        {`You are logged ${auth ? "In" : "Out"}`}
       <div className="page" id="home">
         <div className="header">
           <img src={Logo} alt="Logo" width={100} height={100}></img>
@@ -101,6 +109,9 @@ const Login = () => {
                     <Link href="#" variant="body2">
                       {"Don't have an account? Sign Up"}
                     </Link>
+                    <RouterLink to='../test'>
+                        Go to test
+                    </RouterLink>
                   </Grid>
                 </Grid>
               </Box>
