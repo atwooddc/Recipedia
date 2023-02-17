@@ -1,0 +1,27 @@
+.logo{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: default;
+    width: fit-content;
+    height: 100%;
+}
+
+.logo.link{
+    cursor: pointer;
+}
+
+.logo h1{
+    color: var(--coral);
+    border-radius: 5px;
+}
+
+.logo.home h1{
+    font-size: 100px;
+}
+
+.logo img{
+    margin-right: 2%;
+    width: auto;
+    height: 100%;
+}
