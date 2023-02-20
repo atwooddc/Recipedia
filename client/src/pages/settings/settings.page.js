@@ -1,6 +1,5 @@
 import React from "react";
 import "./settings.styles.css";
-import Logo from "../../assets/logo.png";
 
 import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
