@@ -16,6 +16,7 @@ import Logo from "../../components/logo/logo.component";
 
 import useAuth from "../../hooks/useAuth";
 import {Link as RouterLink, useNavigate} from 'react-router-dom'
+import {getBaseUrlClient } from '../../utils/getBaseClientUrl'
 
 const Login = () => {
   const {auth, setAuth} = useAuth()
@@ -98,6 +99,18 @@ const Login = () => {
                   sx={{ mt: 3, mb: 2 }}
                 >
                   Sign In
+                </Button>
+                <Button
+                    fullWidth
+                    variant="contained"
+                    sx={{ mt: 3, mb: 2 }}
+                    style={{
+                        backgroundColor: "#4c8bf5",
+                        marginTop: 0
+                    }}
+                    onClick={() => window.location.href = `${getBaseUrlClient()}/auth/google`}
+                >
+                    Sign In With Google
                 </Button>
                 <Grid container>
                   <Grid item xs>
