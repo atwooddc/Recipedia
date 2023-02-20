@@ -51,8 +51,9 @@ export default function Sidebar() {
                     variant="permanent"
                     anchor="left"
                 >
-                    <Toolbar />
-
+                    <div className="navbar-logo-cont">
+                        <Logo linkTo="home" />
+                    </div>
                     <Divider />
                     <List>
                         {["myrecipes", "addrecipe", "profile", "settings"].map(
