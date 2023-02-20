@@ -48,15 +48,19 @@ const RecipePage = () => {
                 </button>
             <h1>{recipe?.title}</h1>
             <p>{`Serving size: ${recipe?.servingSize}`}</p>
-
+            <br />
             <h3>Ingredients</h3>
-            {
-                recipe?.ingredients.map(item => <p>{item}</p>)
-            }
+            <ul>
+                {
+                    recipe?.ingredients.map(item => <li>{item}</li>)
+                }
+            </ul>
             <h3>Steps</h3>
-            {
-                recipe?.steps.map((item, idx) => <p>{`${idx+1}. ${item}`}</p>)
-            }
+            <ol>
+                {
+                    recipe?.steps.map(step => <li>{step}</li>)
+                }
+            </ol>
             {/* <CustomTextArea
                 label="Steps"
                 type="text"
