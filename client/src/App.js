@@ -11,6 +11,7 @@ import Layout from './components/layout/layout.component'
 import RequireAuth from "./components/RequireAuth";
 
 import {Routes, Route} from 'react-router-dom'
+import RecipePage from "./pages/recipe/recipe.page";
 
 function App(){
     return(
@@ -27,8 +28,9 @@ function App(){
                 paths in the app. */}
                 <Route element={<RequireAuth/>}>
                     <Route element={<Layout/>}>
-                        <Route path="test" element={<p>TEST IS PROTECTED</p>}/>
+                        <Route path="home" element={<p>HOME IS PROTECTED</p>}/>
                         <Route path="myrecipes" element={<MyRecipesPage/>}/>
+                        <Route path="recipe/:id" element={<RecipePage/>}/>
                         <Route path="addrecipe" element={<AddRecipePage/>}/>
                         <Route path="profile" element={<ProfilePage/>}/>
                         <Route path="settings" element={<SettingsPage/>}/>

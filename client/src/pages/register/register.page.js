@@ -1,6 +1,5 @@
 import React from "react";
 import "./register.styles.css";
-import Logo from "../../assets/download.png";
 
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -10,9 +9,11 @@ import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+
+import Logo from "../../components/logo/logo.component";
+import {Link as RouterLink} from 'react-router-dom'
 
 const Register = () => {
   const scrollOffset = -1 * window.innerHeight * 0.1;
@@ -35,13 +36,11 @@ const Register = () => {
   });
 
   return (
-    <div className="homepage">
-      <div className="page" id="home">
-        <div className="header">
-          <img src={Logo} alt="Logo" width={100} height={100}></img>
-          <h1>Recipedia</h1>
+    <div className="register-page">
+        <div className="logo-cont">
+            <Logo linkTo={".."}/>
         </div>
-        <h2>Welcome to your new recipe box, Chef</h2>
+        <h2>Say hello to your new favorite cookbook</h2>
         <ThemeProvider theme={theme}>
           <Container component="main" maxWidth="xs">
             <CssBaseline />
@@ -121,18 +120,18 @@ const Register = () => {
                 </Button>
                 <Grid container justifyContent="flex-end">
                   <Grid item>
-                    <Link href="#" variant="body2">
-                      Already have an account? Sign in
-                    </Link>
+                    <RouterLink to="../login">
+                        <Link variant="body2">
+                        Already have an account? Sign in
+                        </Link>
+                    </RouterLink>
                   </Grid>
                 </Grid>
               </Box>
             </Box>
           </Container>
         </ThemeProvider>
-        <div className="page" id="contact"></div>
       </div>
-    </div>
   );
 };
 

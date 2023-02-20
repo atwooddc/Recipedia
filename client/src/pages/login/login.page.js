@@ -1,6 +1,5 @@
 import React from "react";
 import "./login.styles.css";
-import Logo from "../../assets/download.png";
 
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -10,15 +9,17 @@ import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
+import Logo from "../../components/logo/logo.component";
+
 import useAuth from "../../hooks/useAuth";
-import {Link as RouterLink} from 'react-router-dom'
+import {Link as RouterLink, useNavigate} from 'react-router-dom'
 
 const Login = () => {
   const {auth, setAuth} = useAuth()
+  const navigate = useNavigate()
   const scrollOffset = -1 * window.innerHeight * 0.1;
 
   const handleSubmit = (event) => {
@@ -31,6 +32,7 @@ const Login = () => {
 
     //temporary, login whenever button is clicked
     setAuth(true)
+    navigate('../home')
   };
 
   const theme = createTheme({
@@ -42,12 +44,10 @@ const Login = () => {
   });
 
   return (
-    <div className="homepage">
-        {`You are logged ${auth ? "In" : "Out"}`}
-      <div className="page" id="home">
-        <div className="header">
-          <img src={Logo} alt="Logo" width={100} height={100}></img>
-          <h1>Recipedia</h1>
+      <div className="login-page">
+        {/* {`You are logged ${auth ? "In" : "Out"}`} */}
+        <div className="logo-cont">
+            <Logo linkTo=".." />
         </div>
         <h2>Welcome back, Chef</h2>
         <ThemeProvider theme={theme}>
@@ -101,16 +101,17 @@ const Login = () => {
                 </Button>
                 <Grid container>
                   <Grid item xs>
-                    <Link href="#" variant="body2">
-                      Forgot password?
-                    </Link>
+                    <RouterLink to="#">
+                        <Link variant="body2">
+                            Forgot password?
+                        </Link>
+                    </RouterLink>
                   </Grid>
                   <Grid item>
-                    <Link href="#" variant="body2">
-                      {"Don't have an account? Sign Up"}
-                    </Link>
-                    <RouterLink to='../test'>
-                        Go to test
+                    <RouterLink to="../register">
+                        <Link variant="body2">
+                            Don't have an account? Sign Up
+                        </Link>
                     </RouterLink>
                   </Grid>
                 </Grid>
@@ -118,9 +119,7 @@ const Login = () => {
             </Box>
           </Container>
         </ThemeProvider>
-        <div className="page" id="contact"></div>
       </div>
-    </div>
   );
 };
 

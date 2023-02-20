@@ -7,3 +7,7 @@
     align-items: center;
     justify-content: space-around;
 }
+
+.sidebar .logo-cont{
+    height: 5vh;
+}

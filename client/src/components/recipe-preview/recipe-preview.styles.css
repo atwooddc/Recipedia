@@ -4,6 +4,13 @@
     border: var(--coral) 5px solid;
     border-radius: 5px;
     text-align: center;
+    cursor: pointer;
+}
+
+.recipe-preview:hover{
+    transform: scale(1.02);
+    transition: 0.1s ease-in;
+
 }
 
 .recipe-preview .img-cont{
