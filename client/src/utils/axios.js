@@ -1,8 +1,8 @@
-import axios from 'axios'
+import axios from "axios";
 
-import { getBaseUrlClient } from './getBaseClientUrl'
+import { getBaseUrlClient } from "./getBaseClientUrl";
 
-export const api = api.create({
+export const api = axios.create({
     baseURL: getBaseUrlClient(),
-    withCredentials: true
-})
+    withCredentials: true,
+});
