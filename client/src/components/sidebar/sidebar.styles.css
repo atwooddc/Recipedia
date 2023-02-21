@@ -8,6 +8,7 @@
     justify-content: space-around;
 }
 
-.sidebar .logo-cont{
+.navbar-logo-cont{
     height: 5vh;
+    margin: 20px 0px 20px 0px;
 }
