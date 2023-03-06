@@ -1,6 +1,7 @@
 const express       = require('express')
 const router        = express.Router()
 const passport      = require('passport')
+const getBaseUrl = require('../middleware/getBaseUrl')
 // const jwt           = require('jsonwebtoken')
 // const auth          = require('../middleware/auth')
 
@@ -10,28 +11,24 @@ const passport      = require('passport')
 // @route       GET auth/google
 // @desc        Authenticate the user with Google OAuth
 // @access      Public
-router.get('/google', passport.authenticate('google', { scope: ['profile'] }));
-// router.get("/google",
-//     passport.authenticate("google", { scope: ["profile", "email"] })
-// );
-
+router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
 // @route       GET auth/google/callback
 // @desc        Redirects to success message
 // @access      Public
 router.get('/google/callback',
-    passport.authenticate('google', { failureRedirect: '/', failureMessage: true }),
+    passport.authenticate('google', { failureRedirect: `${getBaseUrl(client = false)}/failure`, failureMessage: true }),
     function(req, res) {
-        res.redirect('/success');
-}); 
+        res.redirect(`${getBaseUrl(client = true)}/login`);
+});
 
-// @route       GET auth/success
-// @desc        Placeholder route to show successful logging in w google
+
+// @route       GET auth/failure
+// @desc        Placeholder route to show failure logging in w google
 // @access      Public
-router.get('/success', (req, res) => {
-    res.send('test success');
+router.get('/failure', (req, res) => {
+    res.send('google sign in failure');
 })
-
 
 // router.get("/google/callback",
 //     passport.authenticate("google", { failureRedirect: '/'}), (req, res) => {

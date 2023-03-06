@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 
 const session = require("express-session");
 const passport = require("passport");
+const getBaseUrl = require('./middleware/getBaseUrl')
 
 const app = express();
 
@@ -23,12 +24,13 @@ var GoogleStrategy = require('passport-google-oauth20').Strategy;
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: "http://www.example.com/auth/google/callback"
+    callbackURL: `${getBaseUrl(false)}/auth/google/callback`
   },
   function(accessToken, refreshToken, profile, cb) {
-    User.findOrCreate({ googleId: profile.id }, function (err, user) {
-      return cb(err, user);
-    });
+    return cb(null, profile);
+    // User.findOrCreate({ googleId: profile.id }, function (err, user) {
+    //    return cb(err, user);
+    // });
   }
 ));
 
@@ -55,18 +57,3 @@ app.use('/test', testRoutes);
 // Set port and listen
 const port = process.env.PORT || 8080;
 app.listen(port, () => console.log(`Server listening on port ${port}`));
-
-// // BASIC SERVER
-// const express = require('express');
-// const dotenv = require('dotenv');
-
-// const app = express();
-
-// dotenv.config();
-
-// // use built in express body parser
-// app.use(express.json());
-
-// // Set port and listen
-// const port = process.env.PORT || 8080;
-// app.listen(port, () => console.log(`Server listening on port ${port}`));
