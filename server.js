@@ -75,8 +75,13 @@ passport.deserializeUser((user, done) => {
 // auth stuff
 const authRoutes = require("./routes/auth.routes");
 const testRoutes = require("./routes/test.routes");
+const usersRoutes = require("./routes/users.routes");
+const recipeRoutes = require("./routes/recipe.routes");
+
 app.use("/auth", authRoutes);
 app.use("/test", testRoutes);
+app.use("/users", usersRoutes);
+app.use("/recipe", recipeRoutes);
 
 // Set port and listen
 const port = process.env.PORT || 8080;
