@@ -11,4 +11,6 @@
 .navbar-logo-cont{
     height: 5vh;
     margin: 20px 0px 20px 0px;
+    display: flex;
+    justify-content: center;
 }
