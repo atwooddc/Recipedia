@@ -1,9 +1,9 @@
 const express       = require('express')
 const router        = express.Router()
 const passport      = require('passport')
-const getBaseUrl = require('../middleware/getBaseUrl')
-// const jwt           = require('jsonwebtoken')
-// const auth          = require('../middleware/auth')
+const getBaseUrl    = require('../middleware/getBaseUrl')
+const jwt           = require('jsonwebtoken')
+const auth          = require('../middleware/auth')
 
 
 // two required functions for passport-google-oauth20
@@ -13,14 +13,30 @@ const getBaseUrl = require('../middleware/getBaseUrl')
 // @access      Public
 router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
+
 // @route       GET auth/google/callback
 // @desc        Redirects to success message
 // @access      Public
-router.get('/google/callback',
-    passport.authenticate('google', { failureRedirect: `${getBaseUrl(client = false)}/failure`, failureMessage: true }),
-    function(req, res) {
-        res.redirect(`${getBaseUrl(client = true)}/login`);
-});
+// router.get('/google/callback',
+//     passport.authenticate('google', { failureRedirect: `${getBaseUrl(client = false)}/failure`, failureMessage: true }),
+//     function(req, res) {
+//         res.redirect(`${getBaseUrl(client = true)}/login`);
+// });
+
+// Max's JWT callback
+router.get("/google/callback",
+    passport.authenticate("google", { failureRedirect: `${getBaseUrl()}`}), (req, res) => {
+        let minsToExp = 90;
+      
+        let token = jwt.sign({
+            exp: Math.floor(Date.now() / 1000) + (minsToExp * 60),
+            user: req.user
+        }, process.env.JWT_SECRET)
+
+        res.cookie("token", token, {httpOnly:false})
+        res.redirect(`${getBaseUrl()}/home`)
+  }
+);
 
 
 // @route       GET auth/failure
@@ -43,5 +59,15 @@ router.get('/failure', (req, res) => {
 //         res.redirect('/')
 //   }
 // );
+
+
+// won't work without jwt
+
+// @route       GET private test
+// @desc        Test private
+// @access      Private
+router.get('/privatetest', auth, (req, res) => {
+    res.send('private test success');
+})
 
 module.exports = router;

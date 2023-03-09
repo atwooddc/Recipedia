@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 
 const session = require("express-session");
 const passport = require("passport");
+const cookieParser = require("cookie-parser")
 const getBaseUrl = require('./middleware/getBaseUrl')
 
 const app = express();
@@ -17,7 +18,6 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session());
-
 
 var GoogleStrategy = require('passport-google-oauth20').Strategy;
 
@@ -36,17 +36,18 @@ passport.use(new GoogleStrategy({
 
 // https://medium.com/@prashantramnyc/how-to-implement-google-authentication-in-node-js-using-passport-js-9873f244b55e
 
-passport.serializeUser( (user, done) => {
-    done(null, user)
+passport.serializeUser((user, done) => {
+    done(null, user.id)
  })
 
- passport.deserializeUser((user, done) => {
-   done (null, user)
+ passport.deserializeUser((id, done) => {
+    done(null, id);
  })
 
 
-// use built in express body parser
+//use built in body parser
 app.use(express.json());
+app.use(cookieParser())
 
 // auth stuff
 const authRoutes = require('./routes/auth.routes')
