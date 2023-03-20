@@ -74,7 +74,7 @@ router.delete("/:id", (req, res) => {
 // @desc        Clear all users from DB
 // @access      Public
 router.delete("/reset", (req, res) => {
-    User.deleteMany({})
+    User.deleteMany({}) //TODO AGAIN NOT SURE ITS NOT DELETING
         .then((resp) =>
             res.send({
                 message: `Successfully deleted ${resp.deletedCount} record${
