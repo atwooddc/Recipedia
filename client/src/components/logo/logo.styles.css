@@ -5,6 +5,8 @@
     cursor: default;
     width: fit-content;
     height: 100%;
+    margin-left: -5px;
+    /* border: black 2px solid; */
 }
 
 .logo.link{
