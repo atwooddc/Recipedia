@@ -8,13 +8,34 @@ const GoogleStrategy = require("passport-google-oauth20").Strategy;
 //const findOrCreate = require("mongoose-findorcreate");
 
 const UserSchema = new Schema({
-    id: mongoose.Schema.Types.ObjectId,
-    username: String,
-    firstName: String,
-    lastName: String,
-    email: String,
-    password: String,
-    googleId: String,
+    id: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+    },
+    username: {
+        type: String,
+        required: true,
+    },
+    firstName: {
+        type: String,
+        required: true,
+    },
+    lastName: {
+        type: String,
+        required: true,
+    },
+    email: {
+        type: String,
+        required: true,
+    },
+    password: {
+        type: String,
+        required: true,
+    },
+    googleId: {
+        type: String,
+        required: false,
+    },
     secret: String,
     imgUrl: String,
     phone: String,

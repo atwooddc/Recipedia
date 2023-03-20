@@ -111,9 +111,25 @@ const Recipe = require("../models/recipe.model");
 //   $ref: '#/components/requestBodies/Recipe'
 
 // @route       POST api/recipes
-// @desc        Create a new recipe and add user to students list
+// @desc        Create a new recipe and add to a user's recipe list
 // @access      Private
 router.post("/", async (req, res) => {
+    const user = new Recipe(req.body);
+    user.save()
+        .then((result) => {
+            console.log(result);
+            res.status(201).json({
+                message: "Handling POST requests to /recipe",
+                createdRecipe: result,
+            });
+        })
+        .catch((err) => {
+            console.log(err);
+            res.status(500).json({
+                error: err,
+            });
+        });
+    /*
     const validStr = await validateRecipe(req.body);
     if (validStr === "valid" || validStr === "exists") {
         let newRecipe;
@@ -137,6 +153,7 @@ router.post("/", async (req, res) => {
     } else {
         res.status(400).send(validStr);
     }
+    */
 });
 
 // put:

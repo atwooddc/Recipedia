@@ -40,11 +40,11 @@ module.exports = Ingredient = mongoose.model("ingredient", IngredientSchema);
 
 const RecipeSchema = new Schema({
     id: {
-        type: Number,
-        required: true,
+        type: mongoose.Schema.Types.ObjectId,
+        required: false,
     },
     ownerID: {
-        type: Number,
+        type: String,
         required: false,
     },
     title: {
@@ -68,8 +68,7 @@ const RecipeSchema = new Schema({
         required: false,
     },
     photoUrls: {
-        //todo fix this?
-        type: [Map], // OrderedMap { "name": "photoUrl", "wrapped": true }, string
+        type: [String],
         required: false,
     },
     tags: {
