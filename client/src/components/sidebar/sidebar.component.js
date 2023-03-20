@@ -54,7 +54,7 @@ export default function Sidebar() {
                     <div className="navbar-logo-cont">
                         <Logo linkTo="home" />
                     </div>
-                    <Divider />
+                    {/* <Divider /> */}
                     <List>
                         {["myrecipes", "addrecipe", "profile", "settings"].map(
                             (text, index) => (
@@ -86,7 +86,7 @@ export default function Sidebar() {
                             )
                         )}
                     </List>
-                    <Divider />
+                    {/* <Divider /> */}
                 </Drawer>
             </Box>
         </ThemeProvider>

@@ -1,25 +1,9 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
-
 import "./my-recipes.styles.css";
 
 import RecipePreview from "../../components/recipe-preview/recipe-preview.component";
-
-import AppBar from "@mui/material/AppBar";
-import Button from "@mui/material/Button";
-import CameraIcon from "@mui/icons-material/PhotoCamera";
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-import CssBaseline from "@mui/material/CssBaseline";
 import Grid from "@mui/material/Grid";
-import Stack from "@mui/material/Stack";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import Link from "@mui/material/Link";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 const MyRecipesPage = () => {
@@ -30,14 +14,13 @@ const MyRecipesPage = () => {
             },
         },
     });
-    const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
     const dummyRecipes = [
         {
             id: 1,
-            title: "Asian Radish Salad",
-            img: "https://static01.nyt.com/images/2020/10/07/dining/04HealthyRoundup-Chicken-and-Cabbage/merlin_173165028_672c579b-817d-4be9-9c06-2c5d75334792-videoSixteenByNine3000.jpg",
-            desc: "Light, refreshing side for any dish",
+            title: "Eggplant Parmesean",
+            img: "https://static.onecms.io/wp-content/uploads/sites/44/2021/02/08/grilled-eggplant-parmesan-2000.jpg",
+            desc: "An instant crowd pleaser!",
         },
         {
             id: 2,
@@ -65,64 +48,15 @@ const MyRecipesPage = () => {
         },
     ];
 
-    const navigate = useNavigate();
-
     return (
         <div className="my-recipes-page">
-            <h1>MyRecipesPage</h1>
-            <br />
             <ThemeProvider theme={theme}>
-                <Container sx={{ py: 8 }} maxWidth="md">
-                    {/* End hero unit */}
+                <Container sx={{ py: 8 }} maxWidth="md" style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
+                <h2 style={{color: "var(--dark-gray)"}}>Hope you're hungry!</h2>
+                <br/>
                     <Grid container spacing={4}>
                         {dummyRecipes.map((recipe) => (
-                            <Grid item key={recipe.id} xs={12} sm={6} md={4}>
-                                <Card
-                                    sx={{
-                                        height: "100%",
-                                        display: "flex",
-                                        flexDirection: "column",
-                                    }}
-                                    onClick={() =>
-                                        navigate(`../recipe/${recipe.id}`)
-                                    }
-                                    style={{ cursor: "pointer" }}
-                                >
-                                    <CardMedia
-                                        component="img"
-                                        sx={
-                                            {
-                                                // 16:9
-                                            }
-                                        }
-                                        image={recipe.img}
-                                        alt="recipe"
-                                    />
-                                    <CardContent sx={{ flexGrow: 1 }}>
-                                        <Typography
-                                            gutterBottom
-                                            variant="h5"
-                                            component="h2"
-                                        >
-                                            {recipe.title}
-                                        </Typography>
-                                        <Typography>{recipe.desc}</Typography>
-                                    </CardContent>
-                                    <CardActions>
-                                        <Button
-                                            size="small"
-                                            onClick={() =>
-                                                navigate(
-                                                    `../recipe/${recipe.id}`
-                                                )
-                                            }
-                                        >
-                                            View
-                                        </Button>
-                                        <Button size="small">Edit</Button>
-                                    </CardActions>
-                                </Card>
-                            </Grid>
+                            <RecipePreview data={recipe}/>
                         ))}
                     </Grid>
                 </Container>

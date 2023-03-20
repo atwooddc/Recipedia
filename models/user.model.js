@@ -41,23 +41,7 @@ const UserSchema = new Schema({
     phone: String,
 });
 
-/*
-UserSchema.plugin(passportLocalMongoose);
-UserSchema.plugin(findOrCreate);
-*/
-
 module.exports = User = mongoose.model("user", UserSchema);
-/*
-//passport.use(User.createStrategy());
-passport.serializeUser(function (user, done) {
-    done(null, user.id);
-});
-
-passport.deserializeUser(function (id, done) {
-    User.findById(id, function (err, user) {
-        done(err, user);
-    });
-});
 
 passport.use(
     new GoogleStrategy(
@@ -95,45 +79,3 @@ passport.use(
         }
     )
 );
-*/
-
-/*
-bio: {
-        type: String,
-        default: "",
-    },
-    major: {
-        type: String,
-        default: "N/A",
-    },
-    schedule: {
-        type: [
-            {
-                _id: String,
-                department: String,
-                number: Number,
-                professor: String,
-                startTime: String,
-                endTime: String,
-                monday: Boolean,
-                tuesday: Boolean,
-                wednesday: Boolean,
-                thursday: Boolean,
-                friday: Boolean,
-                saturday: Boolean,
-                sunday: Boolean,
-                lab: Boolean,
-                firstHalfMod: Boolean,
-                secondHalfMod: Boolean,
-            },
-        ],
-        default: [],
-    },
-    hideSchedule: {
-        type: Boolean,
-        default: false,
-    },
-    dateReg: {
-        type: Date,
-        default: Date.now,
-    }, */

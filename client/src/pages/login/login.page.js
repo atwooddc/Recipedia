@@ -33,7 +33,7 @@ const Login = () => {
 
         //temporary, login whenever button is clicked
         setAuth(true);
-        navigate("../home");
+        navigate("../myrecipes");
     };
 
     const theme = createTheme({
