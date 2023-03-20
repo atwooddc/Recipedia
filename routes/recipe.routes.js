@@ -1,3 +1,5 @@
+const mongoose = require("mongoose");
+
 /*
 
 '/recipe/addByUrl/{siteUrl}':
@@ -248,6 +250,15 @@ router.get("/:id", (req, res) => {
 //     description: Invalid ID supplied
 //   '404':
 //     description: Recipe not found
+
+// @route       DELETE recipe/:id
+// @desc        Delete a recipe by ID
+// @access      Private
+router.delete("/:id", (req, res) => {
+    Recipe.findByIdAndRemove(new mongoose.Types.ObjectId(req.params._id).trim()) //TODO I DONT KNOW IF THIS WORKS
+        .catch((err) => res.status(404).send(err))
+        .then(res.send(`Successfully deleted recipe ${req.params.id}`));
+});
 
 // @route       DELETE api/recipe/reset
 // @desc        Clear all recipes from DB

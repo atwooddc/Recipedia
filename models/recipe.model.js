@@ -72,7 +72,7 @@ const RecipeSchema = new Schema({
         required: false,
     },
     tags: {
-        type: [TagSchema], // xml: OrderedMap { "name": "tag", "wrapped": true }
+        type: [TagSchema],
         required: false,
     },
 });
