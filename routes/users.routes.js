@@ -1,12 +1,9 @@
 const express = require("express");
 const app = express();
 const router = express.Router();
-// const auth = require("../middleware/auth");
 const mongoose = require("mongoose");
 
 const User = require("../models/user.model");
-
-const Course = require("../models/recipe.model");
 
 app.use(express.json());
 
@@ -65,7 +62,8 @@ router.put("/:id", (req, res) => {
 // @desc        Delete a user
 // @access      Private
 router.delete("/:id", (req, res) => {
-    User.findByIdAndDelete(req.params._id) //TODO I DONT KNOW IF THIS WORKS
+    var itemId = req.params.id;
+    User.findOneAndRemove({ _id: itemId })
         .catch((err) => res.status(404).send(err))
         .then(res.send(`Successfully deleted user ${req.params.id}`));
 });
@@ -74,7 +72,7 @@ router.delete("/:id", (req, res) => {
 // @desc        Clear all users from DB
 // @access      Public
 router.delete("/reset", (req, res) => {
-    User.deleteMany({}) //TODO AGAIN NOT SURE ITS NOT DELETING
+    User.deleteMany({}) //TODO HASN'T BEEN TESTED
         .then((resp) =>
             res.send({
                 message: `Successfully deleted ${resp.deletedCount} record${
@@ -84,116 +82,5 @@ router.delete("/reset", (req, res) => {
         )
         .catch((err) => console.log(err));
 });
-
-/*
-// @route       PUT api/users/push2schedule/:courseId
-// @desc        Push course with given id to user's schedule
-// @access      Private
-router.put("/push2schedule/:courseId", auth, async (req, res) => {
-    let courseToAdd;
-    let updatedSchedule;
-
-    await User.findById(req.user._id).then(
-        (user) => (updatedSchedule = user.schedule)
-    );
-
-    if (!updatedSchedule.find((course) => course._id === req.params.courseId)) {
-        await Course.findById(req.params.courseId)
-            .then((course) => {
-                courseToAdd = course;
-            })
-            .catch((err) => res.send(err));
-
-        User.findByIdAndUpdate(req.user._id, {
-            $push: { schedule: courseToAdd },
-        })
-            .then((updatedUser) => {
-                res.send(updatedUser);
-            })
-            .catch((err) => res.send(err));
-    } else {
-        res.status(400).send("This course already exists in your schedule");
-    }
-});
-
-// @route       PUT api/users/unenroll/:courseId
-// @desc        Remove course from user's schedule
-// @access      Private
-router.put("/unenroll/:courseId", auth, async (req, res) => {
-    let updatedSchedule;
-
-    await User.findById(req.user._id).then(
-        (user) => (updatedSchedule = user.schedule)
-    );
-
-    let index = updatedSchedule.findIndex(
-        (el) => el._id === req.params.courseId
-    );
-    if (index > -1) {
-        updatedSchedule.splice(index, 1);
-
-        User.findByIdAndUpdate(req.user._id, {
-            schedule: updatedSchedule,
-        }).then((updatedUser) => {
-            res.send(updatedUser);
-        });
-
-        let updatedStudentList;
-        await Course.findById(req.params.courseId).then(
-            (course) => (updatedStudentList = course.students)
-        );
-
-        let courseIdx = updatedStudentList.findIndex(
-            (el) => el._id === req.user._id
-        );
-        if (courseIdx > -1) {
-            updatedStudentList.splice(courseIdx, 1);
-            Course.findByIdAndUpdate(req.params.courseId, {
-                students: updatedStudentList,
-            }).catch((err) => console.log(err));
-        }
-    } else {
-        res.status(400).send("This course does not exist in your schedule");
-    }
-});
-
-// @route       PUT api/users/schedule/clear
-// @desc        Clear a user's schedule
-// @access      Private
-router.put("/schedule/clear", auth, async (req, res) => {
-    let updatedSchedule;
-    await User.findById(req.user._id).then(
-        (user) => (updatedSchedule = user.schedule)
-    );
-
-    let scheduleLength = updatedSchedule.length;
-    for (let i = 0; i < scheduleLength; ++i) {
-        let updatedStudentList;
-        let courseId = updatedSchedule[scheduleLength - 1 - i]._id;
-
-        await Course.findById(courseId).then(
-            (course) => (updatedStudentList = course.students)
-        );
-
-        let courseIdx = updatedStudentList.findIndex(
-            (el) => el._id === req.user._id
-        );
-        if (courseIdx > -1) {
-            updatedStudentList.splice(courseIdx, 1);
-            Course.findByIdAndUpdate(courseId, {
-                students: updatedStudentList,
-            }).catch((err) => console.log(err));
-        }
-
-        updatedSchedule.pop();
-    }
-
-    User.findByIdAndUpdate(req.user._id, { schedule: updatedSchedule })
-        .then((updatedUser) => {
-            res.send(updatedUser);
-        })
-        .catch((err) => console.log(err));
-});
-*/
 
 module.exports = router;
