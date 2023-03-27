@@ -7,12 +7,16 @@ const User = require("../models/user.model");
 
 app.use(express.json());
 
-// @route       POST api/users
+// @route       POST /users
 // @desc        Create a new user, this can only be done by the logged in user.
 // @operationID createUser
 // @access      Public
 router.post("/", (req, res) => {
+    //console.log(req);
+    console.log(req.body);
+
     const user = new User(req.body);
+    console.log(user);
     user.save()
         .then((result) => {
             console.log(result);
