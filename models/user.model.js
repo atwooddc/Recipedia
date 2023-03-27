@@ -5,7 +5,7 @@ const getBaseUrl = require('../middleware/getBaseUrl')
 const passport = require('passport')
 const passportLocalMongoose = require("passport-local-mongoose");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
-const findOrCreate = require('mongoose-findorcreate')
+// const findOrCreate = require('mongoose-findorcreate')
 
 const UserSchema = new Schema({
     username: String,
@@ -55,28 +55,34 @@ const UserSchema = new Schema({
 });
 
 UserSchema.plugin(passportLocalMongoose);
-UserSchema.plugin(findOrCreate);
+// UserSchema.plugin(findOrCreate);
 
 module.exports = User = mongoose.model('user', UserSchema);
 
 passport.use(User.createStrategy());
+
 passport.serializeUser(function(user, done) {
     done(null, user.id);
 });
 
 passport.deserializeUser(function(id, done) {
-    User.findById(id, function(err, user) {
-        done(err, user);
-    });
+    // User.findById(id, function(err, user) {
+    //     done(err, user);
+    // });
+    User.findById(id)
+        .then((result) => {
+            done(result)})
+        .catch((err) => {
+            done(err)})
 });
 
 passport.use(new GoogleStrategy({
-    clientID: process.env.CLIENT_ID,
-    clientSecret: process.env.CLIENT_SECRET,
-    callbackURL: `${getBaseUrl(false)}/auth/google/callback`,
-    userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: `${getBaseUrl(false)}/auth/google/callback`
   },
   async function(accessToken, refreshToken, profile, cb) {
+    console.log('test')
     const newUser = {
         googleId: profile.id,
         username: profile.id,
@@ -85,16 +91,29 @@ passport.use(new GoogleStrategy({
         lastName: profile.name.familyName,
         imgUrl: profile._json.picture
     }
-    
-    // User.findOrCreate({username: profile.id, googleId: profile.id}, newUser, (err, user) => cb(err, user))
-    let findUser;
-    await User.findOne({googleId: profile.id})
-        .then(res => findUser = res)
+    return cb(null, profile);
 
-    if(!findUser){
-        User.create(newUser, (err, user) => cb(err, user))
-    }
-    else{
-        User.findOneAndUpdate({googleId: profile.id}, newUser, (err, user) => cb(err, user));
-    }
+    // User.findOrCreate({username: profile.id, googleId: profile.id}, newUser, (err, user) => cb(err, user))
+
+
+    // let findUser;
+    // await User.findOne({googleId: profile.id})
+    //     .then(res => findUser = res)
+        
+    // if(!findUser){
+    //     User.create(newUser)
+    //         .then((result) => {
+    //             cb(result)})
+    //         .catch((err) => {
+    //             cb(err)})
+    //     // User.create(newUser, (err, user) => cb(err, user))
+    // }
+    // else{
+    //     User.findOneAndUpdate({googleId: profile.id}, newUser)
+    //         .then((result) => {
+    //             cb(result)})
+    //         .catch((err) => {
+    //             cb(err)})
+    //     // User.findOneAndUpdate({googleId: profile.id}, newUser, (err, user) => cb(err, user));
+    // }
   }));
