@@ -7,8 +7,9 @@ const Recipe = require("../models/recipe.model");
 // @desc        Create a new recipe and add to a user's recipe list
 // @access      Private
 router.post("/", async (req, res) => {
-    const user = new Recipe(req.body);
-    user.save()
+    const recipe = new Recipe(req.body);
+    recipe
+        .save()
         .then((result) => {
             console.log(result);
             res.status(201).json({

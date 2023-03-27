@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 const getBaseUrl = require("../middleware/getBaseUrl");
 
 const passport = require("passport");
+const Recipe = require("./recipe.model");
 //const passportLocalMongoose = require("passport-local-mongoose");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 //const findOrCreate = require("mongoose-findorcreate");
@@ -39,6 +40,7 @@ const UserSchema = new Schema({
     secret: String,
     imgUrl: String,
     phone: String,
+    recipes: { type: [Recipe.schema], required: false },
 });
 
 module.exports = User = mongoose.model("user", UserSchema);

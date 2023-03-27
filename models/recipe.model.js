@@ -1,12 +1,10 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const { User, UserSchema } = require("./user.model");
-
 const TagSchema = new Schema({
     id: {
-        type: Number,
-        required: true,
+        type: mongoose.Schema.Types.ObjectId,
+        required: false,
     },
     name: {
         type: String,
@@ -19,8 +17,8 @@ module.exports = Tag = mongoose.model("tag", TagSchema);
 
 const IngredientSchema = new Schema({
     id: {
-        type: Number,
-        required: true,
+        type: mongoose.Schema.Types.ObjectId,
+        required: false,
     },
     name: {
         type: String,

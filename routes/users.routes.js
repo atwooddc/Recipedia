@@ -29,6 +29,51 @@ router.post("/", (req, res) => {
         });
 });
 
+// @route       POST users/addrecipe/:id
+// @desc        Adds the new recipe from the body to the userID provided
+// @operationID createUser
+// @access      Public
+router.post("/addrecipe/:id", (req, res) => {
+    const myrecipe = new Recipe(req.body);
+
+    User.findByIdAndUpdate(
+        { _id: new mongoose.Types.ObjectId(req.params.id) },
+        { $push: { recipes: myrecipe } }
+    )
+        .then((result) => {
+            console.log(result);
+            res.status(201).json({
+                message: "Handling POST requests to /users/addrecipes/:id",
+                createdRecipe: result,
+            });
+        })
+        .catch((err) => {
+            console.log(err);
+            res.status(500).json({
+                error: err,
+            });
+        });
+    /*
+    let myUser = User.findOne({ _id: req.params.id }).recipes.push(myrecipe);
+    myUser.save(done); */
+    /*
+    user.save()
+        .then((result) => {
+            console.log(result);
+            res.status(201).json({
+                message: "Handling POST requests to /users/addrecipes/:id",
+                createdUser: result,
+            });
+        })
+        .catch((err) => {
+            console.log(err);
+            res.status(500).json({
+                error: err,
+            });
+        });
+        */
+});
+
 // @route       GET api/users
 // @desc        Get all users
 // @access      Public
