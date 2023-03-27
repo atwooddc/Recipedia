@@ -1,9 +1,31 @@
-const mongoose = require("mongoose");
 const express = require("express");
+const parseRecipe = require("../middleware/parseRecipe");
 const router = express.Router();
 const Recipe = require("../models/recipe.model");
 
-// @route       POST api/recipes
+// @route       GET api/recipe
+// @desc        Get all recipes
+// @access      Public
+router.get("/", (req, res) => {
+    Recipe.find({})
+        .then((recipes) => res.send(recipes))
+        .catch((err) => {
+            console.log(err);
+        });
+});
+
+// @route       GET api/Recipes/:id
+// @desc        Get a Recipe by its ID
+// @access      Public
+router.get("/:id", (req, res) => {
+    Recipe.findById(req.params.id)
+        .then((Recipe) => res.send(Recipe))
+        .catch((err) => {
+            console.log(err);
+        });
+});
+
+// @route       POST api/recipe
 // @desc        Create a new recipe and add to a user's recipe list
 // @access      Private
 router.post("/", async (req, res) => {
@@ -28,26 +50,29 @@ router.post("/", async (req, res) => {
 // @route       POST api/recipe/:url
 // @desc        Create a new recipe using URL parsing
 // @access      Private
-router.post('/:url', auth, async (req, res) => {
+// TODO: ADD BACK AUTH
+router.post('/byurl', async (req, res) => {
     // Check if recipe already exists by searching for URL
-    var recipe = false // switch this to searching for recipe in DB (if doesnt exist return undefined)
+    // var recipe = false // switch this to searching for recipe in DB (if doesnt exist return undefined)
     
-    // If recipe doesn't exist, create a new one
-    var newRecipe
-    if(!recipe){ 
-        recipe = await parseRecipe(req.params.url)
+    // // If recipe doesn't exist, create a new one
+    // var newRecipe
+    // if(!recipe){ 
+    //     recipe = await parseRecipe(req.params.url)
         
-        // TODO: Validate recipe
+    //     // TODO: Validate recipe
 
-        await Recipe.create(recipe)
-            .then(recipe => newRecipe = recipe)
-            .catch(err => res.send(err))
-    } else{
-        newRecipe = recipe
-    }
-
-    // If something goes wrong, send an error
+    //     await Recipe.create(recipe)
+    //         .then(recipe => newRecipe = recipe)
+    //         .catch(err => res.send(err))
+    // } else{
+    //     newRecipe = recipe
+    // }
     
+    // If something goes wrong, send an error
+    const recipe = await parseRecipe(req.body.url)
+    console.log(recipe)
+    res.send(recipe)
 })
 
 // @route       PUT api/recipe/:id
@@ -59,27 +84,6 @@ router.put("/:id", (req, res) => {
         .catch((err) => res.send(err));
 });
 
-// @route       GET api/recipe
-// @desc        Get all recipes
-// @access      Public
-router.get("/", (req, res) => {
-    Recipe.find({})
-        .then((recipes) => res.send(recipes))
-        .catch((err) => {
-            console.log(err);
-        });
-});
-
-// @route       GET api/Recipes/:id
-// @desc        Get a Recipe by its ID
-// @access      Public
-router.get("/:id", (req, res) => {
-    Recipe.findById(req.params.id)
-        .then((Recipe) => res.send(Recipe))
-        .catch((err) => {
-            console.log(err);
-        });
-});
 
 // @route       DELETE recipe/:id
 // @desc        Delete a recipe by ID
