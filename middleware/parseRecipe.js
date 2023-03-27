@@ -75,14 +75,15 @@ const parseRecipe = async url => {
         "keywords": recipeData?.keywords?.split(",")
     }
     
-    console.log(recipe)
+    // console.log(recipe)
+    return recipe
 }
 
-// module.exports = parseRecipe
+module.exports = parseRecipe
 
-const test1 = "https://www.foodnetwork.com/recipes/ina-garten/greek-salad-recipe-1948517"
-const test2 = "https://cookieandkate.com/how-to-make-tzatziki/#tasty-recipes-25607-jump-target"
-const test3 = "https://www.halfbakedharvest.com/honey-garlic-salmon-soba-noodle-bowls/"
-const test4 = "https://cooking.nytimes.com/recipes/1890-roasted-brussels-sprouts-with-garlic?action=click&module=RecipeBox&pgType=recipebox-page&region=all&rank=0" // NYT
+// const test1 = "https://www.foodnetwork.com/recipes/ina-garten/greek-salad-recipe-1948517"
+// const test2 = "https://cookieandkate.com/how-to-make-tzatziki/#tasty-recipes-25607-jump-target"
+// const test3 = "https://www.halfbakedharvest.com/honey-garlic-salmon-soba-noodle-bowls/"
+// const test4 = "https://cooking.nytimes.com/recipes/1890-roasted-brussels-sprouts-with-garlic?action=click&module=RecipeBox&pgType=recipebox-page&region=all&rank=0" // NYT
 
-parseRecipe(test1)
+// parseRecipe(test1)
