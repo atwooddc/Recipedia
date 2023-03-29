@@ -6,9 +6,6 @@ import { useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
@@ -23,16 +20,15 @@ const ManualInsertPage = () => {
         const data = new FormData(event.currentTarget);
 
         let json_data = JSON.stringify({
-            firstName: data.get("firstName"),
-            lastName: data.get("lastName"),
-            email: data.get("email"),
-            password: data.get("password"),
-            username: data.get("username"),
+            title: data.get("title"),
+            ingredients: data.get("ingredients"),
+            steps: data.get("steps"),
+            tags: data.get("tags"),
         });
         console.log(json_data);
 
         // Send data to the backend via POST
-        fetch("http://localhost:8080/users", {
+        fetch("http://localhost:8080/recipe", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: json_data, // body data type must match "Content-Type" header
@@ -51,7 +47,7 @@ const ManualInsertPage = () => {
         <div>
             <h2>Enter recipe information here</h2>
             <ThemeProvider theme={theme}>
-                <Container component="main" maxWidth="xs">
+                <Container component="main">
                     <CssBaseline />
                     <Box
                         sx={{
@@ -82,52 +78,30 @@ const ManualInsertPage = () => {
                                     <TextField
                                         required
                                         fullWidth
-                                        id="lastName"
-                                        label="Last Name"
-                                        name="lastName"
-                                        autoComplete="family-name"
+                                        id="ingredients"
+                                        label="Ingredients"
+                                        name="ingredients"
+                                        multiline
+                                        rows={4}
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
                                     <TextField
                                         required
                                         fullWidth
-                                        id="email"
-                                        label="Email Address"
-                                        name="email"
-                                        autoComplete="email"
+                                        id="steps"
+                                        label="Steps"
+                                        name="steps"
+                                        multiline
+                                        rows={4}
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
                                     <TextField
-                                        required
                                         fullWidth
-                                        id="username"
-                                        label="Username"
-                                        name="username"
-                                        autoComplete="username"
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField
-                                        required
-                                        fullWidth
-                                        name="password"
-                                        label="Password"
-                                        type="password"
-                                        id="password"
-                                        autoComplete="new-password"
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <FormControlLabel
-                                        control={
-                                            <Checkbox
-                                                value="allowExtraEmails"
-                                                color="primary"
-                                            />
-                                        }
-                                        label="I want to receive inspiration, marketing promotions and updates via email."
+                                        id="tags"
+                                        label="Tags"
+                                        name="tags"
                                     />
                                 </Grid>
                             </Grid>
@@ -137,17 +111,8 @@ const ManualInsertPage = () => {
                                 variant="contained"
                                 sx={{ mt: 3, mb: 2 }}
                             >
-                                Register
+                                Add Recipe
                             </Button>
-                            <Grid container justifyContent="flex-end">
-                                <Grid item>
-                                    <RouterLink to="../login">
-                                        <Link variant="body2">
-                                            Already have an account? Sign in
-                                        </Link>
-                                    </RouterLink>
-                                </Grid>
-                            </Grid>
                         </Box>
                     </Box>
                 </Container>
