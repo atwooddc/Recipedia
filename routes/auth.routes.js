@@ -35,6 +35,14 @@ router.get(
     }
 );
 
+// @route       GET auth/logout
+// @desc        Logout user
+// @access      Public
+router.get("/logout", function(req, res){
+    res.clearCookie("token");
+    res.redirect(`${getBaseUrl()}`);
+});
+
 // @route       GET auth/success
 // @desc        Placeholder route to show successful logging in w google
 // @access      Public
