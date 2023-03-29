@@ -17,7 +17,7 @@ router.post("/", (req, res) => {
 
     const user = new User(req.body);
     console.log(user);
-    user.save()
+    User.create(req.body)
         .then((result) => {
             console.log(result);
             res.status(201).json({

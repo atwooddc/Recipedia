@@ -14,6 +14,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 import Logo from "../../components/logo/logo.component";
 import { Link as RouterLink } from "react-router-dom";
+import { api } from "../../utils/axios";
 
 const Register = () => {
     const scrollOffset = -1 * window.innerHeight * 0.1;

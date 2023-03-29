@@ -11,23 +11,23 @@ const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const UserSchema = new Schema({
     username: {
         type: String,
-        required: false,
+        required: true,
     },
     firstName: {
         type: String,
-        required: false,
+        required: true,
     },
     lastName: {
         type: String,
-        required: false,
+        required: true,
     },
     email: {
         type: String,
-        required: false,
+        required: true,
     },
     password: {
         type: String,
-        required: false,
+        required: true,
     },
     googleId: {
         type: String,
