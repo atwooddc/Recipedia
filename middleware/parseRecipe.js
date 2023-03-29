@@ -13,6 +13,63 @@ const isoToMinutes = isoStr => {
     return moment.duration(isoStr).asMinutes();
 }
 
+const parseIngredient = ingredientString => {
+    // Split the ingredient string into an array of words
+    const words = ingredientString.trim().split(' ')
+
+    // Checks if a word is in the approved unit array
+    function isUnit(word) {
+        // Define an array of common units of measurement
+        const units = ['teaspoon', 'teaspoons', 'tsp', 'tablespoon', 'tablespoons', 'tbsp', 'cup', 'cups', 'ounce', 'ounces', 'oz', 'pound', 'pounds', 'lb', 'lbs', 'g', 'gram', 'grams', 'kg', 'kilogram', 'kilograms'];
+        
+        // Check if the word is in the units array
+        return units.includes(word.toLowerCase());
+    }
+
+    // Find the index of the word that contains the unit of measurement
+    let unitIndex = -1;
+    for (let i = 0; i < words.length && unitIndex == -1; ++i) {
+        if (isUnit(words[i])) {
+            unitIndex = i;
+        }
+    }
+
+    const amount = unitIndex !== -1 ? words.slice(0, unitIndex).join(' ') : words[0]
+    const unit = unitIndex !== -1 ? words[unitIndex] : undefined
+    const name = unitIndex !== -1 ? words.slice(unitIndex + 1).join(' ') : words.slice(1).join(' ')
+
+    // Return the parsed ingredient object
+    return {
+        amount: isNaN(amount) ? undefined : parseInt(amount),
+        unit: isNaN(amount) ? undefined : unit,
+        name: isNaN(amount) ? ingredientString : name
+    }
+}
+
+const parseIngredientsArray = ingredients => ingredients.map(ing => parseIngredient(ing))
+
+// TODO: Consider checking if instructions are nested inside one big thing of text and pulling those options out in a future version
+const handleInstructions = instructions => {
+    // We have type HowToStep for each element
+    if(typeof instructions[0] === "object" && instructions[0] !== null){ 
+        return instructions.map(el => el.text)
+    }
+
+    return instructions
+}
+
+const handleYield = yield => {
+    if(Array.isArray(yield)){
+        yield = yield[0]
+    }
+
+    if(!isNaN(yield)){
+        yield += " servings"
+    }
+
+    return yield
+}
+
 const parseRecipe = async url => {
     const html = await fetch(url)
         .then(res => res.text())
@@ -69,13 +126,24 @@ const parseRecipe = async url => {
         "cookTime": isoToMinutes(recipeData?.cookTime),
         "totalTime": isoToMinutes(recipeData?.totalTime),
         "nutrition": recipeData?.nutrition,
-        "recipeIngredient": recipeData?.recipeIngredient,
-        "recipeInstructions": recipeData?.recipeInstructions,
-        "recipeYield": recipeData?.recipeYield,
+        "ingredients": parseIngredientsArray(recipeData?.recipeIngredient),
+        "instructions": handleInstructions(recipeData?.recipeInstructions),
+        "yield": handleYield(recipeData?.recipeYield),
+        "cuisine": recipeData?.recipeCuisine,
         "keywords": recipeData?.keywords?.split(",")
     }
     
-    // console.log(recipe)
+    // Two of prepTime, cookTime, totalTime are defined meaning we can decipher the remaining variable 
+    if([recipe.prepTime, recipe.cookTime, recipe.totalTime].filter(v => typeof v == "undefined").length == 1){
+        if(!recipe.prepTime){
+            recipe.prepTime = recipe.totalTime - recipe.cookTime
+        } else if(!recipe.cookTime){
+            recipe.cookTime = recipe.totalTime - recipe.prepTime
+        } else{
+            recipe.totalTime = recipe.prepTime + recipe.cookTime
+        }
+    }
+
     return recipe
 }
 
@@ -86,4 +154,8 @@ module.exports = parseRecipe
 // const test3 = "https://www.halfbakedharvest.com/honey-garlic-salmon-soba-noodle-bowls/"
 // const test4 = "https://cooking.nytimes.com/recipes/1890-roasted-brussels-sprouts-with-garlic?action=click&module=RecipeBox&pgType=recipebox-page&region=all&rank=0" // NYT
 
-// parseRecipe(test1)
+// async function main() {
+//     console.log(await parseRecipe(test1))
+// }
+
+// main()

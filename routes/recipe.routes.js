@@ -1,5 +1,6 @@
 const express = require("express");
 const parseRecipe = require("../middleware/parseRecipe");
+const validateRecipe = require("../middleware/validateRecipe");
 const router = express.Router();
 const Recipe = require("../models/recipe.model");
 
@@ -52,27 +53,34 @@ router.post("/", async (req, res) => {
 // @access      Private
 // TODO: ADD BACK AUTH
 router.post('/byurl', async (req, res) => {
-    // Check if recipe already exists by searching for URL
-    // var recipe = false // switch this to searching for recipe in DB (if doesnt exist return undefined)
+    // Search through recipe DB by url. If it exists already send that recipe. Else, move on to next block to create it.
+    await Recipe.findOne({url: req.body.url})
+        .then(recipe => {
+            if(recipe){
+                res.send(recipe)
+                return
+            }})
+        .catch(err => res.send(err))
     
-    // // If recipe doesn't exist, create a new one
-    // var newRecipe
-    // if(!recipe){ 
-    //     recipe = await parseRecipe(req.params.url)
-        
-    //     // TODO: Validate recipe
+    try {
+        // Parse recipe using helper function
+        const recipe = await parseRecipe(req.body.url)
 
-    //     await Recipe.create(recipe)
-    //         .then(recipe => newRecipe = recipe)
-    //         .catch(err => res.send(err))
-    // } else{
-    //     newRecipe = recipe
-    // }
-    
-    // If something goes wrong, send an error
-    const recipe = await parseRecipe(req.body.url)
-    console.log(recipe)
-    res.send(recipe)
+        // Validate the recipe
+        if(validateRecipe(recipe)){
+            throw new Error("Invalid recipe parsing")
+        }
+
+        // Create the recipe
+        // await Recipe.create(recipe)
+        //     .then(recipe => res.send(recipe))
+        //     .catch(err => res.send(err))
+
+        // Send response
+        res.send(recipe)
+    } catch (err) { // If something goes wrong, send an error
+        res.send(err.message)
+    }
 })
 
 // @route       PUT api/recipe/:id
