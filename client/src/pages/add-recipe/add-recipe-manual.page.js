@@ -67,19 +67,18 @@ const ManualInsertPage = () => {
                             onSubmit={handleSubmit}
                             sx={{ mt: 3 }}
                         >
-                            <Grid container spacing={2}>
-                                <Grid item xs={12} sm={6}>
+                            <Grid container spacing={4}>
+                                <Grid item xs={12}>
                                     <TextField
-                                        autoComplete="given-name"
-                                        name="firstName"
+                                        name="title"
                                         required
                                         fullWidth
-                                        id="firstName"
-                                        label="First Name"
+                                        id="title"
+                                        label="Title"
                                         autoFocus
                                     />
                                 </Grid>
-                                <Grid item xs={12} sm={6}>
+                                <Grid item xs={12}>
                                     <TextField
                                         required
                                         fullWidth
