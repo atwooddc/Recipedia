@@ -6,6 +6,8 @@ import Login from "./pages/login/login.page";
 import ErrorPage from "./pages/error/error.page";
 import MyRecipesPage from "./pages/my-recipes/my-recipes.page";
 import AddRecipePage from "./pages/add-recipe/add-recipe.page";
+import AutoParsePage from "./pages/add-recipe/add-recipe-auto.page";
+import ManualInsertPage from "./pages/add-recipe/add-recipe-manual.page";
 import ProfilePage from "./pages/profile/profile.page";
 import SettingsPage from "./pages/settings/settings.page";
 import RecipePage from "./pages/recipe/recipe.page";
@@ -57,6 +59,14 @@ function App() {
                         <Route path="myrecipes" element={<MyRecipesPage />} />
                         <Route path="recipe/:id" element={<RecipePage />} />
                         <Route path="addrecipe" element={<AddRecipePage />} />
+                        <Route
+                            path="addrecipe/autoparse"
+                            element={<AutoParsePage />}
+                        />
+                        <Route
+                            path="addrecipe/manualinsert"
+                            element={<ManualInsertPage />}
+                        />
                         <Route path="profile" element={<ProfilePage />} />
                         <Route path="settings" element={<SettingsPage />} />
                     </Route>
