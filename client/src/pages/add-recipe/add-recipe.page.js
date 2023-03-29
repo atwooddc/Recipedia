@@ -58,7 +58,10 @@ const AddRecipePage = () => {
                     </Card>{" "}
                 </Grid>
                 <Grid item xs={6}>
-                    <Card sx={{ maxWidth: 345 }}>
+                    <Card
+                        sx={{ maxWidth: 345 }}
+                        onClick={() => navigate(`./manualinsert`)}
+                    >
                         <CardActionArea>
                             <CardMedia
                                 component="img"

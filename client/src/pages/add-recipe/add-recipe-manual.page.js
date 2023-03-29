@@ -9,9 +9,9 @@ import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import { useNavigate } from "react-router-dom";
 
-const AutoParsePage = () => {
+const ManualInsertPage = () => {
     const navigate = useNavigate();
 
-    return <p>INSERT YOUR LINK HERE:</p>;
+    return <p>Enter recipe information here</p>;
 };
-export default AutoParsePage;
+export default ManualInsertPage;
