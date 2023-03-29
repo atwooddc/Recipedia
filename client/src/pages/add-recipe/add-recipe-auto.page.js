@@ -9,7 +9,7 @@ import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import { useNavigate } from "react-router-dom";
 
-const AddRecipePage = () => {
+const AutoParsePage = () => {
     const navigate = useNavigate();
 
     return (
@@ -44,7 +44,7 @@ const AddRecipePage = () => {
                                     variant="h5"
                                     component="div"
                                 >
-                                    Automatically Parse
+                                    OOGA BOOGA{" "}
                                 </Typography>
                                 <Typography
                                     variant="body2"
@@ -89,4 +89,4 @@ const AddRecipePage = () => {
         </Box>
     );
 };
-export default AddRecipePage;
+export default AutoParsePage;
