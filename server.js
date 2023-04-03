@@ -6,17 +6,8 @@ const session = require("express-session");
 const passport = require("passport");
 const cookieParser = require('cookie-parser');
 const path = require('path');
-//const getBaseUrl = require('./middleware/getBaseUrl');
+const getBaseUrl = require('./middleware/getBaseUrl');
 
-const session = require("express-session");
-const passport = require("passport");
-const cookieParser = require("cookie-parser")
-const getBaseUrl = require('./middleware/getBaseUrl')
-
-const session = require("express-session");
-const passport = require("passport");
-const cookieParser = require("cookie-parser")
-const getBaseUrl = require('./middleware/getBaseUrl')
 
 const app = express();
 
