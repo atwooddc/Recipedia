@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/MJRAJ01/Recipedia#readme",
   "dependencies": {
+    "body-parser": "^1.20.2",
     "concurrently": "^7.6.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
@@ -30,8 +31,10 @@
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^7.0.0",
     "nodemon": "^2.0.20",
+    "object-assign": "^4.1.1",
     "passport": "^0.6.0",
     "passport-google-oauth2": "^0.2.0",
-    "passport-google-oauth20": "^2.0.0"
+    "passport-google-oauth20": "^2.0.0",
+    "uid-safe": "^2.1.5"
   }
 }

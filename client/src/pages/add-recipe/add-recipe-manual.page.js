@@ -1,5 +1,7 @@
 import React from "react";
-import "./register.styles.css";
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
+import { useNavigate } from "react-router-dom";
 
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -7,22 +9,18 @@ import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
-import Logo from "../../components/logo/logo.component";
 import { Link as RouterLink } from "react-router-dom";
-import { api } from "../../utils/axios";
 
-const Register = () => {
+const ManualInsertPage = () => {
+    const navigate = useNavigate();
     const scrollOffset = -1 * window.innerHeight * 0.1;
 
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        // console.log(data);
 
         let json_data = JSON.stringify({
             firstName: data.get("firstName"),
@@ -32,14 +30,6 @@ const Register = () => {
             username: data.get("username"),
         });
         console.log(json_data);
-        /*
-        console.log({
-            firstName: data.get("firstName"),
-            lastName: data.get("lastName"),
-            email: data.get("email"),
-            password: data.get("password"),
-        });
-        */
 
         // Send data to the backend via POST
         fetch("http://localhost:8080/users", {
@@ -58,11 +48,8 @@ const Register = () => {
     });
 
     return (
-        <div className="register-page">
-            <div className="logo-cont">
-                <Logo linkTo={".."} />
-            </div>
-            <h2>Say hello to your new favorite cookbook</h2>
+        <div>
+            <h2>Enter recipe information here</h2>
             <ThemeProvider theme={theme}>
                 <Container component="main" maxWidth="xs">
                     <CssBaseline />
@@ -169,5 +156,4 @@ const Register = () => {
         </div>
     );
 };
-
-export default Register;
+export default ManualInsertPage;
