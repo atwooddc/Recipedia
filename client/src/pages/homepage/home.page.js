@@ -1,19 +1,28 @@
 import React from "react";
 import "./home.styles.css";
 import Logo from "../../components/logo/logo.component";
+import CookingVideo from "../../assets/bellpepper.mp4";
+import CardContent from "@mui/material/CardContent";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
 
 import { Link } from "react-router-dom";
+import { Card } from "@mui/material";
 
 const HomePage = () => {
     const scrollOffset = -1 * window.innerHeight * 0.1;
 
     return (
         <div className="homepage">
-            <div className="page" id="home">
+            <div className="page" id="home" style={{ position: "relative" }}>
                 <div className="logo-cont">
                     <Logo home />
                 </div>
-                <h2>
+                <video id="VideoTag" autoPlay loop muted>
+                    <source src={CookingVideo} type="video/mp4" />
+                </video>
+                <h2 style={{ color: "white" }}>
                     Join the fastest growing hub to upload, organize, and share
                     your recipes{" "}
                 </h2>
@@ -28,41 +37,74 @@ const HomePage = () => {
 
                 <br />
             </div>
-            <div className="page" id="upload">
-                <div className="about-text">
-                    <h3>Upload Recipes Online or Manually </h3>
-                    <p>
-                        Use our patented Recipe Parser to automatically scrape
-                        information from your favorite websites or transcribe
-                        grandmothers hand-written notecards from the motherland
-                    </p>
-                </div>
-            </div>
-            <div className="page" id="upload">
-                <div className="about-text">
-                    <h3>Organize and Get Smart Suggestions</h3>
-                    <p>
-                        Have all of your week-night meals in a single spot and
-                        we’ll provide similar recipes using Machine Learning
-                        from other users{" "}
-                    </p>
-                </div>
-            </div>
-            <div className="page" id="upload">
-                <div className="about-text">
-                    <h3>Share Your Favorites With Friends</h3>
-                    <p>
-                        Post, Comment, and Re-post recipes with our Social Feed
-                        to see what your friends are cooking and put them onto
-                        your favroites!
-                    </p>
-                </div>
-            </div>
-            <div className="btn-grp">
-                <button id="main_btn">Register Now!</button>
+            <div className="features">
+                <Grid container spacing={2} alignItems="center">
+                    <Grid item xs={6}>
+                        <Card>
+                            <CardContent>
+                                <Typography
+                                    variant="h5"
+                                    style={{ fontWeight: "bold" }}
+                                    component="div"
+                                >
+                                    Upload Recipes Online or Manually{" "}
+                                </Typography>
+
+                                <Typography variant="body2">
+                                    Use our patented Recipe Parser to
+                                    automatically scrape information from your
+                                    favorite websites or transcribe grandmothers
+                                    hand-written notecards from the motherland
+                                </Typography>
+                            </CardContent>
+                        </Card>{" "}
+                    </Grid>
+                    <Grid item xs={6}></Grid>
+                    <Grid item xs={6}></Grid>
+
+                    <Grid item xs={6} alignItems={"right"}>
+                        <Card sx={{ minWidth: 275 }}>
+                            <CardContent>
+                                <Typography
+                                    variant="h5"
+                                    style={{ fontWeight: "bold" }}
+                                    component="div"
+                                >
+                                    Organize and Get Smart Suggestions{" "}
+                                </Typography>
+
+                                <Typography variant="body2">
+                                    Have all of your week-night meals in a
+                                    single spot and we’ll provide similar
+                                    recipes using Machine Learning from other
+                                    users{" "}
+                                </Typography>
+                            </CardContent>
+                        </Card>{" "}
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Card sx={{ minWidth: 275 }}>
+                            <CardContent>
+                                <Typography
+                                    variant="h5"
+                                    style={{ fontWeight: "bold" }}
+                                    component="div"
+                                >
+                                    Share Your Favorites With Friends{" "}
+                                </Typography>
+
+                                <Typography variant="body2">
+                                    Post, Comment, and Re-post recipes with our
+                                    Social Feed to see what your friends are
+                                    cooking and put them onto your favroites!
+                                </Typography>
+                            </CardContent>
+                        </Card>{" "}
+                    </Grid>
+                </Grid>
             </div>
 
-            <div className="page" id="contact"></div>
+            <button id="final_btn">Register Now!</button>
         </div>
     );
 };
