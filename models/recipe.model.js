@@ -1,78 +1,55 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const TagSchema = new Schema({
-    id: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: false,
-    },
-    name: {
-        type: String,
-        required: true,
-    },
-});
-
-module.exports = TagSchema;
-module.exports = Tag = mongoose.model("tag", TagSchema);
-
 const IngredientSchema = new Schema({
-    id: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: false,
-    },
     name: {
         type: String,
         required: true,
     },
-    amount: {
-        type: Number,
-        required: true,
-    },
-    unit: {
-        type: String,
-        required: true,
-    },
-});
+    amount: Number,
+    unit: String
+}, { _id: false });
+
 module.exports = IngredientSchema;
 module.exports = Ingredient = mongoose.model("ingredient", IngredientSchema);
 
+const NutritionSchema = new Schema({
+    servings: String,
+    calories: String,
+    fat: String,
+    carbs: String,
+    protein: String
+}, { _id: false });
+
+module.exports = NutritionSchema;
+module.exports = Nutrition = mongoose.model("nutrition", NutritionSchema);
+
 const RecipeSchema = new Schema({
-    id: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: false,
-    },
-    ownerID: {
-        type: String,
-        required: false,
-    },
     title: {
         type: String,
         required: true,
     },
+    url: String,
+    imageUrl: String,
+    prepTime: Number,
+    cookTime: Number,
+    totalTime: Number,
+    nutrition: {
+        type: [NutritionSchema],
+        default: null,
+        required: false
+    },
     ingredients: {
-        type: [IngredientSchema], //ingredient or ingredient schema?
-        required: true,
+        type: [IngredientSchema],
+        required: true
     },
-    steps: {
+    instructions: {
         type: [String],
-        required: true,
+        required: true
     },
-    notes: {
-        type: String,
-        required: false,
-    },
-    recipeUrl: {
-        type: String,
-        required: false,
-    },
-    photoUrls: {
-        type: [String],
-        required: false,
-    },
-    tags: {
-        type: [TagSchema],
-        required: false,
-    },
+    yield: String,
+    cuisine: String,
+    tags: [String]
 });
 
 module.exports = RecipeSchema;

@@ -51,36 +51,28 @@ router.post("/", async (req, res) => {
 // @route       POST api/recipe/:url
 // @desc        Create a new recipe using URL parsing
 // @access      Private
-// TODO: ADD BACK AUTH
 router.post('/byurl', async (req, res) => {
     // Search through recipe DB by url. If it exists already send that recipe. Else, move on to next block to create it.
-    await Recipe.findOne({url: req.body.url})
-        .then(recipe => {
+    Recipe.findOne({url: req.body.url})
+        .then(async recipe => {
             if(recipe){
-                res.send(recipe)
-                return
-            }})
-        .catch(err => res.send(err))
-    
-    try {
-        // Parse recipe using helper function
-        const recipe = await parseRecipe(req.body.url)
+                return res.send(recipe)
+            }
 
-        // Validate the recipe
-        if(validateRecipe(recipe)){
-            throw new Error("Invalid recipe parsing")
-        }
+            // Parse recipe using helper function
+            const newRecipe = await parseRecipe(req.body.url)
 
-        // Create the recipe
-        // await Recipe.create(recipe)
-        //     .then(recipe => res.send(recipe))
-        //     .catch(err => res.send(err))
+            // Validate the recipe
+            if(!validateRecipe(newRecipe)){
+                throw new Error("Invalid recipe parsing")
+            }
 
-        // Send response
-        res.send(recipe)
-    } catch (err) { // If something goes wrong, send an error
-        res.send(err.message)
-    }
+            // Create the recipe
+            await Recipe.create(newRecipe)
+                .then(recipe => res.send(recipe))
+                .catch(err => res.send(err))
+        })
+        .catch(err => res.send(err.message))
 })
 
 // @route       PUT api/recipe/:id
