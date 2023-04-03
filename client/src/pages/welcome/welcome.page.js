@@ -101,7 +101,7 @@ const WelcomePage = () => {
             </Grid>
           ))}
           <Grid item xs={12}>
-            <Typography variant="h5" component="h2">Suggested Recipes</Typography>
+            <Typography variant="h5" component="h2" color="black">Suggested Recipes</Typography>
           </Grid>
           {SuggestedRecipes.map(recipe => (
             <Grid item xs={12} sm={6} md={3} key={recipe.id}>
@@ -139,7 +139,7 @@ const WelcomePage = () => {
                   </Grid>
                   <Grid item xs={12} md={6}>
                      <Box className="bottom-box" p={3}>
-                      <Typography variant="h5" component="h2">Ingredient Hub</Typography>
+                      <Typography variant="h5" component="h2" color="white">Ingredient Hub</Typography>
                       <Typography variant="body1" component="p">
                         Cooking on a whim? Let us help you make magic with what you have.
                       </Typography>
