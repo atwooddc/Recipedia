@@ -17,7 +17,7 @@ app.use(
     session({
         secret: process.env.EXPRESS_SESSION_SECRET,
         resave: false,
-        saveUninitialized: false,
+        saveUninitialized: false
     })
 );
 
@@ -47,7 +47,13 @@ app.use(express.json());
 app.use(cookieParser());
 
 //allow cross origin resource sharing
-//app.use(cors({credentials: true, origin: `${getBaseUrl()}`}))
+app.use(cors({origin: `${getBaseUrl()}`}))
+
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", `${getBaseUrl()}`); // update to match the domain you will make the request from
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+  });
 
 // auth stuff
 const authRoutes = require("./routes/auth.routes");
