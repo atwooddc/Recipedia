@@ -48,13 +48,12 @@ const Login = () => {
                     const user = data.user;
                     console.log(user);
                     setAuth(user);
+                    // redirect to protected route
+                    //temporary, login whenever button is clicked
+                    navigate("../myrecipes");
                     // Do something with the token and user
                 })
                 .catch((error) => console.error(error));
-
-            // redirect to protected route
-            //temporary, login whenever button is clicked
-            navigate("../myrecipes");
         } catch (err) {
             console.error(err);
         }
