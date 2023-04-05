@@ -51,33 +51,11 @@ router.put("/addrecipe/:recipeId", auth, async (req, res) => {
             });
         });
 });
-// router.put("/addrecipe/:id", (req, res) => {
-//     // TODO: Validate this recipe etc
-//     const myrecipe = new Recipe(req.body);
-
-//     User.findByIdAndUpdate(
-//         { _id: new mongoose.Types.ObjectId(req.params.id) },
-//         { $push: { recipes: myrecipe } }
-//     )
-//         .then((result) => {
-//             console.log(result);
-//             res.status(201).json({
-//                 message: "Handling POST requests to /users/addrecipes/:id",
-//                 createdRecipe: result,
-//             });
-//         })
-//         .catch((err) => {
-//             console.log(err);
-//             res.status(500).json({
-//                 error: err,
-//             });
-//         });
-// });
 
 // @route       GET api/users/recipes
 // @desc        Get a users recipe list
 // @access      Private
-router.get("/", auth, (req, res) => {
+router.get("/recipes", auth, (req, res) => {
     User.findOne({_id: new mongoose.Types.ObjectId(req.user._id)})
         .then(user => res.send(user.recipes))
         .catch((err) => res.status(400).send(err));
