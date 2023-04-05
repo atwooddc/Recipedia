@@ -35,11 +35,22 @@ router.get(
     }
 );
 
+
+// @route       GET auth/user
+// @desc        Get user data
+// @access      Private
+router.get('/user', (req, res) => {
+    User.findById(req.user._id)
+        .then(user => res.send(user))
+})
+
 // @route       GET auth/logout
 // @desc        Logout user
 // @access      Public
 router.get("/logout", function(req, res){
     res.clearCookie("token");
+    // req.session = null;
+    req.logout();
     res.redirect(`${getBaseUrl()}`);
 });
 
