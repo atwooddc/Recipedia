@@ -1,10 +1,8 @@
 import {React, useState} from "react";
 
 import Box from "@mui/material/Box";
-import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
-import FormGroup from "@mui/material/FormGroup";
 import TextField from "@mui/material/TextField";
 import CssBaseline from "@mui/material/CssBaseline";
 import Container from "@mui/material/Container";
@@ -32,7 +30,7 @@ const AutoParsePage = () => {
         setLink(event.target.value);
     };
   
-    const isTextFilled = text !== '';
+    const isTextFilled = link !== '';
 
     const handleSubmit = (event) => {
         event.preventDefault();
