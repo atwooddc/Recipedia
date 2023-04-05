@@ -51,11 +51,6 @@ UserSchema.pre("save", async function (next) {
     next();
 });
 
-UserSchema.methods.comparePassword = async function (candidatePassword) {
-    const user = this;
-    return bcrypt.compare(candidatePassword, user.password);
-};
-
 UserSchema.plugin(passportLocalMongoose);
 // UserSchema.plugin(findOrCreate);
 module.exports = User = mongoose.model("user", UserSchema);
