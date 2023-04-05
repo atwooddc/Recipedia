@@ -4,10 +4,10 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 const session = require("express-session");
 const passport = require("passport");
-const cookieParser = require('cookie-parser');
-const path = require('path');
-const getBaseUrl = require('./middleware/getBaseUrl');
-const User = require('./models/user.model')
+const cookieParser = require("cookie-parser");
+const path = require("path");
+const getBaseUrl = require("./middleware/getBaseUrl");
+const User = require("./models/user.model");
 
 const app = express();
 
@@ -17,9 +17,20 @@ app.use(
     session({
         secret: process.env.EXPRESS_SESSION_SECRET,
         resave: false,
-        saveUninitialized: false
+        saveUninitialized: false,
     })
 );
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
+    res.header(
+        "Access-Control-Allow-Headers",
+        "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+    );
+    next();
+});
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -38,7 +49,6 @@ mongoose
         console.log(`Database error: ${err}`);
     });
 
-
 // https://medium.com/@prashantramnyc/how-to-implement-google-authentication-in-node-js-using-passport-js-9873f244b55e
 
 mongoose.set("returnOriginal", false);
@@ -47,13 +57,16 @@ app.use(express.json());
 app.use(cookieParser());
 
 //allow cross origin resource sharing
-app.use(cors({origin: `${getBaseUrl()}`}))
+app.use(cors({ origin: `${getBaseUrl()}` }));
 
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", `${getBaseUrl()}`); // update to match the domain you will make the request from
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header(
+        "Access-Control-Allow-Headers",
+        "Origin, X-Requested-With, Content-Type, Accept"
+    );
     next();
-  });
+});
 
 // auth stuff
 const authRoutes = require("./routes/auth.routes");

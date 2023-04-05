@@ -14,22 +14,29 @@
 
 #home h2{
     padding: 10px 20px;
-    color: var(--light-gray);
+    color: #FFFFFF;
     border-radius: 5px;
     font-size: 20px;
     text-align: center;
+    z-index: 100;
 }
 
 #home .logo-cont{
     width: fit-content;
     height: 20vh;
+    z-index: 100;
+
 }
 
-#upload{
-    display: flex;
-    max-width: 50%;
-}
 
+#VideoTag{
+z-index: 0;
+width: 100%;
+position: absolute;
+top: 0px;
+filter: blur(5px);
+
+}
 
 #upload .about-text{
     background-color: white;
@@ -41,6 +48,9 @@
     justify-content: space-around;
 }
 
+.features{
+    padding-top: 200px;
+}
 
 #main_btn{
     background-color: var(--coral);
@@ -51,6 +61,24 @@
     padding: 4px 32px;
     border-radius: 50em;
     cursor: pointer;
+    z-index: 100;
+
+}
+#final_btn{
+    background-color: var(--coral);
+    color: white;
+    border: none;
+    font-weight: bold;
+    text-align: center;
+    padding: 4px 32px;
+    border-radius: 50em;
+    cursor: pointer;
+    z-index: 100;
+    margin-left: 45%;
+    text-align: center;   
+    margin-top: 100px;  
+    margin-bottom: 100px;  
+
 }
 
 #secondary_btn{
@@ -63,6 +91,8 @@
     padding: 4px 32px;
     border-radius: 50em;
     cursor: pointer;
+    z-index: 100;
+
 }
 
 .btn-grp{
@@ -70,6 +100,8 @@
     align-items: center;
     gap: 20px;
     padding: 30px 0 20px 0;
+    z-index: 100;
+
 }
 
 @media screen and (max-width: 400px) {
