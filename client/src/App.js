@@ -11,6 +11,7 @@ import ManualInsertPage from "./pages/add-recipe/add-recipe-manual.page";
 import ProfilePage from "./pages/profile/profile.page";
 import SettingsPage from "./pages/settings/settings.page";
 import RecipePage from "./pages/recipe/recipe.page";
+import WelcomePage from "./pages/welcome/welcome.page";
 
 import Layout from "./components/layout/layout.component";
 import RequireAuth from "./components/RequireAuth";
@@ -50,12 +51,12 @@ function App() {
                 <Route path="register" element={<Register />} />
 
                 {/* Private Routes */}
-                {/* Note: RequireAuth wraps everything that is to be protected. In order to reach these routes, 
+                {/* Note: RequireAuth wraps everything that is to be protected. In order to reach these routes,
                 the use must be logged in. Layout wraps all of these to include the sidebar layout for all of the
                 paths in the app. */}
                 <Route element={<RequireAuth />}>
                     <Route element={<Layout />}>
-                        <Route path="home" element={<p>HOME IS PROTECTED</p>} />
+                        <Route path="home" element={<WelcomePage />} />
                         <Route path="myrecipes" element={<MyRecipesPage />} />
                         <Route path="recipe/:id" element={<RecipePage />} />
                         <Route path="addrecipe" element={<AddRecipePage />} />
