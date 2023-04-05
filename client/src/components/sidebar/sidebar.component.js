@@ -26,11 +26,14 @@ import LogoutIcon from "@mui/icons-material/Logout";
 
 import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 
-import { getBaseUrlClient } from '../../utils/getBaseClientUrl'
+import { getBaseUrlClient } from "../../utils/getBaseClientUrl";
+
+import useAuth from "../../hooks/useAuth";
 
 const drawerWidth = 240;
 
 export default function Sidebar() {
+    const { auth, setAuth } = useAuth();
     const theme = createTheme({
         palette: {
             primary: {
@@ -58,6 +61,7 @@ export default function Sidebar() {
                     <div className="navbar-logo-cont">
                         <Logo linkTo="home" />
                     </div>
+                    <p>{auth.username}</p>
                     {/* <Divider /> */}
                     <List>
                         {["myrecipes", "addrecipe", "profile", "settings"].map(
@@ -91,8 +95,13 @@ export default function Sidebar() {
                         )}
 
                         {/* We are doing the logout button separate because not using React router */}
-                        <ListItem  disablePadding>
-                            <ListItemButton onClick={() => window.location.href = `${getBaseUrlClient()}/auth/logout`}>
+                        <ListItem disablePadding>
+                            <ListItemButton
+                                onClick={() => {
+                                    setAuth(undefined);
+                                    window.location.href = `${getBaseUrlClient()}/auth/logout`;
+                                }}
+                            >
                                 <ListItemIcon>
                                     <LogoutIcon />
                                 </ListItemIcon>

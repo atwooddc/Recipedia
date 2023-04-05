@@ -7,6 +7,7 @@ const passport = require("passport");
 const cookieParser = require("cookie-parser");
 const path = require("path");
 const getBaseUrl = require("./middleware/getBaseUrl");
+const bodyParser = require("body-parser");
 const User = require("./models/user.model");
 
 const app = express();
