@@ -14,6 +14,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 import Logo from "../../components/logo/logo.component";
 import { Link as RouterLink } from "react-router-dom";
+import { api } from "../../utils/axios";
 
 const Register = () => {
     const scrollOffset = -1 * window.innerHeight * 0.1;
@@ -21,10 +22,31 @@ const Register = () => {
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
+        // console.log(data);
+
+        let json_data = JSON.stringify({
+            firstName: data.get("firstName"),
+            lastName: data.get("lastName"),
+            email: data.get("email"),
+            password: data.get("password"),
+            username: data.get("username"),
+        });
+        console.log(json_data);
+        /*
         console.log({
+            firstName: data.get("firstName"),
+            lastName: data.get("lastName"),
             email: data.get("email"),
             password: data.get("password"),
         });
+        */
+
+        // Send data to the backend via POST
+        fetch("http://localhost:8080/users", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: json_data, // body data type must match "Content-Type" header
+        }).then((res) => res.json());
     };
 
     const theme = createTheme({
@@ -88,6 +110,16 @@ const Register = () => {
                                         label="Email Address"
                                         name="email"
                                         autoComplete="email"
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        required
+                                        fullWidth
+                                        id="username"
+                                        label="Username"
+                                        name="username"
+                                        autoComplete="username"
                                     />
                                 </Grid>
                                 <Grid item xs={12}>

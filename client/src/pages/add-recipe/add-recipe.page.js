@@ -1,4 +1,14 @@
-import React from 'react'
+import React from "react";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import Typography from "@mui/material/Typography";
+import { CardActionArea } from "@mui/material";
+import Box from "@mui/material/Box";
+import Paper from "@mui/material/Paper";
+import Grid from "@mui/material/Grid";
+import { useNavigate } from "react-router-dom";
+import "./add-recipe.styles.css";
 
 import FormGroup from '@mui/material/FormGroup';
 import Grid from '@mui/material/Grid';
@@ -18,50 +28,90 @@ import Container from "@mui/material/Container";
 
 
 const AddRecipePage = () => {
+    const navigate = useNavigate();
 
-  const theme = createTheme({
-    palette: {
-        primary: {
-            main: "#F26969",
-        },
-    },
-  });
-
-
-  return (
-
-    <ThemeProvider theme={theme}>
-
-      {/* SYNC UP WITH MARK'S MANUAL INPUT FORM */}
-
-      <h2>Enter the link to your recipe here</h2>
-
-        <Grid
-        container
-        spacing={0}
-        direction="column"
-        alignItems="center"
-        justifyContent="center"
-        style={{ minHeight: '100vh' , minWidth: '80vw'}}
-        
-        >
-
-            <FormGroup row style={{width: "70%"}}> 
-              <Button variant="contained" disableElevation style={{width: 100}}>Submit</Button>
-              <TextField variant="outlined" placeholder="www.myrecipe.com" style={{width: "80%"}}/>
-            </FormGroup>
-
-
-          {/* <Grid item xs={3}>
-            <FormGroup row>
-              <Button variant="contained" disableElevation>Submit</Button>
-              <TextField variant="outlined" placeholder="www.example.com" />
-            </FormGroup>
-          </Grid> */}
-
-        </Grid> 
-  </ThemeProvider>
-  )
-}
-
-export default AddRecipePage
+    return (
+        <div>
+            {" "}
+            <h1>Add a Recipe</h1>
+            <Box
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                minHeight="100vh"
+            >
+                <Grid
+                    container
+                    spacing={3}
+                    direction="row"
+                    justifyContent="center"
+                    alignItems="center"
+                >
+                    <Grid item m>
+                        <Card
+                            sx={{ maxWidth: 345 }}
+                            onClick={() => navigate(`./autoparse`)}
+                        >
+                            <CardActionArea>
+                                <CardMedia
+                                    component="img"
+                                    height="140"
+                                    image="https://i0.wp.com/mbrjournal.com/wp-content/uploads/2022/08/MBR-Paper-18-Kumar_1771088840.png?fit=2560%2C1440&ssl=1"
+                                    alt="world wide web"
+                                />
+                                <CardContent>
+                                    <Typography
+                                        gutterBottom
+                                        variant="h5"
+                                        component="div"
+                                    >
+                                        Automatically Parse
+                                    </Typography>
+                                    <Typography
+                                        variant="body2"
+                                        color="text.secondary"
+                                    >
+                                        Include a link to your favorite online
+                                        recipe and we’ll extract the recipe
+                                    </Typography>
+                                </CardContent>
+                            </CardActionArea>
+                        </Card>{" "}
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Card
+                            sx={{ maxWidth: 345 }}
+                            onClick={() => navigate(`./manualinsert`)}
+                        >
+                            <CardActionArea>
+                                <CardMedia
+                                    component="img"
+                                    height="140"
+                                    image="https://d3m7xw68ay40x8.cloudfront.net/assets/2016/04/15091737/kitchen-riches-sheri-castle.jpg"
+                                    alt="recipe box"
+                                />
+                                <CardContent>
+                                    <Typography
+                                        gutterBottom
+                                        variant="h5"
+                                        component="div"
+                                    >
+                                        Manual Input
+                                    </Typography>
+                                    <Typography
+                                        variant="body2"
+                                        color="text.secondary"
+                                    >
+                                        Input the steps to homemade recipes and
+                                        they’ll be in your recipe box
+                                    </Typography>
+                                </CardContent>
+                            </CardActionArea>
+                        </Card>{" "}
+                    </Grid>
+                </Grid>
+            </Box>
+        </div>
+    );
+};
+export default AddRecipePage;
