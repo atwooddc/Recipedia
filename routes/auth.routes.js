@@ -38,7 +38,7 @@ router.get(
 // @route       GET auth/logout
 // @desc        Logout user
 // @access      Public
-router.get("/logout", function(req, res){
+router.get("/logout", function (req, res) {
     res.clearCookie("token");
     res.redirect(`${getBaseUrl()}`);
 });
