@@ -30,7 +30,6 @@ const Login = () => {
             email: data.get("email"),
             password: data.get("password"),
         });
-        //ENCRPYT it with passport and chatgpt
 
         let json_data = JSON.stringify({
             email: data.get("email"),

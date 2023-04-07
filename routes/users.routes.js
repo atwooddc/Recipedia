@@ -110,6 +110,12 @@ router.put("/:id", (req, res) => {
         .catch((err) => res.status(401).send(err));
 });
 
+router.put("/reset/:id", (req, res) => {
+    User.findByIdAndUpdate(req.params.id, { recipe: [] })
+        .then((updatedUser) => res.send(updatedUser))
+        .catch((err) => res.status(401).send(err));
+});
+
 // @route       DELETE api/users
 // @desc        Delete a user
 // @access      Private

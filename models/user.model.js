@@ -36,7 +36,9 @@ const UserSchema = new Schema({
     },
     secret: String,
     imgUrl: String,
-    phone: String,
+    phoneNumber: String,
+    birthday: String,
+    location: String,
     recipes: { type: [Recipe.schema], required: false },
 });
 

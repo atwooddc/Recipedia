@@ -1,4 +1,5 @@
 import React from "react";
+
 import "./register.styles.css";
 
 import Button from "@mui/material/Button";
@@ -13,7 +14,7 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 import Logo from "../../components/logo/logo.component";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, Navigate, redirect } from "react-router-dom";
 import { api } from "../../utils/axios";
 
 const Register = () => {
