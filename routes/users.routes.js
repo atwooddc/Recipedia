@@ -2,6 +2,9 @@ const express = require("express");
 const app = express();
 const router = express.Router();
 const mongoose = require("mongoose");
+const jwt = require("jsonwebtoken");
+const bodyParser = require("body-parser");
+const bcrypt = require("bcrypt");
 const auth = require('../middleware/auth')
 
 const User = require("../models/user.model");
@@ -113,6 +116,44 @@ router.delete("/reset", (req, res) => {
             })
         )
         .catch((err) => console.log(err));
+});
+
+router.post("/login", async (req, res) => {
+    const { email, password } = req.body;
+    try {
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res
+                .status(401)
+                .json({ message: "Invalid email or password" });
+        }
+        console.log(user);
+        console.log(password, user.password);
+
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res
+                .status(401)
+                .json({ message: "Invalid email or password" });
+        }
+
+        const payload = {
+            user: user,
+        };
+
+        const token = jwt.sign(payload, process.env.JWT_SECRET, {
+            expiresIn: "1h",
+        });
+        res.cookie("token", token, { httpOnly: false });
+        res.status(200).json({
+            success: true,
+            message: "Logged in successfully!",
+            user: user,
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Server error" });
+    }
 });
 
 module.exports = router;

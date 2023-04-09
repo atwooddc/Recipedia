@@ -22,11 +22,18 @@ import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import Person2Icon from "@mui/icons-material/Person2";
 import SettingsIcon from "@mui/icons-material/Settings";
+import LogoutIcon from "@mui/icons-material/Logout";
+
 import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
+
+import { getBaseUrlClient } from "../../utils/getBaseClientUrl";
+
+import useAuth from "../../hooks/useAuth";
 
 const drawerWidth = 240;
 
 export default function Sidebar() {
+    const { auth, setAuth } = useAuth();
     const theme = createTheme({
         palette: {
             primary: {
@@ -54,6 +61,7 @@ export default function Sidebar() {
                     <div className="navbar-logo-cont">
                         <Logo linkTo="home" />
                     </div>
+                    <p>{auth.username}</p>
                     {/* <Divider /> */}
                     <List>
                         {["myrecipes", "addrecipe", "profile", "settings"].map(
@@ -85,6 +93,21 @@ export default function Sidebar() {
                                 </ListItem>
                             )
                         )}
+
+                        {/* We are doing the logout button separate because not using React router */}
+                        <ListItem disablePadding>
+                            <ListItemButton
+                                onClick={() => {
+                                    setAuth(undefined);
+                                    window.location.href = `${getBaseUrlClient()}/auth/logout`;
+                                }}
+                            >
+                                <ListItemIcon>
+                                    <LogoutIcon />
+                                </ListItemIcon>
+                                <ListItemText>Logout</ListItemText>
+                            </ListItemButton>
+                        </ListItem>
                     </List>
                     {/* <Divider /> */}
                 </Drawer>
@@ -92,17 +115,3 @@ export default function Sidebar() {
         </ThemeProvider>
     );
 }
-
-const Sidebar2 = () => {
-    return (
-        <div className="sidebar">
-            <div className="logo-cont">
-                <Logo linkTo="home" />
-            </div>
-            <Link to="myrecipes">My Recipes</Link>
-            <Link to="addrecipe">Add Recipes</Link>
-            <Link to="profile">Profile</Link>
-            <Link to="settings">Settings</Link>
-        </div>
-    );
-};

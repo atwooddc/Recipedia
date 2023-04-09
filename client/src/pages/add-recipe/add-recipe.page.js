@@ -10,6 +10,7 @@ import Grid from "@mui/material/Grid";
 import { useNavigate } from "react-router-dom";
 import "./add-recipe.styles.css";
 
+
 const AddRecipePage = () => {
     const navigate = useNavigate();
 
