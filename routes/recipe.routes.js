@@ -48,7 +48,7 @@ router.post("/", async (req, res) => {
         });
 });
 
-// @route       POST api/recipe/:url
+// @route       POST api/recipe/byurl
 // @desc        Create a new recipe using URL parsing
 // @access      Private
 router.post('/byurl', async (req, res) => {
