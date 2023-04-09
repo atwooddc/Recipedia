@@ -62,18 +62,29 @@ const ManualInsertPage = () => {
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
+        
         console.log(ingredients);
         console.log(steps);
         
         // need to handle ingredients, steps
-        // title and tags will be the same
-        console.log(ingredients[0]);
+        let ing_string = ""
+        for (let ing of ingredients) {
+            if (ing.value !== '' && ing.value !== '\n') {
+                ing_string = ing_string + ing.value + "\n";
+            }
+        }
 
+        let step_string = ""
+        for (let step of steps) {
+            if (step.value !== '' && step.value !== '\n') {
+                step_string = step_string + step.value + "\n";
+            }
+        }
 
         let json_data = JSON.stringify({
             title: data.get("title"),
-            ingredients: data.get("ingredients"),
-            steps: data.get("steps"),
+            ingredients: ing_string,
+            steps: step_string,
             tags: data.get("tags"),
         });
         console.log(json_data);
@@ -171,7 +182,7 @@ const ManualInsertPage = () => {
                                         <div style={{ display: 'flex', justifyContent: 'center' }} key={index}>
                                         <TextField
                                             fullWidth
-                                            multiline
+                                            // multiline
                                             size="small"
                                             placeholder={`Step ${index + 1}`}
                                             value={field.value}
