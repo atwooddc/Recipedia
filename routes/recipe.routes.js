@@ -1,38 +1,8 @@
-const mongoose = require("mongoose");
 const express = require("express");
+const parseRecipe = require("../middleware/parseRecipe");
+const validateRecipe = require("../middleware/validateRecipe");
 const router = express.Router();
 const Recipe = require("../models/recipe.model");
-
-// @route       POST api/recipes
-// @desc        Create a new recipe and add to a user's recipe list
-// @access      Private
-router.post("/", async (req, res) => {
-    const recipe = new Recipe(req.body);
-    recipe
-        .save()
-        .then((result) => {
-            console.log(result);
-            res.status(201).json({
-                message: "Handling POST requests to /recipe",
-                createdRecipe: result,
-            });
-        })
-        .catch((err) => {
-            console.log(err);
-            res.status(500).json({
-                error: err,
-            });
-        });
-});
-
-// @route       PUT api/recipe/:id
-// @desc        Update recipe of the provided id by parameters in body
-// @access      Public
-router.put("/:id", (req, res) => {
-    Recipe.findByIdAndUpdate(req.params.id, req.body)
-        .then((updatedRecipe) => res.send(updatedRecipe))
-        .catch((err) => res.send(err));
-});
 
 // @route       GET api/recipe
 // @desc        Get all recipes
@@ -55,6 +25,65 @@ router.get("/:id", (req, res) => {
             console.log(err);
         });
 });
+
+// @route       POST api/recipe
+// @desc        Create a new recipe and add to a user's recipe list
+// @access      Private
+router.post("/", async (req, res) => {
+    const recipe = new Recipe(req.body);
+    recipe
+        .save()
+        .then((result) => {
+            console.log(result);
+            res.status(201).json({
+                message: "Handling POST requests to /recipe",
+                createdRecipe: result,
+            });
+        })
+        .catch((err) => {
+            console.log(err);
+            res.status(500).json({
+                error: err,
+            });
+        });
+});
+
+// @route       POST api/recipe/:url
+// @desc        Create a new recipe using URL parsing
+// @access      Private
+router.post('/byurl', async (req, res) => {
+    // Search through recipe DB by url. If it exists already send that recipe. Else, move on to next block to create it.
+    Recipe.findOne({url: req.body.url})
+        .then(async recipe => {
+            if(recipe){
+                return res.send(recipe)
+            }
+
+            // Parse recipe using helper function
+            const newRecipe = await parseRecipe(req.body.url)
+
+            // Validate the recipe
+            if(!validateRecipe(newRecipe)){
+                throw new Error("Invalid recipe parsing")
+            }
+
+            // Create the recipe
+            await Recipe.create(newRecipe)
+                .then(recipe => res.send(recipe))
+                .catch(err => res.send(err))
+        })
+        .catch(err => res.send(err.message))
+})
+
+// @route       PUT api/recipe/:id
+// @desc        Update recipe of the provided id by parameters in body
+// @access      Public
+router.put("/:id", (req, res) => {
+    Recipe.findByIdAndUpdate(req.params.id, req.body)
+        .then((updatedRecipe) => res.send(updatedRecipe))
+        .catch((err) => res.send(err));
+});
+
 
 // @route       DELETE recipe/:id
 // @desc        Delete a recipe by ID

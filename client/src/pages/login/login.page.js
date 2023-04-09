@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./login.styles.css";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -23,17 +23,40 @@ const Login = () => {
     const navigate = useNavigate();
     const scrollOffset = -1 * window.innerHeight * 0.1;
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         console.log({
             email: data.get("email"),
             password: data.get("password"),
         });
+        //ENCRPYT it with passport and chatgpt
 
-        //temporary, login whenever button is clicked
-        setAuth(true);
-        navigate("../myrecipes");
+        let json_data = JSON.stringify({
+            email: data.get("email"),
+            password: data.get("password"),
+        });
+        try {
+            // Send data to the backend via POST
+            fetch("http://localhost:8080/users/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: json_data, // body data type must match "Content-Type" header
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    const user = data.user;
+                    console.log(user);
+                    setAuth(user);
+                    // redirect to protected route
+                    //temporary, login whenever button is clicked
+                    navigate("../myrecipes");
+                    // Do something with the token and user
+                })
+                .catch((error) => console.error(error));
+        } catch (err) {
+            console.error(err);
+        }
     };
 
     const theme = createTheme({

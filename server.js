@@ -6,11 +6,9 @@ const session = require("express-session");
 const passport = require("passport");
 const cookieParser = require("cookie-parser");
 const path = require("path");
-const bodyParser = require("body-parser");
-
-//const getBaseUrl = require('./middleware/getBaseUrl');
-
 const getBaseUrl = require("./middleware/getBaseUrl");
+const bodyParser = require("body-parser");
+const User = require("./models/user.model");
 
 const app = express();
 
@@ -54,41 +52,22 @@ mongoose
 
 // https://medium.com/@prashantramnyc/how-to-implement-google-authentication-in-node-js-using-passport-js-9873f244b55e
 
-passport.serializeUser((user, done) => {
-    done(null, user.id);
-});
-
-passport.deserializeUser((id, done) => {
-    done(null, id);
-});
-
-var GoogleStrategy = require("passport-google-oauth20").Strategy;
-
-passport.use(
-    new GoogleStrategy(
-        {
-            clientID: process.env.GOOGLE_CLIENT_ID,
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-            callbackURL: `${getBaseUrl(false)}/auth/google/callback`,
-        },
-        function (accessToken, refreshToken, profile, cb) {
-            return cb(null, profile);
-            // User.findOrCreate({ googleId: profile.id }, function (err, user) {
-            //    return cb(err, user);
-            // });
-        }
-    )
-);
-
-// https://medium.com/@prashantramnyc/how-to-implement-google-authentication-in-node-js-using-passport-js-9873f244b55e
-
 mongoose.set("returnOriginal", false);
 //use built in body parser
 app.use(express.json());
 app.use(cookieParser());
 
 //allow cross origin resource sharing
-//app.use(cors({credentials: true, origin: `${getBaseUrl()}`}))
+app.use(cors({ origin: `${getBaseUrl()}` }));
+
+app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", `${getBaseUrl()}`); // update to match the domain you will make the request from
+    res.header(
+        "Access-Control-Allow-Headers",
+        "Origin, X-Requested-With, Content-Type, Accept"
+    );
+    next();
+});
 
 // auth stuff
 const authRoutes = require("./routes/auth.routes");
