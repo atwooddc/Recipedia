@@ -21,7 +21,7 @@ router.post("/", (req, res) => {
     // console.log(user);
     User.create(req.body)
         .then((result) => {
-            console.log(result);
+            // console.log(result);
             res.status(201).json({
                 message: "Handling POST requests to /users",
                 createdUser: result,
@@ -44,7 +44,7 @@ router.put("/addrecipe/:recipeId", auth, async (req, res) => {
 
     User.findByIdAndUpdate(
         { _id: new mongoose.Types.ObjectId(req.user._id) },
-        { $push: { recipes: recipe } }
+        { $addToSet: { recipes: recipe } }
     )
         .then(user => res.send(user))
         .catch((err) => {
@@ -60,8 +60,10 @@ router.put("/addrecipe/:recipeId", auth, async (req, res) => {
 // @access      Private
 router.get("/recipes", auth, (req, res) => {
     User.findOne({_id: new mongoose.Types.ObjectId(req.user._id)})
-        .then(user => res.send(user.recipes))
-        .catch((err) => res.status(400).send(err));
+        .then(user => {
+            res.send(user.recipes)
+        })
+        .catch((err) => res.status(400).send(err)); 
 });
 
 // @route       GET api/users
@@ -127,8 +129,8 @@ router.post("/login", async (req, res) => {
                 .status(401)
                 .json({ message: "Invalid email or password" });
         }
-        console.log(user);
-        console.log(password, user.password);
+        // console.log(user);
+        // console.log(password, user.password);
 
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
@@ -144,11 +146,12 @@ router.post("/login", async (req, res) => {
         const token = jwt.sign(payload, process.env.JWT_SECRET, {
             expiresIn: "1h",
         });
-        res.cookie("token", token, { httpOnly: false });
+        res.cookie("token", token, {  httpOnly: false });
         res.status(200).json({
             success: true,
             message: "Logged in successfully!",
             user: user,
+            token: token
         });
     } catch (err) {
         console.error(err);
