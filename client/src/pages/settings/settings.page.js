@@ -120,6 +120,9 @@ const SettingsPage = () => {
             location: data.get("location"),
             birthday: data.get("birthday"),
             phoneNumber: data.get("phone-number"),
+            imgUrl: data.get("imgUrl"),
+            bio: data.get("bio"),
+            twitterHandle: data.get("twitterHandle"),
         });
         console.log(json_data);
         const id = auth._id;
@@ -156,6 +159,30 @@ const SettingsPage = () => {
                 .then((data) => {
                     console.log(data);
                     console.log("DELETED");
+                    //TODO REDIRECT TO HOMEPAGE
+                })
+                .catch((error) => console.error(error));
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    //TODO TEST AFTER RECIPES ARE PROPERLY ADDED
+    const handleResetAccount = (event) => {
+        event.preventDefault();
+        console.log("Are you sure?");
+        const id = auth._id;
+        console.log(id);
+        try {
+            // Send data to the backend via PUT
+            fetch(`http://localhost:8080/users/reset/${id}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log(data);
+                    console.log("RESET");
                     //TODO REDIRECT TO HOMEPAGE
                 })
                 .catch((error) => console.error(error));
@@ -206,9 +233,9 @@ const SettingsPage = () => {
                                     }}
                                 >
                                     <Avatar
-                                        alt="Grant Achatz"
-                                        src="/grant.jpg"
-                                        sx={{ width: 56, height: 56 }}
+                                        alt={auth.firstName}
+                                        src={auth.imgUrl}
+                                        sx={{ width: 80, height: 80 }}
                                     />
                                     <Box
                                         sx={{
@@ -439,6 +466,40 @@ const SettingsPage = () => {
                                                     }
                                                 />
                                             </Grid>
+                                            <Grid item xs={12}>
+                                                <TextField
+                                                    fullWidth
+                                                    name="imgUrl"
+                                                    label="Profile Image URL"
+                                                    type="imgUrl"
+                                                    id="imgUrl"
+                                                    defaultValue={auth.imgUrl}
+                                                />
+                                            </Grid>
+                                            <Grid item xs={12}>
+                                                <TextField
+                                                    fullWidth
+                                                    name="bio"
+                                                    label="Bio"
+                                                    type="bio"
+                                                    id="bio"
+                                                    defaultValue={auth.bio}
+                                                    multiline
+                                                    rows={4}
+                                                />
+                                            </Grid>
+                                            <Grid item xs={12}>
+                                                <TextField
+                                                    fullWidth
+                                                    name="twitterHandle"
+                                                    label="Twitter Handle"
+                                                    type="twitterHandle"
+                                                    id="twitterHandle"
+                                                    defaultValue={
+                                                        auth.twitterHandle
+                                                    }
+                                                />
+                                            </Grid>
                                         </Grid>
                                         <Box
                                             m={1}
@@ -482,6 +543,7 @@ const SettingsPage = () => {
                                                 variant="subtitle2"
                                                 color="common.black"
                                                 fontWeight="bold"
+                                                onClick={handleResetAccount}
                                             >
                                                 {" "}
                                                 Reset Account{" "}

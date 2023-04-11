@@ -46,6 +46,7 @@ const Login = () => {
                 .then((data) => {
                     const user = data.user;
                     console.log(user);
+                    document.cookie = `myCookie=${data.cookieValue}; path=/;`;
                     setAuth(user);
                     // redirect to protected route
                     //temporary, login whenever button is clicked

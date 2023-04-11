@@ -39,6 +39,8 @@ const UserSchema = new Schema({
     phoneNumber: String,
     birthday: String,
     location: String,
+    bio: String,
+    twitterHandle: String,
     recipes: { type: [Recipe.schema], required: false },
 });
 
