@@ -16,23 +16,34 @@ app.use(express.json());
 // @desc        Create a new user, this can only be done by the logged in user.
 // @operationID createUser
 // @access      Public
-router.post("/", (req, res) => {
-    // const user = new User(req.body);
-    // console.log(user);
-    User.create(req.body)
-        .then((result) => {
+router.post("/", async (req, res) => {
+    try {
+        const userEmail = await User.findOne({ email: req.body.email });
+        if (userEmail) {
+            return res
+                .status(400)
+                .json({ message: "Account already exists with this email" });
+        } else {
+            const userName = await User.findOne({
+                username: req.body.username,
+            });
+            if (userName) {
+                return res.status(401).json({
+                    message: "Account already exists with this username",
+                });
+            }
+        }
+        User.create(req.body).then((result) => {
             // console.log(result);
             res.status(201).json({
                 message: "Handling POST requests to /users",
                 createdUser: result,
             });
-        })
-        .catch((err) => {
-            console.log(err);
-            res.status(500).json({
-                error: err,
-            });
         });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Server error" });
+    }
 });
 
 // @route       PUT users/addrecipe/:recipeId

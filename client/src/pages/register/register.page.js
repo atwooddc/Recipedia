@@ -19,7 +19,7 @@ import { useNavigate } from "react-router-dom";
 const Register = () => {
     const navigate = useNavigate();
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         // console.log(data);
@@ -32,12 +32,26 @@ const Register = () => {
             username: data.get("username"),
         });
 
-        // Send data to the backend via POST
-        fetch("http://localhost:8080/users", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: json_data, // body data type must match "Content-Type" header
-        }).then((res) => res.json());
+        try {
+            // Send data to the backend via POST
+            const response = await fetch("http://localhost:8080/users", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: json_data, // body data type must match "Content-Type" header
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message);
+            }
+
+            // The response is OK, navigate
+            navigate("../login");
+        } catch (err) {
+            // Display the error message to the user, e.g. in an alert box
+            alert(`Error: ${err.message}`);
+        }
     };
 
     const theme = createTheme({
@@ -67,7 +81,6 @@ const Register = () => {
                     >
                         <Box
                             component="form"
-                            noValidate
                             onSubmit={handleSubmit}
                             sx={{ mt: 3 }}
                         >
