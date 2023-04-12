@@ -1,4 +1,5 @@
 import React from "react";
+
 import "./register.styles.css";
 
 import Button from "@mui/material/Button";
@@ -16,7 +17,7 @@ import Logo from "../../components/logo/logo.component";
 import { useNavigate } from "react-router-dom";
 
 const Register = () => {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -145,7 +146,10 @@ const Register = () => {
                             </Button>
                             <Grid container justifyContent="flex-end">
                                 <Grid item>
-                                    <Link variant="body2" onClick={() => navigate("../login")}>
+                                    <Link
+                                        variant="body2"
+                                        onClick={() => navigate("../login")}
+                                    >
                                         Already have an account? Sign in
                                     </Link>
                                 </Grid>

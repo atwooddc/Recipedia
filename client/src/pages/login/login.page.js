@@ -31,7 +31,7 @@ const Login = () => {
             email: data.get("email"),
             password: data.get("password"),
         });
-        
+
         try {
             // Send data to the backend via POST
             await fetch(addBaseUrlClient("users/login"), {
@@ -41,8 +41,8 @@ const Login = () => {
             })
                 .then((response) => response.json())
                 .then((data) => {
-                    const token = data.token
-                    document.cookie = `token=${token}; path=/;`
+                    const token = data.token;
+                    document.cookie = `token=${token}; path=/;`;
 
                     const user = data.user;
                     setAuth(user);
@@ -132,7 +132,10 @@ const Login = () => {
                                     backgroundColor: "#4c8bf5",
                                     marginTop: 0,
                                 }}
-                                onClick={() => window.location.href = addBaseUrlClient("auth/google")}
+                                onClick={() =>
+                                    (window.location.href =
+                                        addBaseUrlClient("auth/google"))
+                                }
                             >
                                 Sign In With Google
                             </Button>
@@ -143,7 +146,10 @@ const Login = () => {
                                     </Link>
                                 </Grid>
                                 <Grid item>
-                                    <Link variant="body2" onClick={() => navigate("../register")}>
+                                    <Link
+                                        variant="body2"
+                                        onClick={() => navigate("../register")}
+                                    >
                                         Don't have an account? Sign Up
                                     </Link>
                                 </Grid>
