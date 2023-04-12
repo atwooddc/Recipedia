@@ -45,7 +45,7 @@ const MyRecipes = [
     id: 5,
     name: 'Caprese Salad',
     image: 'https://images.unsplash.com/photo-1561043433-aaf687c4cf04?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8Y2Flc2FyJTIwcmVjaXBlfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=800&q=60',
-    description: 'A simple Italian dish made of mozzarella cheese, juicy tomatoes, and fresh basil'
+    description: 'An Italian dish made of mozzarella cheese, juicy tomatoes, and fresh basil'
   }
 ];
 

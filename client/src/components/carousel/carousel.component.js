@@ -59,7 +59,7 @@ const Carousel = ({ recipes }) => {
       {recipes.map((recipe) => (
         <div key={recipe.id}>
           <Link to={`/recipe/${recipe.id}`}>
-            <Card>
+            <Card style={{ margin: '0 10px' }}>
               <CardMedia
                 component="img"
                 height="140"
@@ -71,7 +71,7 @@ const Carousel = ({ recipes }) => {
                   {recipe.name}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                {truncateDescription(recipe.description, 80)}
+                {truncateDescription(recipe.description, 70)}
               </Typography>
               </CardContent>
             </Card>
