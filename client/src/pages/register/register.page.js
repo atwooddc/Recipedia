@@ -49,6 +49,7 @@ const Register = () => {
             navigate("../login");
         } catch (err) {
             // Display the error message to the user, e.g. in an alert box
+            alert(`Error: ${err.message}`);
         }
     };
 
