@@ -29,25 +29,14 @@ router.get("/:id", (req, res) => {
 });
 
 // @route       POST api/recipe
-// @desc        Create a new recipe and add to a user's recipe list
+// @desc        Creates a new recipe
 // @access      Private
 router.post("/", async (req, res) => {
-    const recipe = new Recipe(req.body);
-    recipe
-        .save()
-        .then((result) => {
-            console.log(result);
-            res.status(201).json({
-                message: "Handling POST requests to /recipe",
-                createdRecipe: result,
-            });
+    Recipe.create(req.body)
+        .then(recipe => {
+            res.status(201).send(recipe)
         })
-        .catch((err) => {
-            console.log(err);
-            res.status(500).json({
-                error: err,
-            });
-        });
+        .catch(err => res.status(500).send(err))
 });
 
 // @route       POST api/recipe/byurl
