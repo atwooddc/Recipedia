@@ -100,8 +100,16 @@ router.get("/:id", (req, res) => {
 // @route       PUT api/users/:id
 // @desc        Update a user by id
 // @access      Public
-router.put("/:id", (req, res) => {
-    User.findByIdAndUpdate(req.params.id, req.body)
+router.put("/", auth, async (req, res) => {
+    console.log(req.user._id);
+    console.log(req.body);
+    User.findByIdAndUpdate(req.user._id, req.body)
+        .then((updatedUser) => res.send(updatedUser))
+        .catch((err) => res.status(401).send(err));
+});
+
+router.put("/reset/", auth, async (req, res) => {
+    User.findByIdAndUpdate(req.user._id, { recipes: [] })
         .then((updatedUser) => res.send(updatedUser))
         .catch((err) => res.status(401).send(err));
 });

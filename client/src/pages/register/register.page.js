@@ -1,4 +1,5 @@
 import React from "react";
+
 import "./register.styles.css";
 
 import Button from "@mui/material/Button";

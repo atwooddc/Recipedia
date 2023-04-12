@@ -19,20 +19,179 @@ import Link from "@mui/material/Link";
 import Avatar from "@mui/material/Avatar";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import { Link as RouterLink } from "react-router-dom";
+import { json, Link as RouterLink, useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
+import useAuth from "../../hooks/useAuth";
+import bcrypt from "bcryptjs";
 
 const SettingsPage = () => {
+    const { auth, setAuth } = useAuth();
+    const navigate = useNavigate();
+
     const scrollOffset = -1 * window.innerHeight * 0.1;
 
-    const handleSubmit = (event) => {
+    const handleBasicsSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
+
+        let json_data = JSON.stringify({
+            firstName: data.get("firstName"),
+            lastName: data.get("lastName"),
             email: data.get("email"),
-            password: data.get("password"),
         });
+        console.log(json_data);
+        try {
+            // Send data to the backend via PUT
+            fetch(`http://localhost:8080/users/`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: json_data, // body data type must match "Content-Type" header
+                credentials: "include",
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log(data);
+                })
+                .catch((error) => console.error(error));
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    const handlePasswordSubmit = async (event) => {
+        event.preventDefault();
+        const data = new FormData(event.currentTarget);
+
+        let json_string = JSON.stringify({
+            oldPassword: data.get("old-password"),
+            newPassword: data.get("new-password"),
+            confirmPassword: data.get("confirm-password"),
+        });
+        console.log(json_string);
+        let data_obj = JSON.parse(json_string);
+        //console.log(data_obj);
+
+        //console.log(id);
+        //console.log(data_obj.oldPassword, auth.password);
+
+        const isMatch = await bcrypt.compare(
+            data_obj.oldPassword,
+            auth.password
+        );
+        if (!isMatch) {
+            console.log("Old password is incorrect");
+        }
+
+        if (data_obj.confirmPassword !== data_obj.newPassword) {
+            console.log("passwords do not match");
+        } else if (data_obj.oldPassword === data_obj.newPassword) {
+            console.log("Cannot use the same password again");
+        }
+
+        /* INCLUDE ACTUAL ERROR HANDLING HERE/DISPLAYING THE MESSAGE */
+        const salt = await bcrypt.genSalt(10);
+        const hash = await bcrypt.hash(data.get("new-password"), salt);
+        let relevant_data = JSON.stringify({
+            password: hash,
+        });
+        try {
+            // Send data to the backend via PUT
+            fetch(`http://localhost:8080/users/`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: relevant_data, // body data type must match "Content-Type" header
+                credentials: "include",
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log(data);
+                })
+                .catch((error) => console.error(error));
+            //TODO ADD A REFRESH HERE?
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    const handleAdvancedSubmit = (event) => {
+        event.preventDefault();
+        const data = new FormData(event.currentTarget);
+
+        let json_data = JSON.stringify({
+            location: data.get("location"),
+            birthday: data.get("birthday"),
+            phoneNumber: data.get("phone-number"),
+            imgUrl: data.get("imgUrl"),
+            bio: data.get("bio"),
+            twitterHandle: data.get("twitterHandle"),
+        });
+        console.log(json_data);
+
+        try {
+            // Send data to the backend via PUT
+            fetch(`http://localhost:8080/users/`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: json_data, // body data type must match "Content-Type" header
+                credentials: "include",
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log(data);
+                })
+                .catch((error) => console.error(error));
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    const handleDeleteAccount = (event) => {
+        event.preventDefault();
+        console.log("Are you sure?");
+        const id = auth._id;
+        console.log(id);
+        try {
+            // Send data to the backend via PUT
+            fetch(`http://localhost:8080/users/${id}`, {
+                method: "DELETE",
+                headers: { "Content-Type": "application/json" },
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log(data);
+                    console.log("DELETED");
+                    navigate("../homepage");
+                    //cookie cleared here? refactored to backend?
+                })
+                .catch((error) => console.error(error));
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    //TODO TEST AFTER RECIPES ARE PROPERLY ADDED
+    const handleResetAccount = (event) => {
+        console.log("HLEOOOO??");
+        event.preventDefault();
+        console.log("Are you sure?");
+        try {
+            // Send data to the backend via PUT
+            fetch(`http://localhost:8080/users/reset/`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include",
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log(data);
+                    console.log("RESET");
+                    navigate("../homepage");
+                })
+                .catch((error) => console.error(error));
+        } catch (err) {
+            console.error(err);
+        }
     };
 
     const theme = createTheme({
@@ -77,9 +236,9 @@ const SettingsPage = () => {
                                     }}
                                 >
                                     <Avatar
-                                        alt="Grant Achatz"
-                                        src="/grant.jpg"
-                                        sx={{ width: 56, height: 56 }}
+                                        alt={auth.firstName}
+                                        src={auth.imgUrl}
+                                        sx={{ width: 80, height: 80 }}
                                     />
                                     <Box
                                         sx={{
@@ -93,7 +252,7 @@ const SettingsPage = () => {
                                             color="common.black"
                                             fontWeight="bold"
                                         >
-                                            {greeting}, Grant
+                                            {greeting}, {auth.firstName}
                                         </Typography>
                                         <Typography
                                             variant="subtitle1"
@@ -124,7 +283,7 @@ const SettingsPage = () => {
                                     <Box
                                         component="form"
                                         noValidate
-                                        onSubmit={handleSubmit}
+                                        onSubmit={handleBasicsSubmit}
                                         sx={{ mt: 3 }}
                                     >
                                         <Grid container spacing={2}>
@@ -136,6 +295,9 @@ const SettingsPage = () => {
                                                     id="firstName"
                                                     label="First Name"
                                                     autoFocus
+                                                    defaultValue={
+                                                        auth.firstName
+                                                    }
                                                 />
                                             </Grid>
                                             <Grid item xs={12} sm={6}>
@@ -145,6 +307,7 @@ const SettingsPage = () => {
                                                     label="Last Name"
                                                     name="lastName"
                                                     autoComplete="family-name"
+                                                    defaultValue={auth.lastName}
                                                 />
                                             </Grid>
                                             <Grid item xs={12}>
@@ -154,6 +317,7 @@ const SettingsPage = () => {
                                                     label="Email Address"
                                                     name="email"
                                                     autoComplete="email"
+                                                    defaultValue={auth.email}
                                                 />
                                             </Grid>
                                         </Grid>
@@ -195,7 +359,7 @@ const SettingsPage = () => {
                                     <Box
                                         component="form"
                                         noValidate
-                                        onSubmit={handleSubmit}
+                                        onSubmit={handlePasswordSubmit}
                                         sx={{ mt: 3 }}
                                     >
                                         <Grid container spacing={2}>
@@ -269,7 +433,7 @@ const SettingsPage = () => {
                                     <Box
                                         component="form"
                                         noValidate
-                                        onSubmit={handleSubmit}
+                                        onSubmit={handleAdvancedSubmit}
                                         sx={{ mt: 3 }}
                                     >
                                         <Grid container spacing={2}>
@@ -280,6 +444,7 @@ const SettingsPage = () => {
                                                     label="Location"
                                                     type="location"
                                                     id="location"
+                                                    defaultValue={auth.location}
                                                 />
                                             </Grid>
                                             <Grid item xs={12}>
@@ -289,6 +454,7 @@ const SettingsPage = () => {
                                                     label="Birthday"
                                                     type="birthday"
                                                     id="birthday"
+                                                    defaultValue={auth.birthday}
                                                 />
                                             </Grid>
                                             <Grid item xs={12}>
@@ -298,6 +464,43 @@ const SettingsPage = () => {
                                                     label="Phone Number"
                                                     type="phone-number"
                                                     id="phone-nunmber"
+                                                    defaultValue={
+                                                        auth.phoneNumber
+                                                    }
+                                                />
+                                            </Grid>
+                                            <Grid item xs={12}>
+                                                <TextField
+                                                    fullWidth
+                                                    name="imgUrl"
+                                                    label="Profile Image URL"
+                                                    type="imgUrl"
+                                                    id="imgUrl"
+                                                    defaultValue={auth.imgUrl}
+                                                />
+                                            </Grid>
+                                            <Grid item xs={12}>
+                                                <TextField
+                                                    fullWidth
+                                                    name="bio"
+                                                    label="Bio"
+                                                    type="bio"
+                                                    id="bio"
+                                                    defaultValue={auth.bio}
+                                                    multiline
+                                                    rows={4}
+                                                />
+                                            </Grid>
+                                            <Grid item xs={12}>
+                                                <TextField
+                                                    fullWidth
+                                                    name="twitterHandle"
+                                                    label="Twitter Handle"
+                                                    type="twitterHandle"
+                                                    id="twitterHandle"
+                                                    defaultValue={
+                                                        auth.twitterHandle
+                                                    }
                                                 />
                                             </Grid>
                                         </Grid>
@@ -343,6 +546,7 @@ const SettingsPage = () => {
                                                 variant="subtitle2"
                                                 color="common.black"
                                                 fontWeight="bold"
+                                                onClick={handleResetAccount}
                                             >
                                                 {" "}
                                                 Reset Account{" "}
@@ -418,6 +622,9 @@ const SettingsPage = () => {
                                                     variant="contained"
                                                     color="error"
                                                     sx={{ mt: 3, mb: 2 }}
+                                                    onClick={
+                                                        handleDeleteAccount
+                                                    }
                                                 >
                                                     Delete Account
                                                 </Button>

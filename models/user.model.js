@@ -36,7 +36,11 @@ const UserSchema = new Schema({
     },
     secret: String,
     imgUrl: String,
-    phone: String,
+    phoneNumber: String,
+    birthday: String,
+    location: String,
+    bio: String,
+    twitterHandle: String,
     recipes: { type: [Recipe.schema], required: false },
 });
 

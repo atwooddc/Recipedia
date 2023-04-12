@@ -61,8 +61,6 @@ export default function Sidebar() {
                     <div className="navbar-logo-cont">
                         <Logo linkTo="home" />
                     </div>
-                    <p>{auth.username}</p>
-                    {/* <Divider /> */}
                     <List>
                         {["myrecipes", "addrecipe", "profile", "settings"].map(
                             (text, index) => (

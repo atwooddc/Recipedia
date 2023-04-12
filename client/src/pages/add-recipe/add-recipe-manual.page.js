@@ -16,11 +16,12 @@ import Paper from "@mui/material/Paper";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 import { useNavigate } from "react-router-dom";
-import { Link as RouterLink } from "react-router-dom";
+import { addBaseUrlClient } from "../../utils/getBaseClientUrl";
+import useAuth from "../../hooks/useAuth";
 
 const ManualInsertPage = () => {
     const navigate = useNavigate();
-    const scrollOffset = -1 * window.innerHeight * 0.1;
+    const {auth, setAuth} = useAuth()
 
     const [ingredients, setIngredients] = useState([{ value: "" }]);
     const [steps, setSteps] = useState([{ value: "" }]);
@@ -82,9 +83,6 @@ const ManualInsertPage = () => {
             return; // stop form submission
         }
 
-        // console.log(ingredients);
-        // console.log(steps);
-
         let ing_arr = [];
         for (let ing of ingredients) {
             if (ing.value !== "" && ing.value !== "\n") {
@@ -118,7 +116,32 @@ const ManualInsertPage = () => {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: json_data, // body data type must match "Content-Type" header
-        }).then((res) => res.json());
+        })
+        .then(res => {
+            if (!res.ok) {
+                throw new Error(res.statusText);
+            }
+            return res.json();
+        })
+        .then(json => {
+            return fetch(addBaseUrlClient(`users/addrecipe/${json._id}`), {
+                method: "PUT",
+                credentials: 'include',
+                headers: { "Content-Type": "application/json" }
+            })
+        })
+        .then(res => {
+            if (!res.ok) {
+                throw new Error(res.statusText)
+            }
+            return res.json()
+        })
+        .then(json => {
+            setAuth(json)
+            navigate("../myrecipes")
+        })
+        .catch(err => console.error(err))
+
 
         // redirect user to recipe they just created
     };
