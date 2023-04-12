@@ -16,7 +16,7 @@ import Logo from "../../components/logo/logo.component";
 import { useNavigate } from "react-router-dom";
 
 const Register = () => {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -37,6 +37,8 @@ const Register = () => {
             headers: { "Content-Type": "application/json" },
             body: json_data, // body data type must match "Content-Type" header
         }).then((res) => res.json());
+
+        navigate("../login");
     };
 
     const theme = createTheme({
@@ -145,7 +147,10 @@ const Register = () => {
                             </Button>
                             <Grid container justifyContent="flex-end">
                                 <Grid item>
-                                    <Link variant="body2" onClick={() => navigate("../login")}>
+                                    <Link
+                                        variant="body2"
+                                        onClick={() => navigate("../login")}
+                                    >
                                         Already have an account? Sign in
                                     </Link>
                                 </Grid>
