@@ -20,7 +20,7 @@ const RecipePreview = ({data}) => {
             <Card
                 sx={{
                     width: "35vh",
-                    height: "35vh",
+                    height: "40vh",
                     display: "flex",
                     flexDirection: "column",
                     cursor: "pointer"
@@ -38,10 +38,11 @@ const RecipePreview = ({data}) => {
                         gutterBottom
                         variant="h5"
                         component="h2"
+                        style={{fontSize: "100%"}}
+                        // className='text-cont'
                     >
                         {title}
                     </Typography>
-                    {/* <Typography>{desc}</Typography> */}
                 </CardContent>
             </Card>
         </Grid>

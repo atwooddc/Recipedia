@@ -115,11 +115,18 @@ const handleNutrition = nutrition => {
     }
 }
 
+const handleImage = img => {
+    const imgObj = Array.isArray(img) ? img[0] : img
+
+    return typeof imgObj === "object" ? imgObj?.url : imgObj
+}
+
 const formatRecipe = (recipeData, recipeUrl) => {
     const recipe = {
         "title": recipeData?.name?.trim(),
         "url": recipeUrl,
-        "imageUrl": Array.isArray(recipeData?.image) ? recipeData?.image[0]?.url : recipeData?.image?.url,
+        "imageUrl": handleImage(recipeData?.image),
+        // "imageUrl": Array.isArray(recipeData?.image) ? recipeData?.image[0]?.url : recipeData?.image?.url,
         "prepTime": isoToMinutes(recipeData?.prepTime),
         "cookTime": isoToMinutes(recipeData?.cookTime),
         "totalTime": isoToMinutes(recipeData?.totalTime),
