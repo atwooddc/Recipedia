@@ -17,7 +17,7 @@ router.get("/", (req, res) => {
         });
 });
 
-// @route       GET api/Recipes/:id
+// @route       GET api/recipe/:id
 // @desc        Get a Recipe by its ID
 // @access      Public
 router.get("/:id", (req, res) => {
@@ -57,8 +57,7 @@ router.post('/byurl', auth, async (req, res) => {
                 if(!validateRecipe(newRecipe)){
                     throw new Error("Invalid recipe parsing")
                 }
-    
-                console.log(newRecipe)
+
                 // Create the recipe
                 Recipe.create(newRecipe)
                     .then(recipe => {

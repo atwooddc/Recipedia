@@ -41,11 +41,8 @@ const Login = () => {
             })
                 .then((response) => response.json())
                 .then((data) => {
-                    console.log(document.cookie)
                     const token = data.token;
-                    console.log(token)
                     document.cookie = `token=${token}; path=/;`;
-                    console.log(document.cookie)
 
                     const user = data.user;
                     setAuth(user);
