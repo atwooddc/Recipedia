@@ -1,4 +1,5 @@
 import React from "react";
+
 import "./register.styles.css";
 
 import Button from "@mui/material/Button";
@@ -13,11 +14,10 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 import Logo from "../../components/logo/logo.component";
-import { Link as RouterLink } from "react-router-dom";
-import { api } from "../../utils/axios";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
-    const scrollOffset = -1 * window.innerHeight * 0.1;
+    const navigate = useNavigate();
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -31,15 +31,6 @@ const Register = () => {
             password: data.get("password"),
             username: data.get("username"),
         });
-        console.log(json_data);
-        /*
-        console.log({
-            firstName: data.get("firstName"),
-            lastName: data.get("lastName"),
-            email: data.get("email"),
-            password: data.get("password"),
-        });
-        */
 
         // Send data to the backend via POST
         fetch("http://localhost:8080/users", {
@@ -155,11 +146,12 @@ const Register = () => {
                             </Button>
                             <Grid container justifyContent="flex-end">
                                 <Grid item>
-                                    <RouterLink to="../login">
-                                        <Link variant="body2">
-                                            Already have an account? Sign in
-                                        </Link>
-                                    </RouterLink>
+                                    <Link
+                                        variant="body2"
+                                        onClick={() => navigate("../login")}
+                                    >
+                                        Already have an account? Sign in
+                                    </Link>
                                 </Grid>
                             </Grid>
                         </Box>
