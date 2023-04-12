@@ -43,9 +43,9 @@ const MyRecipes = [
   },
   {
     id: 5,
-    name: 'Test Recipe',
+    name: 'Caprese Salad',
     image: 'https://images.unsplash.com/photo-1561043433-aaf687c4cf04?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8Y2Flc2FyJTIwcmVjaXBlfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=800&q=60',
-    description: 'plz work'
+    description: 'A simple Italian dish made of mozzarella cheese, juicy tomatoes, and fresh basil'
   }
 ];
 
@@ -76,15 +76,15 @@ const SuggestedRecipes = [
   },
   {
     id: 10,
-    name: 'Test Recipe',
-    image: 'https://images.unsplash.com/photo-1561043433-aaf687c4cf04?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8Y2Flc2FyJTIwcmVjaXBlfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=800&q=60',
-    description: 'plz work'
+    name: 'Beef Wellington',
+    image: 'https://images.unsplash.com/photo-1546964053-d018e345e490?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80',
+    description: 'Tender filet wrapped in pastry crust and coated with a savory mushroom duxelles.'
   },
   {
     id: 11,
-    name: 'Test Recipe 2',
-    image: 'https://images.unsplash.com/photo-1561043433-aaf687c4cf04?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8Y2Flc2FyJTIwcmVjaXBlfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=800&q=60',
-    description: 'plz work'
+    name: 'Lemon Meringue',
+    image: 'https://images.unsplash.com/photo-1519915028121-7d3463d20b13?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80',
+    description: 'A tangy and sweet dessert pie made with lemon curd filling and fluffy meringue.'
   }
 ];
 
