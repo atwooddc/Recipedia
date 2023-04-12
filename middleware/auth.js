@@ -6,6 +6,7 @@ dotenv.config();
 
 function auth(req, res, next){
     const token = req.cookies.token;
+    console.log(token)
 
     if(!token){
         res.status(401).json({msg: "Access denied. No token provided"})
@@ -15,9 +16,9 @@ function auth(req, res, next){
         req.user = decodedUser.user
         next()
     }catch(err){
-        res.redirect(`${getBaseUrl()}`)
         res.clearCookie("token")
         res.status(400).send("Token is not valid")
+        return res.redirect(`${getBaseUrl()}`)
     }
 }
 

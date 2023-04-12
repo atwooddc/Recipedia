@@ -15,11 +15,11 @@ import Logo from "../../components/logo/logo.component";
 
 import useAuth from "../../hooks/useAuth";
 
-import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { addBaseUrlClient } from "../../utils/getBaseClientUrl";
 
 const Login = () => {
-    const { auth, setAuth } = useAuth();
+    const { setAuth } = useAuth();
     const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
@@ -41,8 +41,11 @@ const Login = () => {
             })
                 .then((response) => response.json())
                 .then((data) => {
+                    console.log(document.cookie)
                     const token = data.token;
+                    console.log(token)
                     document.cookie = `token=${token}; path=/;`;
+                    console.log(document.cookie)
 
                     const user = data.user;
                     setAuth(user);

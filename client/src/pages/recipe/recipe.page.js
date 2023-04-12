@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import CustomTextArea from '../../components/custom-textarea/custom-textarea.component';
-import { AccessTime, Favorite, Kitchen } from '@mui/icons-material';
+import { Kitchen } from '@mui/icons-material';
 import ListAltIcon from '@mui/icons-material/ListAlt';
-import Box from "@mui/material/Box";
+// import { useParams } from 'react-router-dom';
 
 import './recipe.styles.css';
 
@@ -31,7 +30,7 @@ const dummyRecipeData = {
 };
 
 const RecipePage = () => {
-  const { id: recipeId } = useParams();
+//   const { id: recipeId } = useParams();
   const [recipe, setRecipe] = useState(dummyRecipeData);
   const [editMode, setEditMode] = useState(false);
 
