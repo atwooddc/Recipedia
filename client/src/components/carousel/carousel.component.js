@@ -46,6 +46,14 @@ const Carousel = ({ recipes }) => {
     ],
   };
 
+  const truncateDescription = (description, maxLength) => {
+    if (description.length <= maxLength) {
+      return description;
+    }
+    return description.substring(0, maxLength) + '...';
+  };
+
+
   return (
     <Slider {...settings}>
       {recipes.map((recipe) => (
@@ -63,8 +71,8 @@ const Carousel = ({ recipes }) => {
                   {recipe.name}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  {recipe.description}
-                </Typography>
+                {truncateDescription(recipe.description, 80)}
+              </Typography>
               </CardContent>
             </Card>
           </Link>
