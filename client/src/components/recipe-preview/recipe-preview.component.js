@@ -9,26 +9,29 @@ import Typography from "@mui/material/Typography";
 
 import {useNavigate} from 'react-router-dom'
 
+const defaultImageUrl = "https://static.vecteezy.com/system/resources/previews/002/621/029/original/chef-recipe-book-kitchen-utensil-line-style-icon-free-vector.jpg"
+
 const RecipePreview = ({data}) => {
-    const {id, title, img, desc} = data
+    const {_id, title, imageUrl, desc} = data
     const navigate = useNavigate()
 
     return (
-        <Grid item key={id} xs={12} sm={6} md={4}>
+        <Grid item key={_id} xs={12} sm={6} md={4}>
             <Card
                 sx={{
-                    height: "50vh",
+                    width: "35vh",
+                    height: "35vh",
                     display: "flex",
                     flexDirection: "column",
                     cursor: "pointer"
                 }}
-                onClick={() => navigate(`../recipe/${id}`)}
+                onClick={() => navigate(`../recipe/${_id}`)}
             >
                 <CardMedia
                     component="img"
-                    image={img}
+                    image={imageUrl ? imageUrl : defaultImageUrl}
                     alt="recipe"
-                    style={{height: "60%"}}
+                    style={{height: "70%"}}
                 />
                 <CardContent sx={{ flexGrow: 1 }}>
                     <Typography
@@ -38,7 +41,7 @@ const RecipePreview = ({data}) => {
                     >
                         {title}
                     </Typography>
-                    <Typography>{desc}</Typography>
+                    {/* <Typography>{desc}</Typography> */}
                 </CardContent>
             </Card>
         </Grid>

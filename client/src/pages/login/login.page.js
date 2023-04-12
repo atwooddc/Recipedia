@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import "./login.styles.css";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -16,42 +16,38 @@ import Logo from "../../components/logo/logo.component";
 import useAuth from "../../hooks/useAuth";
 
 import { Link as RouterLink, useNavigate } from "react-router-dom";
-import { getBaseUrlClient } from "../../utils/getBaseClientUrl";
+import { addBaseUrlClient } from "../../utils/getBaseClientUrl";
 
 const Login = () => {
     const { auth, setAuth } = useAuth();
     const navigate = useNavigate();
-    const scrollOffset = -1 * window.innerHeight * 0.1;
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get("email"),
-            password: data.get("password"),
-        });
-        //ENCRPYT it with passport and chatgpt
 
+        //ENCRPYT it with passport and chatgpt
         let json_data = JSON.stringify({
             email: data.get("email"),
             password: data.get("password"),
         });
+        
         try {
             // Send data to the backend via POST
-            fetch("http://localhost:8080/users/login", {
+            await fetch(addBaseUrlClient("users/login"), {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: json_data, // body data type must match "Content-Type" header
             })
                 .then((response) => response.json())
                 .then((data) => {
+                    const token = data.token
+                    document.cookie = `token=${token}; path=/;`
+
                     const user = data.user;
-                    console.log(user);
                     setAuth(user);
                     // redirect to protected route
-                    //temporary, login whenever button is clicked
                     navigate("../myrecipes");
-                    // Do something with the token and user
                 })
                 .catch((error) => console.error(error));
         } catch (err) {
@@ -136,26 +132,20 @@ const Login = () => {
                                     backgroundColor: "#4c8bf5",
                                     marginTop: 0,
                                 }}
-                                onClick={() =>
-                                    (window.location.href = `${getBaseUrlClient()}/auth/google`)
-                                }
+                                onClick={() => window.location.href = addBaseUrlClient("auth/google")}
                             >
                                 Sign In With Google
                             </Button>
                             <Grid container>
                                 <Grid item xs>
-                                    <RouterLink to="#">
-                                        <Link variant="body2">
-                                            Forgot password?
-                                        </Link>
-                                    </RouterLink>
+                                    <Link variant="body2">
+                                        Forgot password?
+                                    </Link>
                                 </Grid>
                                 <Grid item>
-                                    <RouterLink to="../register">
-                                        <Link variant="body2">
-                                            Don't have an account? Sign Up
-                                        </Link>
-                                    </RouterLink>
+                                    <Link variant="body2" onClick={() => navigate("../register")}>
+                                        Don't have an account? Sign Up
+                                    </Link>
                                 </Grid>
                             </Grid>
                         </Box>
