@@ -121,6 +121,14 @@ const handleImage = img => {
     return typeof imgObj === "object" ? imgObj?.url : imgObj
 }
 
+const handleTags = tags => {
+    if(!tags){
+        return undefined
+    }
+
+    return Array.isArray(tags) ? tags : tags?.split(",").map(keyword => keyword.trim().toLowerCase())
+}
+
 const formatRecipe = (recipeData, recipeUrl) => {
     const recipe = {
         "title": recipeData?.name?.trim(),
@@ -136,7 +144,7 @@ const formatRecipe = (recipeData, recipeUrl) => {
         "instructions": handleInstructions(recipeData?.recipeInstructions),
         "yield": handleYield(recipeData?.recipeYield),
         "cuisine": Array.isArray(recipeData?.recipeCuisine) ? recipeData[0]?.recipeCuisine?.trim().toLowerCase() : recipeData?.recipeCuisine?.trim().toLowerCase(),
-        "tags": recipeData?.keywords?.split(",").map(keyword => keyword.trim().toLowerCase())
+        "tags": handleTags(recipeData?.keywords)
     }
     
     // Two of prepTime, cookTime, totalTime are defined meaning we can decipher the remaining variable 

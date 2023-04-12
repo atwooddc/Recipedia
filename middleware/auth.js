@@ -6,7 +6,6 @@ dotenv.config();
 
 function auth(req, res, next){
     const token = req.cookies.token;
-    console.log(token)
 
     if(!token){
         res.status(401).json({msg: "Access denied. No token provided"})

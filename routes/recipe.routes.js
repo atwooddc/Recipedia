@@ -49,23 +49,27 @@ router.post('/byurl', auth, async (req, res) => {
             if(recipe){
                 return res.send(recipe)
             }
-
-            // Parse recipe using helper function
-            const newRecipe = await parseRecipe(req.body.url)
-
-            // Validate the recipe
-            if(!validateRecipe(newRecipe)){
-                throw new Error("Invalid recipe parsing")
+            
+            try{
+                const newRecipe = await parseRecipe(req.body.url)
+                
+                // Validate the recipe
+                if(!validateRecipe(newRecipe)){
+                    throw new Error("Invalid recipe parsing")
+                }
+    
+                console.log(newRecipe)
+                // Create the recipe
+                Recipe.create(newRecipe)
+                    .then(recipe => {
+                        res.send(recipe)
+                    })
+                    .catch(err => {
+                        console.log(err)
+                        res.status(500).send(err)})
+            } catch(err){
+                console.log(err)
             }
-
-            // Create the recipe
-            Recipe.create(newRecipe)
-                .then(recipe => {
-                    res.send(recipe)
-                })
-                .catch(err => {
-                    console.log(err)
-                    res.status(500).send(err)})
         })
         .catch(err => res.send(err.message))
 })
