@@ -69,7 +69,6 @@ router.post('/byurl', auth, async (req, res) => {
                 throw new Error("Invalid recipe parsing")
             }
 
-            console.log(newRecipe)
             // Create the recipe
             Recipe.create(newRecipe)
                 .then(recipe => {
