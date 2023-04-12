@@ -11,6 +11,9 @@ import Box from "@mui/material/Box";
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+
+import { Link } from 'react-router-dom';
+
 const Carousel = ({ recipes }) => {
   const settings = {
     dots: true,
@@ -47,26 +50,28 @@ const Carousel = ({ recipes }) => {
     <Slider {...settings}>
       {recipes.map((recipe) => (
         <div key={recipe.id}>
-          <Card>
-            <CardMedia
-              component="img"
-              height="140"
-              image={recipe.image}
-              alt={recipe.name}
-            />
-            <CardContent>
-              <Typography gutterBottom variant="h5" component="div">
-                {recipe.name}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {recipe.description}
-              </Typography>
-            </CardContent>
-          </Card>
+          <Link to={`/recipe/${recipe.id}`}>
+            <Card>
+              <CardMedia
+                component="img"
+                height="140"
+                image={recipe.image}
+                alt={recipe.name}
+              />
+              <CardContent>
+                <Typography gutterBottom variant="h5" component="div">
+                  {recipe.name}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {recipe.description}
+                </Typography>
+              </CardContent>
+            </Card>
+          </Link>
         </div>
       ))}
     </Slider>
   );
 };
 
-export default Carousel
+export default Carousel;
