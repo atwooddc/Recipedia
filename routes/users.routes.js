@@ -5,8 +5,10 @@ const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt");
+const auth = require('../middleware/auth')
 
 const User = require("../models/user.model");
+const Recipe = require('../models/recipe.model')
 
 app.use(express.json());
 
@@ -15,14 +17,11 @@ app.use(express.json());
 // @operationID createUser
 // @access      Public
 router.post("/", (req, res) => {
-    //console.log(req);
-    console.log(req.body);
-
-    const user = new User(req.body);
-    console.log(user);
+    // const user = new User(req.body);
+    // console.log(user);
     User.create(req.body)
         .then((result) => {
-            console.log(result);
+            // console.log(result);
             res.status(201).json({
                 message: "Handling POST requests to /users",
                 createdUser: result,
@@ -36,49 +35,35 @@ router.post("/", (req, res) => {
         });
 });
 
-// @route       POST users/addrecipe/:id
-// @desc        Adds the new recipe from the body to the userID provided
+// @route       PUT users/addrecipe/:recipeId
+// @desc        Adds a recipe to the user who made request's list
 // @operationID createUser
-// @access      Public
-router.post("/addrecipe/:id", (req, res) => {
-    const myrecipe = new Recipe(req.body);
+// @access      Private
+router.put("/addrecipe/:recipeId", auth, async (req, res) => {
+    const recipe = await Recipe.findOne({_id: req.params.recipeId})
 
     User.findByIdAndUpdate(
-        { _id: new mongoose.Types.ObjectId(req.params.id) },
-        { $push: { recipes: myrecipe } }
+        { _id: new mongoose.Types.ObjectId(req.user._id) },
+        { $addToSet: { recipes: recipe } }
     )
-        .then((result) => {
-            console.log(result);
-            res.status(201).json({
-                message: "Handling POST requests to /users/addrecipes/:id",
-                createdRecipe: result,
-            });
-        })
+        .then(user => res.send(user))
         .catch((err) => {
             console.log(err);
             res.status(500).json({
                 error: err,
             });
         });
-    /*
-    let myUser = User.findOne({ _id: req.params.id }).recipes.push(myrecipe);
-    myUser.save(done); */
-    /*
-    user.save()
-        .then((result) => {
-            console.log(result);
-            res.status(201).json({
-                message: "Handling POST requests to /users/addrecipes/:id",
-                createdUser: result,
-            });
+});
+
+// @route       GET api/users/recipes
+// @desc        Get a users recipe list
+// @access      Private
+router.get("/recipes", auth, (req, res) => {
+    User.findOne({_id: new mongoose.Types.ObjectId(req.user._id)})
+        .then(user => {
+            res.send(user.recipes)
         })
-        .catch((err) => {
-            console.log(err);
-            res.status(500).json({
-                error: err,
-            });
-        });
-        */
+        .catch((err) => res.status(400).send(err)); 
 });
 
 // @route       GET api/users
@@ -150,8 +135,8 @@ router.post("/login", async (req, res) => {
                 .status(401)
                 .json({ message: "Invalid email or password" });
         }
-        console.log(user);
-        console.log(password, user.password);
+        // console.log(user);
+        // console.log(password, user.password);
 
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
@@ -167,11 +152,12 @@ router.post("/login", async (req, res) => {
         const token = jwt.sign(payload, process.env.JWT_SECRET, {
             expiresIn: "1h",
         });
-        res.cookie("token", token, { httpOnly: false });
+        res.cookie("token", token, {  httpOnly: false });
         res.status(200).json({
             success: true,
             message: "Logged in successfully!",
             user: user,
+            token: token
         });
     } catch (err) {
         console.error(err);

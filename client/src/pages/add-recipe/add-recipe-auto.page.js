@@ -11,9 +11,13 @@ import InputAdornment from '@mui/material/InputAdornment';
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 import { useNavigate } from "react-router-dom";
+import useAuth from "../../hooks/useAuth";
+
+import {addBaseUrlClient} from '../../utils/getBaseClientUrl'
 
 const AutoParsePage = () => {
     const navigate = useNavigate();
+    const {auth, setAuth} = useAuth()
     const theme = createTheme({
         palette: {
             primary: {
@@ -37,15 +41,65 @@ const AutoParsePage = () => {
         const data = new FormData(event.currentTarget);
 
         let json_data = JSON.stringify({
-            link: data.get("link"),
+            url: data.get("link"),
         });
         console.log(json_data);
         // Then we will send the link to parser
 
-        // redirect to recipe card on success OR
-        // redirect back to input page with error message
+        // fetch(addBaseUrlClient("recipe/byurl"), {
+        //     method: "POST",
+        //     credentials: 'include',
+        //     headers: { "Content-Type": "application/json" },
+        //     body: json_data
+        // })
+        //     .then(res => res.json())
+        //     .then(json => {
+        //         const recipe_id = json._id
 
-    };
+        //         fetch(addBaseUrlClient(`users/addrecipe/${recipe_id}`), {
+        //             method: "PUT",
+        //             credentials: 'include',
+        //             headers: { "Content-Type": "application/json" }
+        //         })
+        //             .then(res => res.json())
+        //             .then(json => {
+        //                 setAuth(json)
+        //                 navigate("../myrecipes")
+        //             })
+        //             .catch(err => console.error(err))
+        //     })
+        //     .catch(err => console.error(err))
+        fetch(addBaseUrlClient("recipe/byurl"), {
+            method: "POST",
+            credentials: 'include',
+            headers: { "Content-Type": "application/json" },
+            body: json_data
+        })
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error(res.statusText);
+                }
+                return res.json();
+            })
+            .then(json => {
+                return fetch(addBaseUrlClient(`users/addrecipe/${json._id}`), {
+                    method: "PUT",
+                    credentials: 'include',
+                    headers: { "Content-Type": "application/json" }
+                })
+            })
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error(res.statusText)
+                }
+                return res.json()
+            })
+            .then(json => {
+                setAuth(json)
+                navigate("../myrecipes")
+            })
+            .catch(err => console.error(err))       
+    }
     
       return (
         <div>

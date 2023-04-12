@@ -8,7 +8,6 @@ const cookieParser = require("cookie-parser");
 const path = require("path");
 const getBaseUrl = require("./middleware/getBaseUrl");
 const bodyParser = require("body-parser");
-const User = require("./models/user.model");
 
 const app = express();
 
@@ -58,7 +57,10 @@ app.use(express.json());
 app.use(cookieParser());
 
 //allow cross origin resource sharing
-app.use(cors({ origin: `${getBaseUrl()}` }));
+app.use(cors({
+    origin: getBaseUrl(),
+    credentials: true,
+  }));
 
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", `${getBaseUrl()}`); // update to match the domain you will make the request from
@@ -91,18 +93,3 @@ if (process.env.NODE_ENV === "production") {
         res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
     });
 }
-
-// // BASIC SERVER
-// const express = require('express');
-// const dotenv = require('dotenv');
-
-// const app = express();
-
-// dotenv.config();
-
-// // use built in express body parser
-// app.use(express.json());
-
-// // Set port and listen
-// const port = process.env.PORT || 8080;
-// app.listen(port, () => console.log(`Server listening on port ${port}`));

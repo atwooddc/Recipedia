@@ -26,7 +26,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 
 import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 
-import { getBaseUrlClient } from "../../utils/getBaseClientUrl";
+import { addBaseUrlClient } from "../../utils/getBaseClientUrl";
 
 import useAuth from "../../hooks/useAuth";
 
@@ -99,7 +99,7 @@ export default function Sidebar() {
                             <ListItemButton
                                 onClick={() => {
                                     setAuth(undefined);
-                                    window.location.href = `${getBaseUrlClient()}/auth/logout`;
+                                    window.location.href = addBaseUrlClient("auth/logout");
                                 }}
                             >
                                 <ListItemIcon>

@@ -39,10 +39,11 @@ const RecipeSchema = new Schema({
         default: null,
         required: false
     },
-    ingredients: {
-        type: [IngredientSchema],
-        required: true
-    },
+    // ingredients: {
+    //     type: [IngredientSchema],
+    //     required: true
+    // },
+    ingredients: [String],
     instructions: {
         type: [String],
         required: true
