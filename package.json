@@ -39,10 +39,10 @@
     "passport": "^0.6.0",
     "passport-google-oauth2": "^0.2.0",
     "passport-google-oauth20": "^2.0.0",
-    "react-slick": "^0.29.0",
-    "slick-carousel": "^1.8.1",
     "passport-local-mongoose": "^8.0.0",
+    "react-slick": "^0.29.0",
     "react-twitter-widgets": "^1.11.0",
+    "slick-carousel": "^1.8.1",
     "uid-safe": "^2.1.5"
   }
 }
