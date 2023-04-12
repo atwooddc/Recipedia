@@ -3,6 +3,8 @@ const parseRecipe = require("../middleware/parseRecipe");
 const validateRecipe = require("../middleware/validateRecipe");
 const router = express.Router();
 const Recipe = require("../models/recipe.model");
+const User = require("../models/user.model")
+const auth = require("../middleware/auth")
 
 // @route       GET api/recipe
 // @desc        Get all recipes
@@ -51,7 +53,7 @@ router.post("/", async (req, res) => {
 // @route       POST api/recipe/byurl
 // @desc        Create a new recipe using URL parsing
 // @access      Private
-router.post('/byurl', async (req, res) => {
+router.post('/byurl', auth, async (req, res) => {
     // Search through recipe DB by url. If it exists already send that recipe. Else, move on to next block to create it.
     Recipe.findOne({url: req.body.url})
         .then(async recipe => {
@@ -67,10 +69,15 @@ router.post('/byurl', async (req, res) => {
                 throw new Error("Invalid recipe parsing")
             }
 
+            console.log(newRecipe)
             // Create the recipe
-            await Recipe.create(newRecipe)
-                .then(recipe => res.send(recipe))
-                .catch(err => res.send(err))
+            Recipe.create(newRecipe)
+                .then(recipe => {
+                    res.send(recipe)
+                })
+                .catch(err => {
+                    console.log(err)
+                    res.status(500).send(err)})
         })
         .catch(err => res.send(err.message))
 })
