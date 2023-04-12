@@ -5,10 +5,10 @@ const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt");
-const auth = require('../middleware/auth')
+const auth = require("../middleware/auth");
 
 const User = require("../models/user.model");
-const Recipe = require('../models/recipe.model')
+const Recipe = require("../models/recipe.model");
 
 app.use(express.json());
 
@@ -40,13 +40,13 @@ router.post("/", (req, res) => {
 // @operationID createUser
 // @access      Private
 router.put("/addrecipe/:recipeId", auth, async (req, res) => {
-    const recipe = await Recipe.findOne({_id: req.params.recipeId})
+    const recipe = await Recipe.findOne({ _id: req.params.recipeId });
 
     User.findByIdAndUpdate(
         { _id: new mongoose.Types.ObjectId(req.user._id) },
         { $addToSet: { recipes: recipe } }
     )
-        .then(user => res.send(user))
+        .then((user) => res.send(user))
         .catch((err) => {
             console.log(err);
             res.status(500).json({
@@ -59,11 +59,11 @@ router.put("/addrecipe/:recipeId", auth, async (req, res) => {
 // @desc        Get a users recipe list
 // @access      Private
 router.get("/recipes", auth, (req, res) => {
-    User.findOne({_id: new mongoose.Types.ObjectId(req.user._id)})
-        .then(user => {
-            res.send(user.recipes)
+    User.findOne({ _id: new mongoose.Types.ObjectId(req.user._id) })
+        .then((user) => {
+            res.send(user.recipes);
         })
-        .catch((err) => res.status(400).send(err)); 
+        .catch((err) => res.status(400).send(err));
 });
 
 // @route       GET api/users
@@ -89,14 +89,16 @@ router.get("/:id", (req, res) => {
 // @route       PUT api/users/:id
 // @desc        Update a user by id
 // @access      Public
-router.put("/:id", (req, res) => {
-    User.findByIdAndUpdate(req.params.id, req.body)
+router.put("/", auth, async (req, res) => {
+    console.log(req.user._id);
+    console.log(req.body);
+    User.findByIdAndUpdate(req.user._id, req.body)
         .then((updatedUser) => res.send(updatedUser))
         .catch((err) => res.status(401).send(err));
 });
 
-router.put("/reset/:id", (req, res) => {
-    User.findByIdAndUpdate(req.params.id, { recipe: [] })
+router.put("/reset/", auth, async (req, res) => {
+    User.findByIdAndUpdate(req.user._id, { recipes: [] })
         .then((updatedUser) => res.send(updatedUser))
         .catch((err) => res.status(401).send(err));
 });
@@ -152,12 +154,12 @@ router.post("/login", async (req, res) => {
         const token = jwt.sign(payload, process.env.JWT_SECRET, {
             expiresIn: "1h",
         });
-        res.cookie("token", token, {  httpOnly: false });
+        res.cookie("token", token, { httpOnly: false });
         res.status(200).json({
             success: true,
             message: "Logged in successfully!",
             user: user,
-            token: token
+            token: token,
         });
     } catch (err) {
         console.error(err);

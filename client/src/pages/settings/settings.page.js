@@ -19,7 +19,7 @@ import Link from "@mui/material/Link";
 import Avatar from "@mui/material/Avatar";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import { Link as RouterLink } from "react-router-dom";
+import { json, Link as RouterLink, useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
 import useAuth from "../../hooks/useAuth";
@@ -27,6 +27,7 @@ import bcrypt from "bcryptjs";
 
 const SettingsPage = () => {
     const { auth, setAuth } = useAuth();
+    const navigate = useNavigate();
 
     const scrollOffset = -1 * window.innerHeight * 0.1;
 
@@ -39,14 +40,14 @@ const SettingsPage = () => {
             lastName: data.get("lastName"),
             email: data.get("email"),
         });
-        const id = auth._id;
-        console.log(id);
+        console.log(json_data);
         try {
             // Send data to the backend via PUT
-            fetch(`http://localhost:8080/users/${id}`, {
+            fetch(`http://localhost:8080/users/`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: json_data, // body data type must match "Content-Type" header
+                credentials: "include",
             })
                 .then((response) => response.json())
                 .then((data) => {
@@ -71,7 +72,6 @@ const SettingsPage = () => {
         let data_obj = JSON.parse(json_string);
         //console.log(data_obj);
 
-        const id = auth._id;
         //console.log(id);
         //console.log(data_obj.oldPassword, auth.password);
 
@@ -88,6 +88,7 @@ const SettingsPage = () => {
         } else if (data_obj.oldPassword === data_obj.newPassword) {
             console.log("Cannot use the same password again");
         }
+
         /* INCLUDE ACTUAL ERROR HANDLING HERE/DISPLAYING THE MESSAGE */
         const salt = await bcrypt.genSalt(10);
         const hash = await bcrypt.hash(data.get("new-password"), salt);
@@ -96,10 +97,11 @@ const SettingsPage = () => {
         });
         try {
             // Send data to the backend via PUT
-            fetch(`http://localhost:8080/users/${id}`, {
+            fetch(`http://localhost:8080/users/`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: relevant_data, // body data type must match "Content-Type" header
+                credentials: "include",
             })
                 .then((response) => response.json())
                 .then((data) => {
@@ -125,14 +127,14 @@ const SettingsPage = () => {
             twitterHandle: data.get("twitterHandle"),
         });
         console.log(json_data);
-        const id = auth._id;
-        console.log(id);
+
         try {
             // Send data to the backend via PUT
-            fetch(`http://localhost:8080/users/${id}`, {
+            fetch(`http://localhost:8080/users/`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: json_data, // body data type must match "Content-Type" header
+                credentials: "include",
             })
                 .then((response) => response.json())
                 .then((data) => {
@@ -159,7 +161,8 @@ const SettingsPage = () => {
                 .then((data) => {
                     console.log(data);
                     console.log("DELETED");
-                    //TODO REDIRECT TO HOMEPAGE
+                    navigate("../homepage");
+                    //cookie cleared here? refactored to backend?
                 })
                 .catch((error) => console.error(error));
         } catch (err) {
@@ -169,21 +172,21 @@ const SettingsPage = () => {
 
     //TODO TEST AFTER RECIPES ARE PROPERLY ADDED
     const handleResetAccount = (event) => {
+        console.log("HLEOOOO??");
         event.preventDefault();
         console.log("Are you sure?");
-        const id = auth._id;
-        console.log(id);
         try {
             // Send data to the backend via PUT
-            fetch(`http://localhost:8080/users/reset/${id}`, {
+            fetch(`http://localhost:8080/users/reset/`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
+                credentials: "include",
             })
                 .then((response) => response.json())
                 .then((data) => {
                     console.log(data);
                     console.log("RESET");
-                    //TODO REDIRECT TO HOMEPAGE
+                    navigate("../homepage");
                 })
                 .catch((error) => console.error(error));
         } catch (err) {
