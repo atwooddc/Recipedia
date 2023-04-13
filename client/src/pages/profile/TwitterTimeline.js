@@ -3,7 +3,7 @@ import { Timeline } from "react-twitter-widgets";
 import useAuth from "../../hooks/useAuth";
 
 const TwitterTimeline = () => {
-    const { auth, setAuth } = useAuth();
+    const { auth } = useAuth();
 
     return (
         <Timeline

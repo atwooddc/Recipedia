@@ -17,7 +17,7 @@ router.get("/", (req, res) => {
         });
 });
 
-// @route       GET api/Recipes/:id
+// @route       GET api/recipe/:id
 // @desc        Get a Recipe by its ID
 // @access      Public
 router.get("/:id", (req, res) => {
@@ -49,23 +49,26 @@ router.post('/byurl', auth, async (req, res) => {
             if(recipe){
                 return res.send(recipe)
             }
+            
+            try{
+                const newRecipe = await parseRecipe(req.body.url)
+                
+                // Validate the recipe
+                if(!validateRecipe(newRecipe)){
+                    throw new Error("Invalid recipe parsing")
+                }
 
-            // Parse recipe using helper function
-            const newRecipe = await parseRecipe(req.body.url)
-
-            // Validate the recipe
-            if(!validateRecipe(newRecipe)){
-                throw new Error("Invalid recipe parsing")
+                // Create the recipe
+                Recipe.create(newRecipe)
+                    .then(recipe => {
+                        res.send(recipe)
+                    })
+                    .catch(err => {
+                        console.log(err)
+                        res.status(500).send(err)})
+            } catch(err){
+                console.log(err)
             }
-
-            // Create the recipe
-            Recipe.create(newRecipe)
-                .then(recipe => {
-                    res.send(recipe)
-                })
-                .catch(err => {
-                    console.log(err)
-                    res.status(500).send(err)})
         })
         .catch(err => res.send(err.message))
 })

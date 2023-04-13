@@ -4,15 +4,12 @@ import Logo from "../../components/logo/logo.component";
 import CookingVideo from "../../assets/bellpepper.mp4";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 
 import { Link } from "react-router-dom";
 import { Card } from "@mui/material";
 
 const HomePage = () => {
-    const scrollOffset = -1 * window.innerHeight * 0.1;
-
     return (
         <div className="homepage">
             <div className="page" id="home" style={{ position: "relative" }}>

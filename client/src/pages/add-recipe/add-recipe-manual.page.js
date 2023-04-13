@@ -21,7 +21,7 @@ import useAuth from "../../hooks/useAuth";
 
 const ManualInsertPage = () => {
     const navigate = useNavigate();
-    const {auth, setAuth} = useAuth()
+    const {setAuth} = useAuth()
 
     const [ingredients, setIngredients] = useState([{ value: "" }]);
     const [steps, setSteps] = useState([{ value: "" }]);

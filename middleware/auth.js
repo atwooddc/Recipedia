@@ -15,9 +15,9 @@ function auth(req, res, next){
         req.user = decodedUser.user
         next()
     }catch(err){
-        res.redirect(`${getBaseUrl()}`)
         res.clearCookie("token")
         res.status(400).send("Token is not valid")
+        return res.redirect(`${getBaseUrl()}`)
     }
 }
 

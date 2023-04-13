@@ -17,7 +17,7 @@ import {addBaseUrlClient} from '../../utils/getBaseClientUrl'
 
 const AutoParsePage = () => {
     const navigate = useNavigate();
-    const {auth, setAuth} = useAuth()
+    const {setAuth} = useAuth()
     const theme = createTheme({
         palette: {
             primary: {
@@ -28,7 +28,7 @@ const AutoParsePage = () => {
 
     // Greys out button until text field is filled
     const [link, setLink] = useState('');
-    const [error, setError] = useState(null);
+    // const [error, setError] = useState(null);
   
     const handleTextChange = (event) => {
         setLink(event.target.value);
@@ -43,32 +43,8 @@ const AutoParsePage = () => {
         let json_data = JSON.stringify({
             url: data.get("link"),
         });
-        console.log(json_data);
+
         // Then we will send the link to parser
-
-        // fetch(addBaseUrlClient("recipe/byurl"), {
-        //     method: "POST",
-        //     credentials: 'include',
-        //     headers: { "Content-Type": "application/json" },
-        //     body: json_data
-        // })
-        //     .then(res => res.json())
-        //     .then(json => {
-        //         const recipe_id = json._id
-
-        //         fetch(addBaseUrlClient(`users/addrecipe/${recipe_id}`), {
-        //             method: "PUT",
-        //             credentials: 'include',
-        //             headers: { "Content-Type": "application/json" }
-        //         })
-        //             .then(res => res.json())
-        //             .then(json => {
-        //                 setAuth(json)
-        //                 navigate("../myrecipes")
-        //             })
-        //             .catch(err => console.error(err))
-        //     })
-        //     .catch(err => console.error(err))
         fetch(addBaseUrlClient("recipe/byurl"), {
             method: "POST",
             credentials: 'include',
