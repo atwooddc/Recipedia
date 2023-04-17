@@ -34,14 +34,12 @@ router.post("/", async (req, res) => {
             }
         }
         User.create(req.body).then((result) => {
-            // console.log(result);
             res.status(201).json({
                 message: "Handling POST requests to /users",
                 createdUser: result,
             });
         });
     } catch (err) {
-        console.error(err);
         res.status(500).json({ message: "Server error" });
     }
 });
