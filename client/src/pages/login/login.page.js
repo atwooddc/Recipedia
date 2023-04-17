@@ -107,7 +107,7 @@ const Login = () => {
                                 id="password"
                                 autoComplete="current-password"
                             />
-                            <FormControlLabel
+                            {/* <FormControlLabel
                                 control={
                                     <Checkbox
                                         value="remember"
@@ -115,7 +115,7 @@ const Login = () => {
                                     />
                                 }
                                 label="Remember me"
-                            />
+                            /> */}
                             <Button
                                 type="submit"
                                 fullWidth
@@ -124,27 +124,12 @@ const Login = () => {
                             >
                                 Sign In
                             </Button>
-                            <Button
-                                fullWidth
-                                variant="contained"
-                                sx={{ mt: 3, mb: 2 }}
-                                style={{
-                                    backgroundColor: "#4c8bf5",
-                                    marginTop: 0,
-                                }}
-                                onClick={() =>
-                                    (window.location.href =
-                                        addBaseUrlClient("auth/google"))
-                                }
-                            >
-                                Sign In With Google
-                            </Button>
-                            <Grid container>
-                                <Grid item xs>
+                            <Grid container justifyContent="flex-end">
+                                {/* <Grid item xs>
                                     <Link variant="body2">
                                         Forgot password?
                                     </Link>
-                                </Grid>
+                                </Grid> */}
                                 <Grid item>
                                     <Link
                                         variant="body2"
