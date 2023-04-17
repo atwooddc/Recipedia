@@ -4,17 +4,6 @@ import { Kitchen } from "@mui/icons-material";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import { useParams } from "react-router-dom";
 import { addBaseUrlClient } from "../../utils/getBaseClientUrl";
-import {
-    Card,
-    CardContent,
-    CardHeader,
-    Grid,
-    List,
-    ListItem,
-    ListItemIcon,
-    ListItemText,
-    Typography,
-} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import FastfoodIcon from "@material-ui/icons/Fastfood";
 
@@ -110,7 +99,7 @@ const RecipePage = () => {
                         </ol>
                     </div>
                 </div>
-                <div className="notes-section">
+                {/*<div className="notes-section">
                     <CustomTextArea
                         label="Notes"
                         type="text"
@@ -131,7 +120,7 @@ const RecipePage = () => {
                     >
                         {`${editMode ? "Save" : "Edit"}`}
                     </button>
-                </div>
+                    </div> */}
             </div>
             {/*
             <Card>
