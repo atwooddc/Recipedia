@@ -21,7 +21,7 @@ import useAuth from "../../hooks/useAuth";
 
 const ManualInsertPage = () => {
     const navigate = useNavigate();
-    const {setAuth} = useAuth()
+    const { setAuth } = useAuth();
 
     const [ingredients, setIngredients] = useState([{ value: "" }]);
     const [steps, setSteps] = useState([{ value: "" }]);
@@ -107,9 +107,10 @@ const ManualInsertPage = () => {
             ingredients: ing_arr,
             instructions: step_arr,
             tags: tag_arr,
+            imageUrl: data.get("ImageUrl"),
         });
 
-        // console.log(json_data);
+        console.log(json_data);
 
         // Send data to the backend via POST
         fetch("http://localhost:8080/recipe", {
@@ -117,31 +118,30 @@ const ManualInsertPage = () => {
             headers: { "Content-Type": "application/json" },
             body: json_data, // body data type must match "Content-Type" header
         })
-        .then(res => {
-            if (!res.ok) {
-                throw new Error(res.statusText);
-            }
-            return res.json();
-        })
-        .then(json => {
-            return fetch(addBaseUrlClient(`users/addrecipe/${json._id}`), {
-                method: "PUT",
-                credentials: 'include',
-                headers: { "Content-Type": "application/json" }
+            .then((res) => {
+                if (!res.ok) {
+                    throw new Error(res.statusText);
+                }
+                return res.json();
             })
-        })
-        .then(res => {
-            if (!res.ok) {
-                throw new Error(res.statusText)
-            }
-            return res.json()
-        })
-        .then(json => {
-            setAuth(json)
-            navigate("../myrecipes")
-        })
-        .catch(err => console.error(err))
-
+            .then((json) => {
+                return fetch(addBaseUrlClient(`users/addrecipe/${json._id}`), {
+                    method: "PUT",
+                    credentials: "include",
+                    headers: { "Content-Type": "application/json" },
+                });
+            })
+            .then((res) => {
+                if (!res.ok) {
+                    throw new Error(res.statusText);
+                }
+                return res.json();
+            })
+            .then((json) => {
+                setAuth(json);
+                navigate("../myrecipes");
+            })
+            .catch((err) => console.error(err));
 
         // redirect user to recipe they just created
     };
@@ -472,6 +472,37 @@ const ManualInsertPage = () => {
                                                     : 'Add keywords to help categorize your recipe! Ex: "thai, peanuts, air-fryer,..."'
                                             }
                                             sx={{ mt: 1, marginRight: "10px" }}
+                                        />
+                                    </Paper>
+                                </Grid>
+                                {/* Image URL */}
+                                <Grid item xs={12}>
+                                    <Paper
+                                        sx={{
+                                            p: 2,
+                                            display: "flex",
+                                            flexDirection: "column",
+                                        }}
+                                    >
+                                        <Typography
+                                            variant="subtitle1"
+                                            color="common.black"
+                                            fontWeight="bold"
+                                        >
+                                            {" "}
+                                            Image URL
+                                        </Typography>
+                                        <TextField
+                                            name="ImageUrl"
+                                            id="ImageUrl"
+                                            // label="Title"
+                                            placeholder="Image URL"
+                                            fullWidth
+                                            sx={{
+                                                mt: 1,
+                                                marginRight: "10px",
+                                                height: "50px",
+                                            }}
                                         />
                                     </Paper>
                                 </Grid>
