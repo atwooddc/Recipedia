@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import "./register.styles.css";
 
@@ -18,6 +18,17 @@ import { useNavigate } from "react-router-dom";
 
 const Register = () => {
     const navigate = useNavigate();
+
+    const [emailError, setEmailError] = useState(false);
+    const [usernameError, setUsernameError] = useState(false);
+
+    const handleEmailChange = () => {
+        setEmailError(false);
+    };
+
+    const handleUsernameChange = () => {
+        setUsernameError(false);
+    };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -49,8 +60,12 @@ const Register = () => {
             // The response is OK, navigate
             navigate("../login");
         } catch (err) {
-            // Display the error message to the user, e.g. in an alert box
-            alert(`Error: ${err.message}`);
+            console.log(err.message);
+            if (err.message.includes("email")) {
+                setEmailError(true);
+            } else if (err.message.includes("username")) {
+                setUsernameError(true);
+            }
         }
     };
 
@@ -114,6 +129,13 @@ const Register = () => {
                                         label="Email Address"
                                         name="email"
                                         autoComplete="email"
+                                        onChange={handleEmailChange}
+                                        error={emailError}
+                                        helperText={
+                                            emailError
+                                                ? "Email is already in use"
+                                                : ""
+                                        }
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
@@ -124,6 +146,13 @@ const Register = () => {
                                         label="Username"
                                         name="username"
                                         autoComplete="username"
+                                        onChange={handleUsernameChange}
+                                        error={usernameError}
+                                        helperText={
+                                            usernameError
+                                                ? "Username is already in use"
+                                                : ""
+                                        }
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
