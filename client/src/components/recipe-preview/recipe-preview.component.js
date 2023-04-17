@@ -12,7 +12,7 @@ import {useNavigate} from 'react-router-dom'
 const defaultImageUrl = "https://static.vecteezy.com/system/resources/previews/002/621/029/original/chef-recipe-book-kitchen-utensil-line-style-icon-free-vector.jpg"
 
 const RecipePreview = ({data}) => {
-    const {_id, title, imageUrl, desc} = data
+    const {_id, title, imageUrl} = data
     const navigate = useNavigate()
 
     return (

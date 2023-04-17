@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 import HomePage from "./pages/homepage/home.page";
 import Register from "./pages/register/register.page";
@@ -19,8 +19,6 @@ import RequireAuth from "./components/RequireAuth";
 import { Routes, Route } from "react-router-dom";
 
 function App() {
-    const [user, setUser] = useState(null);
-
     // useEffect(() => {
     //     async function auth() {
     //         await fetch("auth/user", {

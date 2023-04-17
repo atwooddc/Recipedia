@@ -163,7 +163,7 @@ router.post("/login", async (req, res) => {
         const token = jwt.sign(payload, process.env.JWT_SECRET, {
             expiresIn: "1h",
         });
-        res.cookie("token", token, { httpOnly: false });
+        // res.cookie("token", token, { httpOnly: false });
         res.status(200).json({
             success: true,
             message: "Logged in successfully!",

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import CustomTextArea from '../../components/custom-textarea/custom-textarea.component';
-import { AccessTime, Favorite, Kitchen } from '@mui/icons-material';
+import { Kitchen } from '@mui/icons-material';
 import ListAltIcon from '@mui/icons-material/ListAlt';
-import Box from "@mui/material/Box";
+import { useParams } from 'react-router-dom';
+import {addBaseUrlClient} from '../../utils/getBaseClientUrl'
 
 import './recipe.styles.css';
 
@@ -37,7 +37,18 @@ const RecipePage = () => {
 
   // This is where we make a call to the API to pull in data for the specific recipe
   // NOTE: For now, I will use dummy data and we will replace that later
-  useEffect(() => {}, []);
+  useEffect(() => {
+    fetch(`${addBaseUrlClient("recipe")}/${recipeId}`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" }
+    })
+        .then(res => res.json())
+        .then(json => setRecipe(json))
+  }, []);
+
+  useEffect(() => {
+    console.log(recipe)
+  }, [recipe])
 
   const handleChange = (event) => {
     const { value, name } = event.target;
@@ -52,13 +63,13 @@ return (
       <div className="recipe-details-container">
         <div className="recipe-ingredients-container">
           <div className="recipe-img-container">
-            <img src={recipe?.img} alt={recipe?.title} />
+            <img src={recipe?.imageUrl} alt={recipe?.title} />
           </div>
           <div className="recipe-details">
-            <p>{`Serving size: ${recipe?.servingSize}`}</p>
+            <p>{`Serving size: ${recipe?.nutrition?.servings}`}</p>
             <h3>Ingredients <Kitchen /> </h3>
             <ul>
-              {recipe?.ingredients.map((item) => (
+              {recipe?.ingredients?.map((item) => (
                 <li>{item}</li>
               ))}
             </ul>
@@ -67,7 +78,7 @@ return (
         <div className="recipe-steps">
           <h3>Steps <ListAltIcon /></h3>
           <ol>
-            {recipe?.steps.map((step) => (
+            {recipe?.instructions?.map((step) => (
               <li>{step}</li>
             ))}
           </ol>
@@ -75,7 +86,8 @@ return (
             label="Notes"
             type="text"
             name="notes"
-            value={recipe?.notes}
+            // value={recipe?.notes}
+            value="fix"
             onChange={handleChange}
             disabled={!editMode}
           />
