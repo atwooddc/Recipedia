@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 
 import HomePage from "./pages/homepage/home.page";
 import Register from "./pages/register/register.page";
@@ -17,14 +17,20 @@ import Layout from "./components/layout/layout.component";
 import RequireAuth from "./components/RequireAuth";
 
 import { Routes, Route } from "react-router-dom";
+import {addBaseUrlClient} from './utils/getBaseClientUrl'
+import useAuth from "./hooks/useAuth";
 
 function App() {
+    const {setAuth} = useAuth()
     // useEffect(() => {
     //     async function auth() {
-    //         await fetch("auth/user", {
+    //         await fetch(addBaseUrlClient("auth/user"), {
     //             method: "GET",
+    //             credentials: "include",
+    //             headers: { "Content-Type": "application/json" }
     //         })
-    //             .then((resUser) => setUser(resUser.data))
+    //             .then(res => res.json())
+    //             .then(user => setAuth(user))
     //             .catch((err) => console.log("ERROR: ", err.json));
     //     }
 

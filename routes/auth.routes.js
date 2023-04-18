@@ -1,45 +1,55 @@
 const express = require("express");
 const router = express.Router();
-const passport = require("passport");
 const getBaseUrl = require("../middleware/getBaseUrl");
 const jwt = require("jsonwebtoken");
 const auth = require("../middleware/auth");
-
-// two required functions for passport-google-oauth20
-
-// @route       GET auth/google
-// @desc        Authenticate the user with Google OAuth
-// @access      Public
-router.get(
-    "/google",
-    passport.authenticate("google", { scope: ["profile", "email"] })
-);
-
-// Max's JWT callback
-router.get(
-    "/google/callback",
-    passport.authenticate("google", { failureRedirect: `${getBaseUrl()}` }),
-    (req, res) => {
-        let minsToExp = 90;
-
-        let token = jwt.sign(
-            {
-                exp: Math.floor(Date.now() / 1000) + minsToExp * 60,
-                user: req.user,
-            },
-            process.env.JWT_SECRET
-        );
-
-        res.cookie("token", token, { httpOnly: false });
-        res.redirect(`${getBaseUrl()}/home`);
-    }
-);
+const User = require('../models/user.model')
+const bcrypt = require("bcrypt");
 
 // @route       GET auth/user
 // @desc        Get user data
 // @access      Private
-router.get("/user", (req, res) => {
-    User.findById(req.user._id).then((user) => res.send(user));
+router.get("/user", auth, (req, res) => {
+    User.findById(req.user).then((user) => res.send(user));
+});
+
+router.post("/login", async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res
+                .status(401)
+                .json({ message: "Invalid email or password" });
+        }
+
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res
+                .status(401)
+                .json({ message: "Invalid email or password" });
+        }
+
+        const payload = {
+            _id: user._id,
+        }
+
+        const token = jwt.sign(payload, process.env.JWT_SECRET, {
+            expiresIn: "1h",
+        });
+
+        // res.cookie("token", token, { httpOnly: false });
+        res.status(200).json({
+            success: true,
+            message: "Logged in successfully!",
+            user: user,
+            token: token,
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Server error" });
+    }
 });
 
 // @route       GET auth/logout
@@ -49,29 +59,6 @@ router.get("/logout", function (req, res) {
     res.clearCookie("token");
     req.session = null;
     res.redirect(`${getBaseUrl()}`);
-});
-
-// @route       GET auth/success
-// @desc        Placeholder route to show successful logging in w google
-// @access      Public
-router.get("/success", (req, res) => {
-    res.send("test success");
-});
-
-// @route       GET auth/failure
-// @desc        Placeholder route to show failure logging in w google
-// @access      Public
-router.get("/failure", (req, res) => {
-    res.send("google sign in failure");
-});
-
-// won't work without jwt
-
-// @route       GET private test
-// @desc        Test private
-// @access      Private
-router.get("/privatetest", auth, (req, res) => {
-    res.send("private test success");
 });
 
 module.exports = router;
