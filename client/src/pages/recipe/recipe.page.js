@@ -42,7 +42,7 @@ const RecipePage = () => {
     // This is where we make a call to the API to pull in data for the specific recipe
     // NOTE: For now, I will use dummy data and we will replace that later
     useEffect(() => {
-        fetch(`${addBaseUrlClient("recipe")}/${recipeId}`, {
+        fetch(addBaseUrlClient(`recipe/${recipeId}`), {
             method: "GET",
             headers: { "Content-Type": "application/json" },
         })

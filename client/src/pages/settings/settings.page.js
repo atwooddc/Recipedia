@@ -16,6 +16,8 @@ import Button from "@mui/material/Button";
 import useAuth from "../../hooks/useAuth";
 import bcrypt from "bcryptjs";
 
+import { addBaseUrlClient } from "../../utils/getBaseClientUrl";
+
 const SettingsPage = () => {
     const { auth } = useAuth();
     const navigate = useNavigate();
@@ -32,7 +34,7 @@ const SettingsPage = () => {
         console.log(json_data);
         try {
             // Send data to the backend via PUT
-            fetch(`http://localhost:8080/users/`, {
+            fetch(addBaseUrlClient("users"), {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: json_data, // body data type must match "Content-Type" header
@@ -86,7 +88,7 @@ const SettingsPage = () => {
         });
         try {
             // Send data to the backend via PUT
-            fetch(`http://localhost:8080/users/`, {
+            fetch(addBaseUrlClient("users"), {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: relevant_data, // body data type must match "Content-Type" header
@@ -119,7 +121,7 @@ const SettingsPage = () => {
 
         try {
             // Send data to the backend via PUT
-            fetch(`http://localhost:8080/users/`, {
+            fetch(addBaseUrlClient("users"), {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: json_data, // body data type must match "Content-Type" header
@@ -142,7 +144,7 @@ const SettingsPage = () => {
         console.log(id);
         try {
             // Send data to the backend via PUT
-            fetch(`http://localhost:8080/users/${id}`, {
+            fetch(addBaseUrlClient(`users/${id}`), {
                 method: "DELETE",
                 headers: { "Content-Type": "application/json" },
             })
@@ -166,7 +168,7 @@ const SettingsPage = () => {
         console.log("Are you sure?");
         try {
             // Send data to the backend via PUT
-            fetch(`http://localhost:8080/users/reset/`, {
+            fetch(addBaseUrlClient("users/reset"), {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include",
