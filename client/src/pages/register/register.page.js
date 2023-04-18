@@ -16,6 +16,8 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Logo from "../../components/logo/logo.component";
 import { useNavigate } from "react-router-dom";
 
+import { addBaseUrlClient } from "../../utils/getBaseClientUrl";
+
 const Register = () => {
     const navigate = useNavigate();
 
@@ -45,7 +47,7 @@ const Register = () => {
 
         try {
             // Send data to the backend via POST
-            const response = await fetch("http://localhost:8080/users", {
+            const response = await fetch(addBaseUrlClient("users"), {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: json_data, // body data type must match "Content-Type" header

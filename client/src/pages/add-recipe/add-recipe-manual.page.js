@@ -129,7 +129,7 @@ const ManualInsertPage = () => {
                 console.log(json_data);
 
                 // Send data to the backend via POST
-                fetch("http://localhost:8080/recipe", {
+                fetch(addBaseUrlClient("recipe"), {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: json_data, // body data type must match "Content-Type" header

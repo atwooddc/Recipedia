@@ -34,7 +34,7 @@ const Login = () => {
 
         try {
             // Send data to the backend via POST
-            await fetch(addBaseUrlClient("users/login"), {
+            await fetch(addBaseUrlClient("auth/login"), {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: json_data, // body data type must match "Content-Type" header
