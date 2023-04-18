@@ -64,6 +64,21 @@ router.put("/addrecipe/:recipeId", auth, async (req, res) => {
         });
 });
 
+// @route       DELETE users/recipe/:recipeId
+// @desc        Removes a recipe from the user who made request's list
+// @access      Private
+router.delete("/recipe/:recipeId", auth, async (req, res) => {
+    User.findByIdAndUpdate(
+        { _id: new mongoose.Types.ObjectId(req.user._id) },
+        { $pull: { recipes: { _id: req.params.recipeId } } }
+    )
+        .then((user) => res.send(user))
+        .catch((err) => {
+            console.log(err);
+            res.status(500).send(err);
+        });
+});
+
 // @route       GET api/users/recipes
 // @desc        Get a users recipe list
 // @access      Private

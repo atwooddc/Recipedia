@@ -6,6 +6,8 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { IconButton } from "@mui/material";
 
 import { useNavigate } from "react-router-dom";
 
@@ -13,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 const defaultImageUrl =
     "https://media.istockphoto.com/id/1038343992/vector/black-silhouette-of-crossed-fork-and-knife-icon-vector-isolated.jpg?s=612x612&w=0&k=20&c=VBYHxRC7x2sQwG0y_sPa3Yiz7ORs0uaj1WQEOqDdpy8=";
 
-const RecipePreview = ({ data }) => {
+const RecipePreview = ({ data, editMode, handleRemoveRecipe }) => {
     const { _id, title, imageUrl } = data;
     const navigate = useNavigate();
 
@@ -31,9 +33,26 @@ const RecipePreview = ({ data }) => {
                         transform: "scale(1.02)",
                         transition: "0.1s ease-in",
                     },
+                    position: "relative",
+                    overflow: "visible",
                 }}
-                onClick={() => navigate(`../recipe/${_id}`)}
+                onClick={() =>
+                    !editMode ? navigate(`../recipe/${_id}`) : null
+                }
             >
+                {editMode ? (
+                    <IconButton
+                        onClick={() => handleRemoveRecipe(_id)}
+                        style={{
+                            position: "absolute",
+                            right: "-1vw",
+                            top: "-1vw",
+                            backgroundColor: "coral",
+                        }}
+                    >
+                        <DeleteIcon />
+                    </IconButton>
+                ) : null}
                 <CardMedia
                     component="img"
                     image={imageUrl ? imageUrl : defaultImageUrl}
