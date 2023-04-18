@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -18,6 +18,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import { addBaseUrlClient } from "../../utils/getBaseClientUrl";
 import useAuth from "../../hooks/useAuth";
+import { createClient } from "pexels";
 
 const ManualInsertPage = () => {
     const navigate = useNavigate();
@@ -102,48 +103,66 @@ const ManualInsertPage = () => {
             .map((s) => s.trim())
             .filter((str) => str !== "");
 
-        let json_data = JSON.stringify({
-            title: data.get("title"),
-            ingredients: ing_arr,
-            instructions: step_arr,
-            tags: tag_arr,
-            imageUrl: data.get("ImageUrl"),
-        });
+        const client = createClient(
+            "sps6QTDmp7ThkCzd0EjsdSDVbHikZb9SgJajDYoN0TBxKsnm3Q9jVuiu"
+        );
+        const query = data.get("title");
 
-        console.log(json_data);
-
-        // Send data to the backend via POST
-        fetch(addBaseUrlClient("recipe"), {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: json_data, // body data type must match "Content-Type" header
-        })
-            .then((res) => {
-                if (!res.ok) {
-                    throw new Error(res.statusText);
-                }
-                return res.json();
+        client.photos
+            .search({ query, per_page: 1 })
+            .then((photos) => {
+                let searched = photos.photos[0].src.large;
+                console.log(searched);
+                return searched;
             })
-            .then((json) => {
-                return fetch(addBaseUrlClient(`users/addrecipe/${json._id}`), {
-                    method: "PUT",
-                    credentials: "include",
-                    headers: { "Content-Type": "application/json" },
+            .then((searched) => {
+                let provided = data.get("ImageUrl");
+                var finalUrl = provided ? provided : searched;
+
+                let json_data = JSON.stringify({
+                    title: data.get("title"),
+                    ingredients: ing_arr,
+                    instructions: step_arr,
+                    tags: tag_arr,
+                    imageUrl: finalUrl,
                 });
-            })
-            .then((res) => {
-                if (!res.ok) {
-                    throw new Error(res.statusText);
-                }
-                return res.json();
-            })
-            .then((json) => {
-                setAuth(json);
-                navigate("../myrecipes");
-            })
-            .catch((err) => console.error(err));
+                console.log(json_data);
 
-        // redirect user to recipe they just created
+                // Send data to the backend via POST
+                fetch(addBaseUrlClient("recipe"), {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: json_data, // body data type must match "Content-Type" header
+                })
+                    .then((res) => {
+                        if (!res.ok) {
+                            throw new Error(res.statusText);
+                        }
+                        return res.json();
+                    })
+                    .then((json) => {
+                        return fetch(
+                            addBaseUrlClient(`users/addrecipe/${json._id}`),
+                            {
+                                method: "PUT",
+                                credentials: "include",
+                                headers: { "Content-Type": "application/json" },
+                            }
+                        );
+                    })
+                    .then((res) => {
+                        if (!res.ok) {
+                            throw new Error(res.statusText);
+                        }
+                        return res.json();
+                    })
+                    .then((json) => {
+                        setAuth(json);
+                        navigate("../myrecipes");
+                    })
+                    .catch((err) => console.error(err));
+                // redirect user to recipe they just created
+            });
     };
 
     const theme = createTheme({
@@ -480,6 +499,7 @@ const ManualInsertPage = () => {
                                     <Paper
                                         sx={{
                                             p: 2,
+                                            pb: 4,
                                             display: "flex",
                                             flexDirection: "column",
                                         }}
@@ -492,6 +512,10 @@ const ManualInsertPage = () => {
                                             {" "}
                                             Image URL
                                         </Typography>
+                                        <Typography
+                                            variant="body1"
+                                            color="common.black"
+                                        ></Typography>
                                         <TextField
                                             name="ImageUrl"
                                             id="ImageUrl"
@@ -503,6 +527,9 @@ const ManualInsertPage = () => {
                                                 marginRight: "10px",
                                                 height: "50px",
                                             }}
+                                            helperText={
+                                                "Optional, if no URL provided we will find an approproiate image!"
+                                            }
                                         />
                                     </Paper>
                                 </Grid>
