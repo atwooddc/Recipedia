@@ -265,7 +265,12 @@ const ManualInsertPage = () => {
                                         >
                                             <Grid container spacing={3}>
                                                 {/* Servings */}
-                                                <Grid item xs={3} md={3} lg={1}>
+                                                <Grid
+                                                    item
+                                                    xs={3}
+                                                    md={3}
+                                                    lg={1.2}
+                                                >
                                                     <TextField
                                                         variant="standard"
                                                         name="servings"
@@ -274,7 +279,6 @@ const ManualInsertPage = () => {
                                                         fullWidth
                                                         size="small"
                                                         sx={{
-                                                            mt: 1,
                                                             mb: 2,
                                                             marginRight: "10px",
                                                             height: "20px",
@@ -295,7 +299,6 @@ const ManualInsertPage = () => {
                                                         fullWidth
                                                         size="small"
                                                         sx={{
-                                                            mt: 1,
                                                             mb: 2,
                                                             marginRight: "10px",
                                                             height: "20px",
@@ -316,7 +319,6 @@ const ManualInsertPage = () => {
                                                         fullWidth
                                                         size="small"
                                                         sx={{
-                                                            mt: 1,
                                                             mb: 2,
                                                             marginRight: "10px",
                                                             height: "20px",
@@ -532,53 +534,6 @@ const ManualInsertPage = () => {
                                     </Paper>
                                 </Grid>
 
-                                {/* Cook time, Prep time, Nutrition */}
-
-                                {/* const NutritionSchema = new Schema({
-                                    servings: String,
-                                    calories: String,
-                                    fat: String,
-                                    carbs: String,
-                                    protein: String
-                                }, { _id: false }); */}
-
-                                {/* prepTime: Number,
-                                cookTime: Number,
-                                totalTime: Number,
-                                nutrition: {
-                                    type: [NutritionSchema],
-                                    default: null,
-                                    required: false
-                                }, */}
-
-                                {/* <Grid item xs={12}>
-                                    <Paper
-                                        sx={{
-                                            p: 2,
-                                            display: "flex",
-                                            flexDirection: "column",
-                                        }}
-                                        fullWidth
-                                    >
-                                        <Typography
-                                            variant="subtitle1"
-                                            color="common.black"
-                                            fontWeight="bold"
-                                        >
-                                            {" "}
-                                            Nutrition
-                                        </Typography>
-                                        <TextField
-                                            name="tags"
-                                            id="tags"
-                                            // label="Tags"
-                                            placeholder="Nutrition"
-                                            // fullWidth
-                                            sx={{ mt: 1, marginRight: "10px" }}
-                                        />
-                                    </Paper>
-                                </Grid> */}
-
                                 {/* Tags */}
                                 <Grid item xs={12} md={8} lg={6}>
                                     <Paper
@@ -640,15 +595,12 @@ const ManualInsertPage = () => {
                                             name="ImageUrl"
                                             id="ImageUrl"
                                             placeholder="Image URL"
-                                            helperText="Add an image to accompany your recipe"
+                                            helperText="Add an image to accompany your recipe. If none provided we will find an appropriate image!"
                                             // fullWidth
                                             sx={{
                                                 mt: 1,
                                                 marginRight: "10px",
                                             }}
-                                            helperText={
-                                                "Optional, if no URL provided we will find an approproiate image!"
-                                            }
                                         />
                                     </Paper>
                                 </Grid>
