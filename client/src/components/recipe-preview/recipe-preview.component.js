@@ -6,12 +6,14 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
+import DeleteIcon from '@mui/icons-material/Delete';
+import { IconButton } from '@mui/material';
 
 import {useNavigate} from 'react-router-dom'
 
 const defaultImageUrl = "https://static.vecteezy.com/system/resources/previews/002/621/029/original/chef-recipe-book-kitchen-utensil-line-style-icon-free-vector.jpg"
 
-const RecipePreview = ({data}) => {
+const RecipePreview = ({data, editMode, handleRemoveRecipe}) => {
     const {_id, title, imageUrl} = data
     const navigate = useNavigate()
 
@@ -23,10 +25,26 @@ const RecipePreview = ({data}) => {
                     height: "40vh",
                     display: "flex",
                     flexDirection: "column",
-                    cursor: "pointer"
+                    cursor: "pointer",
+                    position: "relative",
+                    overflow: "visible"
                 }}
-                onClick={() => navigate(`../recipe/${_id}`)}
+                onClick={() => !editMode ? navigate(`../recipe/${_id}`) : null}
             >
+                {
+                    editMode ?
+                    <IconButton
+                        onClick={() => handleRemoveRecipe(_id)}
+                        style={{
+                            position: "absolute",
+                            right: "-1vw",
+                            top: "-1vw",
+                            backgroundColor: "coral"
+                        }}
+                    >
+                        <DeleteIcon/>
+                    </IconButton> : null
+                }
                 <CardMedia
                     component="img"
                     image={imageUrl ? imageUrl : defaultImageUrl}
