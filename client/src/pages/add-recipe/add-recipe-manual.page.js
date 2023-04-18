@@ -181,8 +181,8 @@ const ManualInsertPage = () => {
                             sx={{ mt: 3 }}
                         >
                             <Grid container spacing={3}>
-                                {/* Header */}
-                                <Grid item xs={12}>
+                                {/* Title */}
+                                <Grid item xs={12} md={8} lg={12}>
                                     <Paper
                                         sx={{
                                             p: 2,
@@ -235,8 +235,80 @@ const ManualInsertPage = () => {
                                                 Add Recipe
                                             </Button>
                                         </Box>
+                                        <Box
+                                            sx={{
+                                                mb: 1,
+                                                flexDirection: "row",
+                                                display: "flex",
+                                                justifyContent: "center",
+                                                alignItems: "center",
+                                            }}
+                                        >
+                                            <Grid container spacing={3}>
+                                                {/* Servings */}
+                                                <Grid item xs={3} md={3} lg={1}>
+                                                    <TextField
+                                                        variant="standard"
+                                                        name="servings"
+                                                        id="servings"
+                                                        label="Servings"
+                                                        fullWidth
+                                                        size="small"
+                                                        sx={{
+                                                            mt: 1,
+                                                            mb: 2,
+                                                            marginRight: "10px",
+                                                            height: "20px",
+                                                        }}
+                                                    />
+                                                </Grid>
+                                                <Grid
+                                                    item
+                                                    xs={3}
+                                                    md={3}
+                                                    lg={1.5}
+                                                >
+                                                    <TextField
+                                                        variant="standard"
+                                                        name="preptime"
+                                                        id="preptime"
+                                                        label="Prep Time"
+                                                        fullWidth
+                                                        size="small"
+                                                        sx={{
+                                                            mt: 1,
+                                                            mb: 2,
+                                                            marginRight: "10px",
+                                                            height: "20px",
+                                                        }}
+                                                    />
+                                                </Grid>
+                                                <Grid
+                                                    item
+                                                    xs={3}
+                                                    md={3}
+                                                    lg={1.5}
+                                                >
+                                                    <TextField
+                                                        variant="standard"
+                                                        name="cooktime"
+                                                        id="cooktime"
+                                                        label="Cook Time"
+                                                        fullWidth
+                                                        size="small"
+                                                        sx={{
+                                                            mt: 1,
+                                                            mb: 2,
+                                                            marginRight: "10px",
+                                                            height: "20px",
+                                                        }}
+                                                    />
+                                                </Grid>
+                                            </Grid>
+                                        </Box>
                                     </Paper>
                                 </Grid>
+
                                 {/* Ingredients */}
                                 <Grid item xs={12} md={8} lg={6}>
                                     <Paper
@@ -460,7 +532,7 @@ const ManualInsertPage = () => {
                                     required: false
                                 }, */}
 
-                                <Grid item xs={12}>
+                                {/* <Grid item xs={12}>
                                     <Paper
                                         sx={{
                                             p: 2,
@@ -486,7 +558,7 @@ const ManualInsertPage = () => {
                                             sx={{ mt: 1, marginRight: "10px" }}
                                         />
                                     </Paper>
-                                </Grid>
+                                </Grid> */}
 
                                 {/* Tags */}
                                 <Grid item xs={12} md={8} lg={6}>
