@@ -440,8 +440,56 @@ const ManualInsertPage = () => {
                                         </Box>
                                     </Paper>
                                 </Grid>
-                                {/* Tags */}
+
+                                {/* Cook time, Prep time, Nutrition */}
+
+                                {/* const NutritionSchema = new Schema({
+                                    servings: String,
+                                    calories: String,
+                                    fat: String,
+                                    carbs: String,
+                                    protein: String
+                                }, { _id: false }); */}
+
+                                {/* prepTime: Number,
+                                cookTime: Number,
+                                totalTime: Number,
+                                nutrition: {
+                                    type: [NutritionSchema],
+                                    default: null,
+                                    required: false
+                                }, */}
+
                                 <Grid item xs={12}>
+                                    <Paper
+                                        sx={{
+                                            p: 2,
+                                            display: "flex",
+                                            flexDirection: "column",
+                                        }}
+                                        fullWidth
+                                    >
+                                        <Typography
+                                            variant="subtitle1"
+                                            color="common.black"
+                                            fontWeight="bold"
+                                        >
+                                            {" "}
+                                            Nutrition
+                                        </Typography>
+                                        <TextField
+                                            name="tags"
+                                            id="tags"
+                                            // label="Tags"
+                                            placeholder="Nutrition"
+                                            // fullWidth
+                                            sx={{ mt: 1, marginRight: "10px" }}
+                                        />
+                                    </Paper>
+                                </Grid>
+
+                                {/* Tags */}
+                                <Grid item xs={12} md={8} lg={6}>
                                     <Paper
                                         sx={{
                                             p: 2,
@@ -462,21 +510,21 @@ const ManualInsertPage = () => {
                                             id="tags"
                                             // label="Tags"
                                             placeholder="Tags"
-                                            fullWidth
+                                            // fullWidth
                                             value={tags}
                                             onChange={handleTagsChange}
                                             error={!!tagsError}
                                             helperText={
                                                 tagsError !== ""
                                                     ? tagsError
-                                                    : 'Add keywords to help categorize your recipe! Ex: "thai, peanuts, air-fryer,..."'
+                                                    : 'Add keywords to categorize your recipe! Ex: "thai, peanuts, air-fryer,..."'
                                             }
                                             sx={{ mt: 1, marginRight: "10px" }}
                                         />
                                     </Paper>
                                 </Grid>
                                 {/* Image URL */}
-                                <Grid item xs={12}>
+                                <Grid item xs={12} md={8} lg={6}>
                                     <Paper
                                         sx={{
                                             p: 2,
@@ -495,13 +543,12 @@ const ManualInsertPage = () => {
                                         <TextField
                                             name="ImageUrl"
                                             id="ImageUrl"
-                                            // label="Title"
                                             placeholder="Image URL"
-                                            fullWidth
+                                            helperText="Add an image to accompany your recipe"
+                                            // fullWidth
                                             sx={{
                                                 mt: 1,
                                                 marginRight: "10px",
-                                                height: "50px",
                                             }}
                                         />
                                     </Paper>
