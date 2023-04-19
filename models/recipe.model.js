@@ -1,25 +1,31 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const IngredientSchema = new Schema({
-    name: {
-        type: String,
-        required: true,
+const IngredientSchema = new Schema(
+    {
+        name: {
+            type: String,
+            required: true,
+        },
+        amount: Number,
+        unit: String,
     },
-    amount: Number,
-    unit: String
-}, { _id: false });
+    { _id: false }
+);
 
 module.exports = IngredientSchema;
 module.exports = Ingredient = mongoose.model("ingredient", IngredientSchema);
 
-const NutritionSchema = new Schema({
-    servings: String,
-    calories: String,
-    fat: String,
-    carbs: String,
-    protein: String
-}, { _id: false });
+const NutritionSchema = new Schema(
+    {
+        servings: String,
+        calories: String,
+        fat: String,
+        carbs: String,
+        protein: String,
+    },
+    { _id: false }
+);
 
 module.exports = NutritionSchema;
 module.exports = Nutrition = mongoose.model("nutrition", NutritionSchema);
@@ -37,7 +43,7 @@ const RecipeSchema = new Schema({
     nutrition: {
         type: [NutritionSchema],
         default: null,
-        required: false
+        required: false,
     },
     // ingredients: {
     //     type: [IngredientSchema],
@@ -46,11 +52,12 @@ const RecipeSchema = new Schema({
     ingredients: [String],
     instructions: {
         type: [String],
-        required: true
+        required: true,
     },
     yield: String,
     cuisine: String,
-    tags: [String]
+    tags: [String],
+    servings: String,
 });
 
 module.exports = RecipeSchema;
