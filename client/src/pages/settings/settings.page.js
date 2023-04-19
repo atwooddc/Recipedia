@@ -1,4 +1,4 @@
-import React from "react";
+import { React, useState, useEffect } from "react";
 import "./settings.styles.css";
 
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -14,13 +14,41 @@ import TextField from "@mui/material/TextField";
 import { useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import useAuth from "../../hooks/useAuth";
+import Alert from "@mui/material/Alert";
 import bcrypt from "bcryptjs";
 
 import { addBaseUrlClient } from "../../utils/getBaseClientUrl";
 
 const SettingsPage = () => {
-    const { auth } = useAuth();
+    const { auth, setAuth } = useAuth();
+    const [showSuccess, setShowSuccess] = useState(false);
+    const [successMessage, setSuccessMessage] = useState("");
+    const [showError, setShowError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
+
     const navigate = useNavigate();
+
+    useEffect(() => {
+        let timer;
+        if (showSuccess) {
+            timer = setTimeout(() => {
+                setShowSuccess(false);
+                setSuccessMessage("");
+            }, 5000);
+        }
+        return () => clearTimeout(timer);
+    }, [showSuccess]);
+
+    useEffect(() => {
+        let timer;
+        if (showError) {
+            timer = setTimeout(() => {
+                setShowError(false);
+                setErrorMessage("");
+            }, 5000);
+        }
+        return () => clearTimeout(timer);
+    }, [showError]);
 
     const handleBasicsSubmit = (event) => {
         event.preventDefault();
@@ -43,10 +71,20 @@ const SettingsPage = () => {
                 .then((response) => response.json())
                 .then((data) => {
                     console.log(data);
+                    const user = data;
+                    setAuth(user);
+                    setShowSuccess(true);
+                    setSuccessMessage("Basic Information update successful!");
                 })
-                .catch((error) => console.error(error));
+                .catch((error) => {
+                    console.error(error);
+                    setShowError(true);
+                    setErrorMessage(error);
+                });
         } catch (err) {
             console.error(err);
+            setShowError(true);
+            setErrorMessage(err);
         }
     };
 
@@ -70,17 +108,30 @@ const SettingsPage = () => {
             data_obj.oldPassword,
             auth.password
         );
+        if (
+            data_obj.oldPassword.trim() === "" ||
+            data_obj.newPassword.trim() === "" ||
+            data_obj.oldPassword.trim() === ""
+        ) {
+            setShowError(true);
+            setErrorMessage("Password cannot be blank");
+            return;
+        }
         if (!isMatch) {
-            console.log("Old password is incorrect");
+            setShowError(true);
+            setErrorMessage("Old password is incorrect");
+            return;
         }
-
         if (data_obj.confirmPassword !== data_obj.newPassword) {
-            console.log("passwords do not match");
+            setShowError(true);
+            setErrorMessage("Passwords do not match");
+            return;
         } else if (data_obj.oldPassword === data_obj.newPassword) {
-            console.log("Cannot use the same password again");
+            setShowError(true);
+            setErrorMessage("Cannot use the same password again");
+            return;
         }
 
-        /* INCLUDE ACTUAL ERROR HANDLING HERE/DISPLAYING THE MESSAGE */
         const salt = await bcrypt.genSalt(10);
         const hash = await bcrypt.hash(data.get("new-password"), salt);
         let relevant_data = JSON.stringify({
@@ -97,11 +148,21 @@ const SettingsPage = () => {
                 .then((response) => response.json())
                 .then((data) => {
                     console.log(data);
+                    const user = data;
+                    setAuth(user);
+                    setShowSuccess(true);
+                    setSuccessMessage("Password changed successfully!");
                 })
-                .catch((error) => console.error(error));
+                .catch((error) => {
+                    console.error(error);
+                    setShowError(true);
+                    setErrorMessage(error);
+                });
             //TODO ADD A REFRESH HERE?
         } catch (err) {
             console.error(err);
+            setShowError(true);
+            setErrorMessage(err);
         }
     };
 
@@ -130,58 +191,90 @@ const SettingsPage = () => {
                 .then((response) => response.json())
                 .then((data) => {
                     console.log(data);
+                    const user = data;
+                    setAuth(user);
+                    setShowSuccess(true);
+                    setSuccessMessage(
+                        "Advanced information updated successfully!"
+                    );
                 })
-                .catch((error) => console.error(error));
+                .catch((error) => {
+                    console.error(error);
+                    setShowError(true);
+                    setErrorMessage(error);
+                });
         } catch (err) {
             console.error(err);
+            setShowError(true);
+            setErrorMessage(err);
         }
     };
 
     const handleDeleteAccount = (event) => {
         event.preventDefault();
-        console.log("Are you sure?");
-        const id = auth._id;
-        console.log(id);
-        try {
-            // Send data to the backend via PUT
-            fetch(addBaseUrlClient(`users/${id}`), {
-                method: "DELETE",
-                headers: { "Content-Type": "application/json" },
-            })
-                .then((response) => response.json())
-                .then((data) => {
-                    console.log(data);
-                    console.log("DELETED");
-                    navigate("../homepage");
-                    //cookie cleared here? refactored to backend?
+        const confirmed = window.confirm(
+            "Are you sure you want to delete your account? Your information will be lost forever"
+        );
+        if (confirmed) {
+            const id = auth._id;
+            console.log(id);
+            try {
+                // Send data to the backend via PUT
+                fetch(addBaseUrlClient(`users/${id}`), {
+                    method: "DELETE",
+                    headers: { "Content-Type": "application/json" },
                 })
-                .catch((error) => console.error(error));
-        } catch (err) {
-            console.error(err);
+                    .then((response) => {
+                        console.log(response);
+                        console.log("DELETED");
+                        setAuth(undefined);
+                        window.location.href = addBaseUrlClient("auth/logout");
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                        setShowError(true);
+                        setErrorMessage(error);
+                    });
+            } catch (err) {
+                console.error(err);
+                setShowError(true);
+                setErrorMessage(err);
+            }
         }
     };
 
     //TODO TEST AFTER RECIPES ARE PROPERLY ADDED
     const handleResetAccount = (event) => {
-        console.log("HLEOOOO??");
         event.preventDefault();
-        console.log("Are you sure?");
-        try {
-            // Send data to the backend via PUT
-            fetch(addBaseUrlClient("users/reset"), {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                credentials: "include",
-            })
-                .then((response) => response.json())
-                .then((data) => {
-                    console.log(data);
-                    console.log("RESET");
-                    navigate("../homepage");
+        const confirmed = window.confirm(
+            "Are you sure you want to reset your account? Your information can always be updated again"
+        );
+        if (confirmed) {
+            try {
+                // Send data to the backend via PUT
+                fetch(addBaseUrlClient("users/reset"), {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "include",
                 })
-                .catch((error) => console.error(error));
-        } catch (err) {
-            console.error(err);
+                    .then((response) => response.json())
+                    .then((data) => {
+                        console.log(data);
+                        const user = data;
+                        setAuth(user);
+                        setShowSuccess(true);
+                        setSuccessMessage("Account Reset successfully!");
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                        setShowError(true);
+                        setErrorMessage(error);
+                    });
+            } catch (err) {
+                console.error(err);
+                setShowError(true);
+                setErrorMessage(err);
+            }
         }
     };
 
@@ -254,6 +347,23 @@ const SettingsPage = () => {
                                     </Box>
                                 </Paper>
                             </Grid>
+                            {showSuccess && (
+                                <Alert
+                                    sx={{ ml: 10, m: 2, width: "95%" }}
+                                    severity="success"
+                                >
+                                    {successMessage}
+                                </Alert>
+                            )}
+                            {showError && (
+                                <Alert
+                                    sx={{ ml: 10, m: 2, width: "95%" }}
+                                    severity="error"
+                                >
+                                    {errorMessage}
+                                </Alert>
+                            )}
+
                             {/* The Basics */}
                             <Grid item xs={12} md={8} lg={6}>
                                 <Paper
@@ -537,7 +647,6 @@ const SettingsPage = () => {
                                                 variant="subtitle2"
                                                 color="common.black"
                                                 fontWeight="bold"
-                                                onClick={handleResetAccount}
                                             >
                                                 {" "}
                                                 Reset Account{" "}
@@ -554,9 +663,9 @@ const SettingsPage = () => {
                                                     color="common.black"
                                                 >
                                                     {" "}
-                                                    Delete all current recipes,
-                                                    posts, and viewing history
-                                                    while maintaining account{" "}
+                                                    Delete all current recipes
+                                                    and social information while
+                                                    maintaining basic account{" "}
                                                 </Typography>
                                             </Box>
                                             <Box
@@ -570,6 +679,7 @@ const SettingsPage = () => {
                                                     type="submit"
                                                     variant="outlined"
                                                     sx={{ mt: 3, mb: 2 }}
+                                                    onClick={handleResetAccount}
                                                 >
                                                     Reset Account
                                                 </Button>

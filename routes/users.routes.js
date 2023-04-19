@@ -113,15 +113,26 @@ router.get("/:id", (req, res) => {
 router.put("/", auth, async (req, res) => {
     console.log(req.user);
     console.log(req.body);
-    User.findByIdAndUpdate({ _id: new mongoose.Types.ObjectId(req.user) }, req.body)
+    User.findByIdAndUpdate(
+        { _id: new mongoose.Types.ObjectId(req.user) },
+        req.body
+    )
         .then((updatedUser) => res.send(updatedUser))
         .catch((err) => res.status(401).send(err));
 });
 
 router.put("/reset/", auth, async (req, res) => {
     User.findByIdAndUpdate(
-        { _id: new mongoose.Types.ObjectId(req.user) }, 
-        { recipes: [] }
+        { _id: new mongoose.Types.ObjectId(req.user) },
+        {
+            recipes: [],
+            imgUrl: "",
+            phoneNumber: "",
+            birthday: "",
+            location: "",
+            bio: "",
+            twitterHandle: "",
+        }
     )
         .then((updatedUser) => res.send(updatedUser))
         .catch((err) => res.status(401).send(err));
