@@ -74,7 +74,7 @@ const MyRecipesPage = () => {
                     sx={{
                         display: "flex",
                         flexDirection: "column",
-                        minWidth: "100%",
+                        minWidth: "90%",
                     }}
                 >
                     <CssBaseline />
