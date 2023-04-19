@@ -146,7 +146,7 @@ const MyRecipesPage = () => {
                             <Grid
                                 container
                                 spacing={4}
-                                style={{ backgroundColor: "lightblue" }}
+                                // style={{ backgroundColor: "lightblue" }}
                             >
                                 {!searchResults.length ? (
                                     <Box
