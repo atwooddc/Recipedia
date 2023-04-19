@@ -29,8 +29,7 @@ const RecipePreview = ({ data, editMode, handleRemoveRecipe }) => {
                     flexDirection: "column",
                     cursor: "pointer",
                     "&:hover": {
-                        background: "var(--coral)",
-                        transform: "scale(1.02)",
+                        transform: "scale(1.008)",
                         transition: "0.1s ease-in",
                     },
                     position: "relative",
