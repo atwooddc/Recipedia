@@ -21,6 +21,7 @@ import { addBaseUrlClient } from "../../utils/getBaseClientUrl";
 const MyRecipesPage = () => {
     const [editMode, setEditMode] = useState(false);
     const { auth, setAuth } = useAuth();
+
     const theme = createTheme({
         palette: {
             primary: {
@@ -28,6 +29,19 @@ const MyRecipesPage = () => {
             },
         },
     });
+
+    const [searchTerm, setSearchTerm] = useState("");
+    const [searchResults, setSearchResults] = useState(auth.recipes);
+
+    const handleSearchTerm = (event) => {
+        const query = event.target.value.toLowerCase();
+
+        setSearchResults(
+            auth.recipes.filter((recipe) =>
+                recipe.title.toLowerCase().includes(query)
+            )
+        );
+    };
 
     const handleRemoveRecipe = (recipeId) => {
         fetch(addBaseUrlClient(`users/recipe/${recipeId}`), {
@@ -67,10 +81,9 @@ const MyRecipesPage = () => {
                             }}
                         >
                             <TextField
-                                name="query"
-                                id="query"
+                                name="searchterm"
+                                id="searchterm"
                                 label="Search"
-                                // placeholder="Search your recipes!"
                                 fullWidth
                                 autoFocus
                                 sx={{
@@ -85,6 +98,11 @@ const MyRecipesPage = () => {
                                         </InputAdornment>
                                     ),
                                 }}
+                                value={searchTerm}
+                                onChange={(event) =>
+                                    setSearchTerm(event.target.value)
+                                }
+                                onKeyUp={handleSearchTerm}
                             />
                             <Button
                                 variant="contained"
@@ -112,7 +130,7 @@ const MyRecipesPage = () => {
                             }}
                         >
                             <Grid container spacing={4}>
-                                {auth.recipes?.map((recipe) => (
+                                {searchResults.map((recipe) => (
                                     <RecipePreview
                                         key={recipe._id}
                                         data={recipe}
