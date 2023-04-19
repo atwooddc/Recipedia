@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect} from "react";
 
 import HomePage from "./pages/homepage/home.page";
 import Register from "./pages/register/register.page";
@@ -17,30 +17,25 @@ import Layout from "./components/layout/layout.component";
 import RequireAuth from "./components/RequireAuth";
 
 import { Routes, Route } from "react-router-dom";
-import { api as axios } from "./utils/axios";
+import {addBaseUrlClient} from './utils/getBaseClientUrl'
+import useAuth from "./hooks/useAuth";
 
 function App() {
-    const [user, setUser] = useState(null);
+    const {setAuth} = useAuth()
+    // useEffect(() => {
+    //     async function auth() {
+    //         await fetch(addBaseUrlClient("auth/user"), {
+    //             method: "GET",
+    //             credentials: "include",
+    //             headers: { "Content-Type": "application/json" }
+    //         })
+    //             .then(res => res.json())
+    //             .then(user => setAuth(user))
+    //             .catch((err) => console.log("ERROR: ", err.json));
+    //     }
 
-    useEffect(() => {
-        async function auth() {
-            await axios({
-                method: "GET",
-                url: "/auth/user",
-            })
-                .then((resUser) => setUser(resUser.data))
-                .catch((err) => console.log("ERROR: ", err.json));
-
-            // await axios({
-            //     method: "GET",
-            //     url: "/auth/exp"
-            // })
-            //     .then(res => setTimeout(() => setOpenDialog(true), res.data.exp*1000 - 10000)) //set dialog to pop up 10 seconds before token exp
-            //     .catch(err => console.log(err))
-        }
-
-        auth();
-    }, []);
+    //     auth();
+    // }, []);
 
     return (
         <Routes>

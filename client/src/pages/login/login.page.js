@@ -3,8 +3,6 @@ import "./login.styles.css";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
@@ -15,25 +13,44 @@ import Logo from "../../components/logo/logo.component";
 
 import useAuth from "../../hooks/useAuth";
 
-import { Link as RouterLink, useNavigate } from "react-router-dom";
-import { getBaseUrlClient } from "../../utils/getBaseClientUrl";
+import { useNavigate } from "react-router-dom";
+import { addBaseUrlClient } from "../../utils/getBaseClientUrl";
 
 const Login = () => {
-    const { auth, setAuth } = useAuth();
+    const { setAuth } = useAuth();
     const navigate = useNavigate();
-    const scrollOffset = -1 * window.innerHeight * 0.1;
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
+
+        //ENCRPYT it with passport and chatgpt
+        let json_data = JSON.stringify({
             email: data.get("email"),
             password: data.get("password"),
         });
 
-        //temporary, login whenever button is clicked
-        setAuth(true);
-        navigate("../myrecipes");
+        try {
+            // Send data to the backend via POST
+            await fetch(addBaseUrlClient("auth/login"), {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: json_data, // body data type must match "Content-Type" header
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    const token = data.token;
+                    document.cookie = `token=${token}; path=/;`;
+
+                    const user = data.user;
+                    setAuth(user);
+                    // redirect to protected route
+                    navigate("../home");
+                })
+                .catch((error) => console.error(error));
+        } catch (err) {
+            console.error(err);
+        }
     };
 
     const theme = createTheme({
@@ -88,7 +105,7 @@ const Login = () => {
                                 id="password"
                                 autoComplete="current-password"
                             />
-                            <FormControlLabel
+                            {/* <FormControlLabel
                                 control={
                                     <Checkbox
                                         value="remember"
@@ -96,7 +113,7 @@ const Login = () => {
                                     />
                                 }
                                 label="Remember me"
-                            />
+                            /> */}
                             <Button
                                 type="submit"
                                 fullWidth
@@ -105,34 +122,19 @@ const Login = () => {
                             >
                                 Sign In
                             </Button>
-                            <Button
-                                fullWidth
-                                variant="contained"
-                                sx={{ mt: 3, mb: 2 }}
-                                style={{
-                                    backgroundColor: "#4c8bf5",
-                                    marginTop: 0,
-                                }}
-                                onClick={() =>
-                                    (window.location.href = `${getBaseUrlClient()}/auth/google`)
-                                }
-                            >
-                                Sign In With Google
-                            </Button>
-                            <Grid container>
-                                <Grid item xs>
-                                    <RouterLink to="#">
-                                        <Link variant="body2">
-                                            Forgot password?
-                                        </Link>
-                                    </RouterLink>
-                                </Grid>
+                            <Grid container justifyContent="flex-end">
+                                {/* <Grid item xs>
+                                    <Link variant="body2">
+                                        Forgot password?
+                                    </Link>
+                                </Grid> */}
                                 <Grid item>
-                                    <RouterLink to="../register">
-                                        <Link variant="body2">
-                                            Don't have an account? Sign Up
-                                        </Link>
-                                    </RouterLink>
+                                    <Link
+                                        variant="body2"
+                                        onClick={() => navigate("../register")}
+                                    >
+                                        Don't have an account? Sign Up
+                                    </Link>
                                 </Grid>
                             </Grid>
                         </Box>

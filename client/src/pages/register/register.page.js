@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+
 import "./register.styles.css";
 
 import Button from "@mui/material/Button";
@@ -13,13 +14,25 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 import Logo from "../../components/logo/logo.component";
-import { Link as RouterLink } from "react-router-dom";
-import { api } from "../../utils/axios";
+import { useNavigate } from "react-router-dom";
+
+import { addBaseUrlClient } from "../../utils/getBaseClientUrl";
 
 const Register = () => {
-    const scrollOffset = -1 * window.innerHeight * 0.1;
+    const navigate = useNavigate();
 
-    const handleSubmit = (event) => {
+    const [emailError, setEmailError] = useState(false);
+    const [usernameError, setUsernameError] = useState(false);
+
+    const handleEmailChange = () => {
+        setEmailError(false);
+    };
+
+    const handleUsernameChange = () => {
+        setUsernameError(false);
+    };
+
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         // console.log(data);
@@ -31,22 +44,31 @@ const Register = () => {
             password: data.get("password"),
             username: data.get("username"),
         });
-        console.log(json_data);
-        /*
-        console.log({
-            firstName: data.get("firstName"),
-            lastName: data.get("lastName"),
-            email: data.get("email"),
-            password: data.get("password"),
-        });
-        */
 
-        // Send data to the backend via POST
-        fetch("http://localhost:8080/users", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: json_data, // body data type must match "Content-Type" header
-        }).then((res) => res.json());
+        try {
+            // Send data to the backend via POST
+            const response = await fetch(addBaseUrlClient("users"), {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: json_data, // body data type must match "Content-Type" header
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message);
+            }
+
+            // The response is OK, navigate
+            navigate("../login");
+        } catch (err) {
+            console.log(err.message);
+            if (err.message.includes("email")) {
+                setEmailError(true);
+            } else if (err.message.includes("username")) {
+                setUsernameError(true);
+            }
+        }
     };
 
     const theme = createTheme({
@@ -76,7 +98,6 @@ const Register = () => {
                     >
                         <Box
                             component="form"
-                            noValidate
                             onSubmit={handleSubmit}
                             sx={{ mt: 3 }}
                         >
@@ -110,6 +131,13 @@ const Register = () => {
                                         label="Email Address"
                                         name="email"
                                         autoComplete="email"
+                                        onChange={handleEmailChange}
+                                        error={emailError}
+                                        helperText={
+                                            emailError
+                                                ? "Email is already in use"
+                                                : ""
+                                        }
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
@@ -120,6 +148,13 @@ const Register = () => {
                                         label="Username"
                                         name="username"
                                         autoComplete="username"
+                                        onChange={handleUsernameChange}
+                                        error={usernameError}
+                                        helperText={
+                                            usernameError
+                                                ? "Username is already in use"
+                                                : ""
+                                        }
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
@@ -155,11 +190,12 @@ const Register = () => {
                             </Button>
                             <Grid container justifyContent="flex-end">
                                 <Grid item>
-                                    <RouterLink to="../login">
-                                        <Link variant="body2">
-                                            Already have an account? Sign in
-                                        </Link>
-                                    </RouterLink>
+                                    <Link
+                                        variant="body2"
+                                        onClick={() => navigate("../login")}
+                                    >
+                                        Already have an account? Sign in
+                                    </Link>
                                 </Grid>
                             </Grid>
                         </Box>

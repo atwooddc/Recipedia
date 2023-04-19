@@ -1,38 +1,281 @@
-import React from "react";
+import { React, useState, useEffect } from "react";
 import "./settings.styles.css";
 
-import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-import MuiDrawer from "@mui/material/Drawer";
 import Box from "@mui/material/Box";
-import MuiAppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
-import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
-import Badge from "@mui/material/Badge";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
-import Link from "@mui/material/Link";
 import Avatar from "@mui/material/Avatar";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import { Link as RouterLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
-import Checkbox from "@mui/material/Checkbox";
+import useAuth from "../../hooks/useAuth";
+import Alert from "@mui/material/Alert";
+import bcrypt from "bcryptjs";
+
+import { addBaseUrlClient } from "../../utils/getBaseClientUrl";
 
 const SettingsPage = () => {
-    const scrollOffset = -1 * window.innerHeight * 0.1;
+    const { auth, setAuth } = useAuth();
+    const [showSuccess, setShowSuccess] = useState(false);
+    const [successMessage, setSuccessMessage] = useState("");
+    const [showError, setShowError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
 
-    const handleSubmit = (event) => {
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        let timer;
+        if (showSuccess) {
+            timer = setTimeout(() => {
+                setShowSuccess(false);
+                setSuccessMessage("");
+            }, 5000);
+        }
+        return () => clearTimeout(timer);
+    }, [showSuccess]);
+
+    useEffect(() => {
+        let timer;
+        if (showError) {
+            timer = setTimeout(() => {
+                setShowError(false);
+                setErrorMessage("");
+            }, 5000);
+        }
+        return () => clearTimeout(timer);
+    }, [showError]);
+
+    const handleBasicsSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
+
+        let json_data = JSON.stringify({
+            firstName: data.get("firstName"),
+            lastName: data.get("lastName"),
             email: data.get("email"),
-            password: data.get("password"),
         });
+        console.log(json_data);
+        try {
+            // Send data to the backend via PUT
+            fetch(addBaseUrlClient("users"), {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: json_data, // body data type must match "Content-Type" header
+                credentials: "include",
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log(data);
+                    const user = data;
+                    setAuth(user);
+                    setShowSuccess(true);
+                    setSuccessMessage("Basic Information update successful!");
+                })
+                .catch((error) => {
+                    console.error(error);
+                    setShowError(true);
+                    setErrorMessage(error);
+                });
+        } catch (err) {
+            console.error(err);
+            setShowError(true);
+            setErrorMessage(err);
+        }
+    };
+
+    const handlePasswordSubmit = async (event) => {
+        event.preventDefault();
+        const data = new FormData(event.currentTarget);
+
+        let json_string = JSON.stringify({
+            oldPassword: data.get("old-password"),
+            newPassword: data.get("new-password"),
+            confirmPassword: data.get("confirm-password"),
+        });
+        console.log(json_string);
+        let data_obj = JSON.parse(json_string);
+        //console.log(data_obj);
+
+        //console.log(id);
+        //console.log(data_obj.oldPassword, auth.password);
+
+        const isMatch = await bcrypt.compare(
+            data_obj.oldPassword,
+            auth.password
+        );
+        if (
+            data_obj.oldPassword.trim() === "" ||
+            data_obj.newPassword.trim() === "" ||
+            data_obj.oldPassword.trim() === ""
+        ) {
+            setShowError(true);
+            setErrorMessage("Password cannot be blank");
+            return;
+        }
+        if (!isMatch) {
+            setShowError(true);
+            setErrorMessage("Old password is incorrect");
+            return;
+        }
+        if (data_obj.confirmPassword !== data_obj.newPassword) {
+            setShowError(true);
+            setErrorMessage("Passwords do not match");
+            return;
+        } else if (data_obj.oldPassword === data_obj.newPassword) {
+            setShowError(true);
+            setErrorMessage("Cannot use the same password again");
+            return;
+        }
+
+        const salt = await bcrypt.genSalt(10);
+        const hash = await bcrypt.hash(data.get("new-password"), salt);
+        let relevant_data = JSON.stringify({
+            password: hash,
+        });
+        try {
+            // Send data to the backend via PUT
+            fetch(addBaseUrlClient("users"), {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: relevant_data, // body data type must match "Content-Type" header
+                credentials: "include",
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log(data);
+                    const user = data;
+                    setAuth(user);
+                    setShowSuccess(true);
+                    setSuccessMessage("Password changed successfully!");
+                })
+                .catch((error) => {
+                    console.error(error);
+                    setShowError(true);
+                    setErrorMessage(error);
+                });
+            //TODO ADD A REFRESH HERE?
+        } catch (err) {
+            console.error(err);
+            setShowError(true);
+            setErrorMessage(err);
+        }
+    };
+
+    const handleAdvancedSubmit = (event) => {
+        event.preventDefault();
+        const data = new FormData(event.currentTarget);
+
+        let json_data = JSON.stringify({
+            location: data.get("location"),
+            birthday: data.get("birthday"),
+            phoneNumber: data.get("phone-number"),
+            imgUrl: data.get("imgUrl"),
+            bio: data.get("bio"),
+            twitterHandle: data.get("twitterHandle"),
+        });
+        console.log(json_data);
+
+        try {
+            // Send data to the backend via PUT
+            fetch(addBaseUrlClient("users"), {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: json_data, // body data type must match "Content-Type" header
+                credentials: "include",
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log(data);
+                    const user = data;
+                    setAuth(user);
+                    setShowSuccess(true);
+                    setSuccessMessage(
+                        "Advanced information updated successfully!"
+                    );
+                })
+                .catch((error) => {
+                    console.error(error);
+                    setShowError(true);
+                    setErrorMessage(error);
+                });
+        } catch (err) {
+            console.error(err);
+            setShowError(true);
+            setErrorMessage(err);
+        }
+    };
+
+    const handleDeleteAccount = (event) => {
+        event.preventDefault();
+        const confirmed = window.confirm(
+            "Are you sure you want to delete your account? Your information will be lost forever"
+        );
+        if (confirmed) {
+            const id = auth._id;
+            console.log(id);
+            try {
+                // Send data to the backend via PUT
+                fetch(addBaseUrlClient(`users/${id}`), {
+                    method: "DELETE",
+                    headers: { "Content-Type": "application/json" },
+                })
+                    .then((response) => {
+                        console.log(response);
+                        console.log("DELETED");
+                        setAuth(undefined);
+                        window.location.href = addBaseUrlClient("auth/logout");
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                        setShowError(true);
+                        setErrorMessage(error);
+                    });
+            } catch (err) {
+                console.error(err);
+                setShowError(true);
+                setErrorMessage(err);
+            }
+        }
+    };
+
+    //TODO TEST AFTER RECIPES ARE PROPERLY ADDED
+    const handleResetAccount = (event) => {
+        event.preventDefault();
+        const confirmed = window.confirm(
+            "Are you sure you want to reset your account? Your information can always be updated again"
+        );
+        if (confirmed) {
+            try {
+                // Send data to the backend via PUT
+                fetch(addBaseUrlClient("users/reset"), {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "include",
+                })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        console.log(data);
+                        const user = data;
+                        setAuth(user);
+                        setShowSuccess(true);
+                        setSuccessMessage("Account Reset successfully!");
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                        setShowError(true);
+                        setErrorMessage(error);
+                    });
+            } catch (err) {
+                console.error(err);
+                setShowError(true);
+                setErrorMessage(err);
+            }
+        }
     };
 
     const theme = createTheme({
@@ -77,9 +320,9 @@ const SettingsPage = () => {
                                     }}
                                 >
                                     <Avatar
-                                        alt="Grant Achatz"
-                                        src="/grant.jpg"
-                                        sx={{ width: 56, height: 56 }}
+                                        alt={auth.firstName}
+                                        src={auth.imgUrl}
+                                        sx={{ width: 80, height: 80 }}
                                     />
                                     <Box
                                         sx={{
@@ -93,7 +336,7 @@ const SettingsPage = () => {
                                             color="common.black"
                                             fontWeight="bold"
                                         >
-                                            {greeting}, Grant
+                                            {greeting}, {auth.firstName}
                                         </Typography>
                                         <Typography
                                             variant="subtitle1"
@@ -104,6 +347,23 @@ const SettingsPage = () => {
                                     </Box>
                                 </Paper>
                             </Grid>
+                            {showSuccess && (
+                                <Alert
+                                    sx={{ ml: 10, m: 2, width: "95%" }}
+                                    severity="success"
+                                >
+                                    {successMessage}
+                                </Alert>
+                            )}
+                            {showError && (
+                                <Alert
+                                    sx={{ ml: 10, m: 2, width: "95%" }}
+                                    severity="error"
+                                >
+                                    {errorMessage}
+                                </Alert>
+                            )}
+
                             {/* The Basics */}
                             <Grid item xs={12} md={8} lg={6}>
                                 <Paper
@@ -124,7 +384,7 @@ const SettingsPage = () => {
                                     <Box
                                         component="form"
                                         noValidate
-                                        onSubmit={handleSubmit}
+                                        onSubmit={handleBasicsSubmit}
                                         sx={{ mt: 3 }}
                                     >
                                         <Grid container spacing={2}>
@@ -136,6 +396,9 @@ const SettingsPage = () => {
                                                     id="firstName"
                                                     label="First Name"
                                                     autoFocus
+                                                    defaultValue={
+                                                        auth.firstName
+                                                    }
                                                 />
                                             </Grid>
                                             <Grid item xs={12} sm={6}>
@@ -145,6 +408,7 @@ const SettingsPage = () => {
                                                     label="Last Name"
                                                     name="lastName"
                                                     autoComplete="family-name"
+                                                    defaultValue={auth.lastName}
                                                 />
                                             </Grid>
                                             <Grid item xs={12}>
@@ -154,6 +418,7 @@ const SettingsPage = () => {
                                                     label="Email Address"
                                                     name="email"
                                                     autoComplete="email"
+                                                    defaultValue={auth.email}
                                                 />
                                             </Grid>
                                         </Grid>
@@ -195,7 +460,7 @@ const SettingsPage = () => {
                                     <Box
                                         component="form"
                                         noValidate
-                                        onSubmit={handleSubmit}
+                                        onSubmit={handlePasswordSubmit}
                                         sx={{ mt: 3 }}
                                     >
                                         <Grid container spacing={2}>
@@ -269,7 +534,7 @@ const SettingsPage = () => {
                                     <Box
                                         component="form"
                                         noValidate
-                                        onSubmit={handleSubmit}
+                                        onSubmit={handleAdvancedSubmit}
                                         sx={{ mt: 3 }}
                                     >
                                         <Grid container spacing={2}>
@@ -280,6 +545,7 @@ const SettingsPage = () => {
                                                     label="Location"
                                                     type="location"
                                                     id="location"
+                                                    defaultValue={auth.location}
                                                 />
                                             </Grid>
                                             <Grid item xs={12}>
@@ -289,6 +555,7 @@ const SettingsPage = () => {
                                                     label="Birthday"
                                                     type="birthday"
                                                     id="birthday"
+                                                    defaultValue={auth.birthday}
                                                 />
                                             </Grid>
                                             <Grid item xs={12}>
@@ -298,6 +565,43 @@ const SettingsPage = () => {
                                                     label="Phone Number"
                                                     type="phone-number"
                                                     id="phone-nunmber"
+                                                    defaultValue={
+                                                        auth.phoneNumber
+                                                    }
+                                                />
+                                            </Grid>
+                                            <Grid item xs={12}>
+                                                <TextField
+                                                    fullWidth
+                                                    name="imgUrl"
+                                                    label="Profile Image URL"
+                                                    type="imgUrl"
+                                                    id="imgUrl"
+                                                    defaultValue={auth.imgUrl}
+                                                />
+                                            </Grid>
+                                            <Grid item xs={12}>
+                                                <TextField
+                                                    fullWidth
+                                                    name="bio"
+                                                    label="Bio"
+                                                    type="bio"
+                                                    id="bio"
+                                                    defaultValue={auth.bio}
+                                                    multiline
+                                                    rows={4}
+                                                />
+                                            </Grid>
+                                            <Grid item xs={12}>
+                                                <TextField
+                                                    fullWidth
+                                                    name="twitterHandle"
+                                                    label="Twitter Handle"
+                                                    type="twitterHandle"
+                                                    id="twitterHandle"
+                                                    defaultValue={
+                                                        auth.twitterHandle
+                                                    }
                                                 />
                                             </Grid>
                                         </Grid>
@@ -359,9 +663,9 @@ const SettingsPage = () => {
                                                     color="common.black"
                                                 >
                                                     {" "}
-                                                    Delete all current recipes,
-                                                    posts, and viewing history
-                                                    while maintaining account{" "}
+                                                    Delete all current recipes
+                                                    and social information while
+                                                    maintaining basic account{" "}
                                                 </Typography>
                                             </Box>
                                             <Box
@@ -375,6 +679,7 @@ const SettingsPage = () => {
                                                     type="submit"
                                                     variant="outlined"
                                                     sx={{ mt: 3, mb: 2 }}
+                                                    onClick={handleResetAccount}
                                                 >
                                                     Reset Account
                                                 </Button>
@@ -418,6 +723,9 @@ const SettingsPage = () => {
                                                     variant="contained"
                                                     color="error"
                                                     sx={{ mt: 3, mb: 2 }}
+                                                    onClick={
+                                                        handleDeleteAccount
+                                                    }
                                                 >
                                                     Delete Account
                                                 </Button>

@@ -24,10 +24,12 @@
     height: auto;
 }
 
-.recipe-preview .text-cont{
+.text-cont{
     height: 20%;
     display: flex;
     justify-content: center;
     align-items: center;
     background-color: var(--coral);
+    font-size: 5vw;
+    max-width: 90%;
 }
