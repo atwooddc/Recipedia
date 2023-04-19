@@ -61,6 +61,9 @@ const RecipePage = () => {
 
     return (
         <div className="recipe-page">
+            {recipe.imageUrl && (
+                <img src={recipe.imageUrl} alt={recipe.title} />
+            )}
             <div className="recipe-img-container">
                 <img
                     src={recipe?.imageUrl ? recipe.imageUrl : defaultImageUrl}
