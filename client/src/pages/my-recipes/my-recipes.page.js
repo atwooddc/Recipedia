@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./my-recipes.styles.css";
 
 import RecipePreview from "../../components/recipe-preview/recipe-preview.component";
@@ -33,6 +33,14 @@ const MyRecipesPage = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [searchResults, setSearchResults] = useState(auth.recipes);
 
+    useEffect(() => {
+        setSearchResults(
+            auth.recipes.filter((recipe) =>
+                recipe.title.toLowerCase().includes(searchTerm)
+            )
+        );
+    }, [auth.recipes]);
+
     const handleSearchTerm = (event) => {
         const query = event.target.value.toLowerCase();
 
@@ -66,7 +74,7 @@ const MyRecipesPage = () => {
                     sx={{
                         display: "flex",
                         flexDirection: "column",
-                        minWidth: "90%",
+                        minWidth: "100%",
                     }}
                 >
                     <CssBaseline />
@@ -135,15 +143,40 @@ const MyRecipesPage = () => {
                                 alignItems: "center",
                             }}
                         >
-                            <Grid container spacing={4}>
-                                {searchResults.map((recipe) => (
-                                    <RecipePreview
-                                        key={recipe._id}
-                                        data={recipe}
-                                        editMode={editMode}
-                                        handleRemoveRecipe={handleRemoveRecipe}
-                                    />
-                                ))}
+                            <Grid
+                                container
+                                spacing={4}
+                                style={{ backgroundColor: "lightblue" }}
+                            >
+                                {!searchResults.length ? (
+                                    <Box
+                                        sx={{
+                                            display: "flex",
+                                            flexDirection: "column",
+                                            minWidth: "90%",
+                                        }}
+                                    >
+                                        {!auth.recipes.length ? (
+                                            <h2>
+                                                Your Recipedia is empty. Get
+                                                started at "Add Recipes".
+                                            </h2>
+                                        ) : (
+                                            <h2>Hmm...can't find anything</h2>
+                                        )}
+                                    </Box>
+                                ) : (
+                                    searchResults.map((recipe) => (
+                                        <RecipePreview
+                                            key={recipe._id}
+                                            data={recipe}
+                                            editMode={editMode}
+                                            handleRemoveRecipe={
+                                                handleRemoveRecipe
+                                            }
+                                        />
+                                    ))
+                                )}
                             </Grid>
                         </Container>
                     </Container>
