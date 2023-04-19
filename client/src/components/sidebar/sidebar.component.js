@@ -12,6 +12,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemButton from "@mui/material/ListItemButton";
+import DashboardIcon from '@mui/icons-material/Dashboard';
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import Person2Icon from "@mui/icons-material/Person2";
@@ -56,16 +57,18 @@ export default function Sidebar() {
                         <Logo linkTo="home" />
                     </div>
                     <List>
-                        {["myrecipes", "addrecipe", "profile", "settings"].map(
+                        {["home","myrecipes", "addrecipe", "profile", "settings"].map(
                             (text, index) => (
                                 <ListItem key={text} disablePadding>
                                     <ListItemButton component={Link} to={text}>
                                         <ListItemIcon>
                                             {index === 0 ? (
-                                                <ReceiptLongIcon />
+                                                <DashboardIcon />
                                             ) : index === 1 ? (
-                                                <AddBoxIcon />
+                                                <ReceiptLongIcon />
                                             ) : index === 2 ? (
+                                                <AddBoxIcon />
+                                            ) : index === 3 ? (
                                                 <Person2Icon />
                                             ) : (
                                                 <SettingsIcon />
@@ -74,12 +77,14 @@ export default function Sidebar() {
 
                                         <ListItemText>
                                             {index === 0
-                                                ? "My Recipes"
+                                                ? "Dashboard"
                                                 : index === 1
-                                                ? "Add Recipes"
+                                                ? "My Recipes"
                                                 : index === 2
+                                                ? "Add Recipes"
+                                                : index === 3
                                                 ? "Profile"
-                                                : "Settings"}{" "}
+                                                : "Settings"}
                                         </ListItemText>
                                     </ListItemButton>
                                 </ListItem>

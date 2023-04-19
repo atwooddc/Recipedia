@@ -45,7 +45,7 @@ const Login = () => {
                     const user = data.user;
                     setAuth(user);
                     // redirect to protected route
-                    navigate("../myrecipes");
+                    navigate("../home");
                 })
                 .catch((error) => console.error(error));
         } catch (err) {
