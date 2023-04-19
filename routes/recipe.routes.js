@@ -3,8 +3,8 @@ const parseRecipe = require("../middleware/parseRecipe");
 const validateRecipe = require("../middleware/validateRecipe");
 const router = express.Router();
 const Recipe = require("../models/recipe.model");
-const User = require("../models/user.model")
-const auth = require("../middleware/auth")
+const User = require("../models/user.model");
+const auth = require("../middleware/auth");
 
 // @route       GET api/recipe
 // @desc        Get all recipes
@@ -33,45 +33,46 @@ router.get("/:id", (req, res) => {
 // @access      Private
 router.post("/", async (req, res) => {
     Recipe.create(req.body)
-        .then(recipe => {
-            res.status(201).send(recipe)
+        .then((recipe) => {
+            res.status(201).send(recipe);
         })
-        .catch(err => res.status(500).send(err))
+        .catch((err) => res.status(500).send(err));
 });
 
 // @route       POST api/recipe/byurl
 // @desc        Create a new recipe using URL parsing
 // @access      Private
-router.post('/byurl', auth, async (req, res) => {
+router.post("/byurl", auth, async (req, res) => {
     // Search through recipe DB by url. If it exists already send that recipe. Else, move on to next block to create it.
-    Recipe.findOne({url: req.body.url})
-        .then(async recipe => {
-            if(recipe){
-                return res.send(recipe)
+    Recipe.findOne({ url: req.body.url })
+        .then(async (recipe) => {
+            if (recipe) {
+                return res.send(recipe);
             }
-            
-            try{
-                const newRecipe = await parseRecipe(req.body.url)
-                
+
+            try {
+                const newRecipe = await parseRecipe(req.body.url);
+
                 // Validate the recipe
-                if(!validateRecipe(newRecipe)){
-                    throw new Error("Invalid recipe parsing")
+                if (!validateRecipe(newRecipe)) {
+                    throw new Error("Invalid recipe parsing");
                 }
 
                 // Create the recipe
                 Recipe.create(newRecipe)
-                    .then(recipe => {
-                        res.send(recipe)
+                    .then((recipe) => {
+                        res.send(recipe);
                     })
-                    .catch(err => {
-                        console.log(err)
-                        res.status(500).send(err)})
-            } catch(err){
-                console.log(err)
+                    .catch((err) => {
+                        console.log(err);
+                        res.status(500).send(err);
+                    });
+            } catch (err) {
+                throw new Error("Recipe parsing failed");
             }
         })
-        .catch(err => res.send(err.message))
-})
+        .catch((err) => res.status(400).send(err.message));
+});
 
 // @route       PUT api/recipe/:id
 // @desc        Update recipe of the provided id by parameters in body
@@ -81,7 +82,6 @@ router.put("/:id", (req, res) => {
         .then((updatedRecipe) => res.send(updatedRecipe))
         .catch((err) => res.send(err));
 });
-
 
 // @route       DELETE recipe/:id
 // @desc        Delete a recipe by ID
