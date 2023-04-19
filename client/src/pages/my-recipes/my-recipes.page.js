@@ -62,7 +62,13 @@ const MyRecipesPage = () => {
     return (
         <div className="my-recipes-page">
             <ThemeProvider theme={theme}>
-                <Box sx={{ display: "flex", flexDirection: "column" }}>
+                <Box
+                    sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        bgcolor: "red",
+                    }}
+                >
                     <CssBaseline />
                     <h2>Hope you're hungry!</h2>
                     <Container
