@@ -9,16 +9,25 @@ import Typography from "@mui/material/Typography";
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+
+const defaultImageUrl =
+  'https://static.vecteezy.com/system/resources/previews/002/621/029/original/chef-recipe-book-kitchen-utensil-line-style-icon-free-vector.jpg';
 
 const Carousel = ({ recipes }) => {
+  const navigate = useNavigate();
+
+  const numRecipes = recipes?.length;
+  const showSlides = numRecipes >= 4 ? 4 : numRecipes;
+  const scrollSlides = numRecipes >= 4 ? 4 : numRecipes;
+
   const settings = {
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 4,
-    slidesToScroll: 4,
+    slidesToShow: showSlides,
+    slidesToScroll: scrollSlides,
     responsive: [
       {
         breakpoint: 1024,
@@ -44,37 +53,25 @@ const Carousel = ({ recipes }) => {
     ],
   };
 
-  const truncateDescription = (description, maxLength) => {
-    if (description.length <= maxLength) {
-      return description;
-    }
-    return description.substring(0, maxLength) + '...';
-  };
-
-
   return (
-    <Slider {...settings}>
-      {recipes.map((recipe) => (
-        <div key={recipe.id}>
-          <Link to={`/recipe/${recipe.id}`}>
-            <Card style={{ margin: '0 10px' }}>
-              <CardMedia
-                component="img"
-                height="140"
-                image={recipe.image}
-                alt={recipe.name}
-              />
-              <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
-                  {recipe.name}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                {truncateDescription(recipe.description, 70)}
+    <Slider {...settings} >
+      {recipes.map(({ _id, title, imageUrl }) => (
+          <Card
+            style={{ margin: '0 10px'}}
+            onClick={() => navigate(`../recipe/${_id}`)}
+          >
+            <CardMedia
+              component="img"
+              height="140"
+              image={imageUrl ? imageUrl : defaultImageUrl}
+              alt="recipe"
+            />
+            <CardContent>
+              <Typography noWrap gutterBottom variant="h5" component="div" align="center">
+                {title}
               </Typography>
-              </CardContent>
-            </Card>
-          </Link>
-        </div>
+            </CardContent>
+          </Card>
       ))}
     </Slider>
   );
