@@ -125,6 +125,9 @@ const ManualInsertPage = () => {
                     instructions: step_arr,
                     tags: tag_arr,
                     imageUrl: finalUrl,
+                    servings: data.get("servings"),
+                    prepTime: data.get("preptime"),
+                    cookTime: data.get("cooktime"),
                 });
                 console.log(json_data);
 

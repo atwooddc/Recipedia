@@ -12,25 +12,9 @@ const defaultImageUrl =
     "https://static.vecteezy.com/system/resources/previews/002/621/029/original/chef-recipe-book-kitchen-utensil-line-style-icon-free-vector.jpg";
 
 const dummyRecipeData = {
-    title: "Eggplant Parmesean",
-    img: "https://static.onecms.io/wp-content/uploads/sites/44/2021/02/08/grilled-eggplant-parmesan-2000.jpg",
-    servingSize: "2 people",
-    ingredients: [
-        "2 large eggplants",
-        "1 jar of tomato sauce",
-        "Mozzerella cheese slices",
-        "1lb of spicy sausage",
-        "One medium yellow onion",
-    ],
-    steps: [
-        "Preheat your oven to 400",
-        "Carve out the flesh of the eggplants and dice the flesh along with your yellow onion",
-        "Heat a pan to medium heat and coat it with cooking spray and cook down your vegetables",
-        "Heat a separate pan to medium heat and cook your sausage. Once cooked, crush into small pieces.",
-        "After the vegetables are cooked down, add in the sausage and the jar of tomato sauce and reduce to a simmer. Let that sit for at least 20 minutes.",
-        "Once the over is preheated, place the eggplant skins in on a baking sheet. Bake for 10 minutes",
-        "Fill each of the skins with the sauce mixture and layer mozzerella cheese on top. Place back in the oven on broil until browned.",
-    ],
+    title: "Loading....",
+    ingredients: [""],
+    steps: [""],
     notes: "",
 };
 
@@ -61,21 +45,57 @@ const RecipePage = () => {
 
     return (
         <div className="recipe-page">
-            <div className="recipe-img-container">
-                <img
-                    src={recipe?.imageUrl ? recipe.imageUrl : defaultImageUrl}
-                    alt={recipe?.title}
-                />
-            </div>
             <div className="recipe-info" mt={10}>
+                <div class="container">
+                    <div class="content">
+                        <h1 className="recipe-title">{recipe?.title}</h1>
+                    </div>
+                    {recipe.imageUrl && (
+                        <div className="recipe-img-container">
+                            <img
+                                src={
+                                    recipe?.imageUrl
+                                        ? recipe.imageUrl
+                                        : defaultImageUrl
+                                }
+                                alt={recipe?.title}
+                            />
+                        </div>
+                    )}{" "}
+                </div>
+                {/* 
                 <div className="recipe-header">
+                    {recipe.imageUrl && (
+                        <div className="recipe-img-container">
+                            <img
+                                src={
+                                    recipe?.imageUrl
+                                        ? recipe.imageUrl
+                                        : defaultImageUrl
+                                }
+                                alt={recipe?.title}
+                            />
+                        </div>
+                    )}
                     <h1 className="recipe-title">{recipe?.title}</h1>
                 </div>
+                */}
 
                 <div className="recipe-details-container">
+                    {recipe.servings && (
+                        <p>{`Serving size: ${recipe.servings}`}</p>
+                    )}
+                    {recipe.cookTime && (
+                        <p>{`Cook Time: ${recipe?.cookTime}`}</p>
+                    )}
+                    {recipe.prepTime && (
+                        <p>{`Prep Time: ${recipe?.prepTime}`}</p>
+                    )}
+
+                    {recipe.yield && <p>{`Yield: ${recipe?.yield}`}</p>}
+                    {recipe.cuisine && <p>{`Cuisine: ${recipe?.cuisine}`}</p>}
                     <div className="recipe-ingredients-container">
                         <div className="recipe-details">
-                            <p>{`Serving size: ${recipe?.nutrition?.servings}`}</p>
                             <h3>
                                 <Kitchen />
                                 Ingredients{" "}
@@ -97,6 +117,21 @@ const RecipePage = () => {
                                 <li>{step}</li>
                             ))}
                         </ol>
+                    </div>
+                    <div>
+                        {recipe.tags && (
+                            <React.Fragment>
+                                <b>Tags: </b>
+                                {recipe?.tags?.map((tag, index) => (
+                                    <React.Fragment key={index}>
+                                        <span>{tag}</span>
+                                        {index !== recipe.tags.length - 1 && (
+                                            <span>, </span>
+                                        )}
+                                    </React.Fragment>
+                                ))}
+                            </React.Fragment>
+                        )}
                     </div>
                 </div>
                 {/*<div className="notes-section">
