@@ -29,9 +29,11 @@ const AutoParsePage = () => {
 
     const [link, setLink] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState(false);
 
     const handleTextChange = (event) => {
         setLink(event.target.value);
+        setError(false);
     };
 
     const isTextFilled = link !== "";
@@ -75,8 +77,12 @@ const AutoParsePage = () => {
                 setAuth(json);
                 navigate("../myrecipes");
             })
-            .then(() => setIsLoading(false))
-            .catch((err) => console.error(err));
+            // .then(() => setIsLoading(false))
+            .catch((err) => {
+                setIsLoading(false);
+                setError(true);
+                console.error(err);
+            });
     };
 
     return (
@@ -104,7 +110,7 @@ const AutoParsePage = () => {
                                 justifyContent: "center",
                             }}
                         >
-                            <Grid container spacing={4}>
+                            <Grid container spacing={3}>
                                 <Grid item xs={12}>
                                     <TextField
                                         name="link"
@@ -121,6 +127,15 @@ const AutoParsePage = () => {
                                                 </InputAdornment>
                                             ),
                                         }}
+                                        sx={{
+                                            mt: 2,
+                                        }}
+                                        error={error}
+                                        helperText={
+                                            error
+                                                ? "Unable to parse recipe information from the provided URL. Try a new recipe or input it manually!"
+                                                : " "
+                                        }
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
@@ -139,7 +154,7 @@ const AutoParsePage = () => {
                                             loading={false}
                                             fullWidth
                                             variant="contained"
-                                            sx={{ mt: 3, mb: 2 }}
+                                            sx={{ mt: 1 }}
                                             disabled={!isTextFilled}
                                         >
                                             Submit
