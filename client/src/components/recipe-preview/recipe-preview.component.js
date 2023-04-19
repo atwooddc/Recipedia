@@ -7,6 +7,7 @@ import CardMedia from "@mui/material/CardMedia";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import DeleteIcon from "@mui/icons-material/Delete";
+import Tooltip from "@mui/material/Tooltip";
 import { IconButton } from "@mui/material";
 
 import { useNavigate } from "react-router-dom";
@@ -58,21 +59,23 @@ const RecipePreview = ({ data, editMode, handleRemoveRecipe }) => {
                     alt="recipe"
                     style={{ height: "70%" }}
                 />
-                <CardContent sx={{ flexGrow: 1 }}>
-                    <Typography
-                        noWrap
-                        gutterBottom
-                        variant="h5"
-                        component="h2"
-                        sx={{
-                            fontSize: "100%",
-                            color: "var(--dark-gray)",
-                        }}
-                        // className='text-cont'
-                    >
-                        {title}
-                    </Typography>
-                </CardContent>
+                <Tooltip title={title} placement="top">
+                    <CardContent sx={{ flexGrow: 1 }}>
+                        <Typography
+                            noWrap
+                            gutterBottom
+                            variant="h5"
+                            component="h2"
+                            sx={{
+                                px: 1,
+                                fontSize: "100%",
+                                color: "var(--dark-gray)",
+                            }}
+                        >
+                            {title}
+                        </Typography>
+                    </CardContent>
+                </Tooltip>
             </Card>
         </Grid>
     );
