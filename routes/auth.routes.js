@@ -58,7 +58,7 @@ router.post("/login", async (req, res) => {
 router.get("/logout", function (req, res) {
     res.clearCookie("token");
     req.session = null;
-    res.redirect(`${getBaseUrl()}`);
+    res.redirect(getBaseUrl());
 });
 
 module.exports = router;
