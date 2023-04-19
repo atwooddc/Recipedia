@@ -66,7 +66,7 @@ router.put("/addrecipe/:recipeId", auth, async (req, res) => {
 // @access      Private
 router.delete("/recipe/:recipeId", auth, async (req, res) => {
     User.findByIdAndUpdate(
-        { _id: new mongoose.Types.ObjectId(req.user._id) },
+        { _id: new mongoose.Types.ObjectId(req.user) },
         { $pull: { recipes: { _id: req.params.recipeId } } }
     )
         .then((user) => res.send(user))

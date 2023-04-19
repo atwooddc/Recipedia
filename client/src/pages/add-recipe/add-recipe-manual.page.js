@@ -200,8 +200,8 @@ const ManualInsertPage = () => {
                             sx={{ mt: 3 }}
                         >
                             <Grid container spacing={3}>
-                                {/* Header */}
-                                <Grid item xs={12}>
+                                {/* Title */}
+                                <Grid item xs={12} md={8} lg={12}>
                                     <Paper
                                         sx={{
                                             p: 2,
@@ -254,8 +254,82 @@ const ManualInsertPage = () => {
                                                 Add Recipe
                                             </Button>
                                         </Box>
+                                        <Box
+                                            sx={{
+                                                mb: 1,
+                                                flexDirection: "row",
+                                                display: "flex",
+                                                justifyContent: "center",
+                                                alignItems: "center",
+                                            }}
+                                        >
+                                            <Grid container spacing={3}>
+                                                {/* Servings */}
+                                                <Grid
+                                                    item
+                                                    xs={3}
+                                                    md={3}
+                                                    lg={1.2}
+                                                >
+                                                    <TextField
+                                                        variant="standard"
+                                                        name="servings"
+                                                        id="servings"
+                                                        label="Servings"
+                                                        fullWidth
+                                                        size="small"
+                                                        sx={{
+                                                            mb: 2,
+                                                            marginRight: "10px",
+                                                            height: "20px",
+                                                        }}
+                                                    />
+                                                </Grid>
+                                                <Grid
+                                                    item
+                                                    xs={3}
+                                                    md={3}
+                                                    lg={1.5}
+                                                >
+                                                    <TextField
+                                                        variant="standard"
+                                                        name="preptime"
+                                                        id="preptime"
+                                                        label="Prep Time"
+                                                        fullWidth
+                                                        size="small"
+                                                        sx={{
+                                                            mb: 2,
+                                                            marginRight: "10px",
+                                                            height: "20px",
+                                                        }}
+                                                    />
+                                                </Grid>
+                                                <Grid
+                                                    item
+                                                    xs={3}
+                                                    md={3}
+                                                    lg={1.5}
+                                                >
+                                                    <TextField
+                                                        variant="standard"
+                                                        name="cooktime"
+                                                        id="cooktime"
+                                                        label="Cook Time"
+                                                        fullWidth
+                                                        size="small"
+                                                        sx={{
+                                                            mb: 2,
+                                                            marginRight: "10px",
+                                                            height: "20px",
+                                                        }}
+                                                    />
+                                                </Grid>
+                                            </Grid>
+                                        </Box>
                                     </Paper>
                                 </Grid>
+
                                 {/* Ingredients */}
                                 <Grid item xs={12} md={8} lg={6}>
                                     <Paper
@@ -459,8 +533,9 @@ const ManualInsertPage = () => {
                                         </Box>
                                     </Paper>
                                 </Grid>
+
                                 {/* Tags */}
-                                <Grid item xs={12}>
+                                <Grid item xs={12} md={8} lg={6}>
                                     <Paper
                                         sx={{
                                             p: 2,
@@ -481,21 +556,21 @@ const ManualInsertPage = () => {
                                             id="tags"
                                             // label="Tags"
                                             placeholder="Tags"
-                                            fullWidth
+                                            // fullWidth
                                             value={tags}
                                             onChange={handleTagsChange}
                                             error={!!tagsError}
                                             helperText={
                                                 tagsError !== ""
                                                     ? tagsError
-                                                    : 'Add keywords to help categorize your recipe! Ex: "thai, peanuts, air-fryer,..."'
+                                                    : 'Add keywords to categorize your recipe! Ex: "thai, peanuts, air-fryer,..."'
                                             }
                                             sx={{ mt: 1, marginRight: "10px" }}
                                         />
                                     </Paper>
                                 </Grid>
                                 {/* Image URL */}
-                                <Grid item xs={12}>
+                                <Grid item xs={12} md={8} lg={6}>
                                     <Paper
                                         sx={{
                                             p: 2,
@@ -519,17 +594,13 @@ const ManualInsertPage = () => {
                                         <TextField
                                             name="ImageUrl"
                                             id="ImageUrl"
-                                            // label="Title"
                                             placeholder="Image URL"
-                                            fullWidth
+                                            helperText="Add an image to accompany your recipe. If none provided we will find an appropriate image!"
+                                            // fullWidth
                                             sx={{
                                                 mt: 1,
                                                 marginRight: "10px",
-                                                height: "50px",
                                             }}
-                                            helperText={
-                                                "Optional, if no URL provided we will find an approproiate image!"
-                                            }
                                         />
                                     </Paper>
                                 </Grid>
